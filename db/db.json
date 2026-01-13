@@ -103,7 +103,7 @@
       "alias": "reny7",
       "password": "reny100",
       "gang": "arcolocos",
-      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=ElRey",
+      "avatar": "/avatars/reny.png",
       "musicTypes": [
         "Cumbia Sonidera",
         "Guaracha"
@@ -653,6 +653,16 @@
       "userGang": "Tiburones de la Cumbia",
       "content": "Hola 27",
       "timestamp": "2026-01-10T03:28:18.674Z",
+      "reactions": []
+    },
+    {
+      "id": "e0398bbe-2242-42d6-abe7-a0ed31913747",
+      "userId": "7de693a6-85a1-49df-9fbf-43c96f057626",
+      "userAlias": "reny7",
+      "userAvatar": "/avatars/reny.png",
+      "userGang": "arcolocos",
+      "content": "hola",
+      "timestamp": "2026-01-13T03:52:08.931Z",
       "reactions": []
     }
   ],
