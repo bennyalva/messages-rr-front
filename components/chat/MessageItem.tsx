@@ -74,7 +74,6 @@ export default function MessageItem({
   const menuRef = useRef<HTMLDivElement>(null);
   const bubbleRef = useRef<HTMLDivElement>(null);
   const messageContainerRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(true);
   const [isHighlighted, setIsHighlighted] = useState(false);  // Track when message is being highlighted
   
   const showReactions = activeReactionMenuId === message.id;
@@ -108,27 +107,6 @@ export default function MessageItem({
       document.removeEventListener('touchstart', handleClickOutside);
     };
   }, [showReactions, setActiveReactionMenuId]);
-
-  // Scroll-based visibility detection for subtle fade effect
-  useEffect(() => {
-    const container = messageContainerRef.current;
-    if (!container) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting);
-      },
-      {
-        threshold: 0.1,  // Trigger when 10% of the element is visible
-        rootMargin: '-10% 0px -10% 0px'  // Add some margin for smoother transition
-      }
-    );
-
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, []);
-
-  // Detect when this message is being highlighted (reply navigation)
   useEffect(() => {
     const handleHighlight = (e: CustomEvent<{ messageId: string }>) => {
       if (e.detail.messageId === message.id) {
@@ -357,11 +335,7 @@ export default function MessageItem({
             // Entrance animation for new messages
             isNew && "animate-in fade-in zoom-in-95 duration-300",
             // HIGHLIGHT EFFECT: Scale up + frosted glass background
-            isHighlighted && "scale-[1.02] bg-white/30 backdrop-blur-md opacity-100",
-            // Scroll-based visibility fade (only when not new and not highlighted)
-            !isNew && !isHighlighted && (isVisible 
-              ? "opacity-100" 
-              : "opacity-40")
+            isHighlighted && "scale-[1.02] bg-white/30 backdrop-blur-md opacity-100"
         )}
     >
 

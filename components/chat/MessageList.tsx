@@ -194,7 +194,11 @@ export default function MessageList() {
                 ref={containerRef}
                 onScroll={handleScroll}
                 className="flex-1 p-2 pb-32 space-y-2 overflow-y-auto scroll-smooth"
-                style={{ background: MESSAGE_LIST_BACKGROUND }}
+                style={{ 
+                    background: MESSAGE_LIST_BACKGROUND,
+                    maskImage: 'linear-gradient(to bottom, transparent, black 15%)',
+                    WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%)'
+                }}
             >
             {messages.map((msg, index) => {
                 const prevMsg = messages[index - 1];

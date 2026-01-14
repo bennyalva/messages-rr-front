@@ -21,10 +21,10 @@ interface AuthGuardProps {
  * AuthGuard component that protects routes requiring authentication.
  * Handles session hydration from localStorage and role-based access control.
  * 
- * Role hierarchy:
- * - owner: All permissions (can access everything)
- * - admin: System management, users, messages, songs
- * - user: Chat, reactions, voting
+ * Note: Middleware handles the primary route protection. This component is for:
+ * 1. Hydrating auth state from localStorage
+ * 2. Role-based access control
+ * 3. Loading state display
  */
 export default function AuthGuard({ 
   children, 
@@ -43,11 +43,20 @@ export default function AuthGuard({
     }
   }, [dispatch, isHydrated]);
 
+  // Clean history on mount to prevent pollution from logout-confirm redirects
+  useEffect(() => {
+    if (isHydrated && isAuthenticated) {
+      // Replace current history entry to clean up any redirect artifacts
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  }, [isHydrated, isAuthenticated]);
+
   // Handle redirects after hydration
   useEffect(() => {
     if (!isHydrated) return;
 
     // Not authenticated -> redirect to login
+    // (Middleware should catch this, but this is a fallback)
     if (!isAuthenticated || !user) {
       router.replace(redirectTo);
       return;
