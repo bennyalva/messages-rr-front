@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google"; // Sonidero vibe with JetBrains or Roboto match
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "@/lib/store/StoreProvider";
 

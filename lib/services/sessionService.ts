@@ -3,6 +3,7 @@ import { generateUUID } from '../utils/uuid';
 
 const SESSION_KEY = 'sonidero_session';
 const TOKEN_KEY = 'sonidero_token';
+const AUTH_COOKIE_NAME = 'sonidero_auth';
 
 export interface SessionData {
   user: User;
@@ -12,10 +13,11 @@ export interface SessionData {
 
 // Session duration: 7 days
 const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000;
+const SESSION_DURATION_DAYS = 7;
 
 export const sessionService = {
   /**
-   * Save user session to localStorage
+   * Save user session to localStorage AND cookie (for middleware)
    */
   saveSession(user: User, token: string): void {
     const sessionData: SessionData = {
@@ -25,8 +27,13 @@ export const sessionService = {
     };
     
     if (typeof window !== 'undefined') {
+      // Save to localStorage (for client-side hydration)
       localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
       localStorage.setItem(TOKEN_KEY, token);
+      
+      // Save to cookie (for middleware server-side checks)
+      const expires = new Date(Date.now() + SESSION_DURATION);
+      document.cookie = `${AUTH_COOKIE_NAME}=${token}; path=/; expires=${expires.toUTCString()}; SameSite=Lax`;
     }
   },
 
@@ -64,12 +71,16 @@ export const sessionService = {
   },
 
   /**
-   * Clear session (logout)
+   * Clear session (logout) - clears both localStorage AND cookie
    */
   clearSession(): void {
     if (typeof window !== 'undefined') {
+      // Clear localStorage
       localStorage.removeItem(SESSION_KEY);
       localStorage.removeItem(TOKEN_KEY);
+      
+      // Clear cookie by setting expired date
+      document.cookie = `${AUTH_COOKIE_NAME}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
     }
   },
 

@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { LoginSchema, LoginCredentials } from '@/lib/types/auth'; // Fixed import path
-import { useAppDispatch } from '@/lib/store/hooks'; // Fixed import path
-import { loginStart, loginSuccess, loginFailure } from '@/lib/store/features/authSlice'; // Fixed import path
+import { LoginSchema, LoginCredentials } from '@/lib/types/auth';
+import { useAppDispatch } from '@/lib/store/hooks';
+import { loginStart, loginSuccess, loginFailure } from '@/lib/store/features/authSlice';
 import { authService } from '@/lib/services/authService';
 import { generateUUID } from '@/lib/utils/uuid';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,23 @@ export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
+  // Clean and trap history on login page
+  useEffect(() => {
+    // Replace to clean any redirect artifacts
+    window.history.replaceState({ page: 'login' }, '', '/login');
+    
+    // Push trap state
+    window.history.pushState({ page: 'login-trap' }, '', '/login');
+    
+    const handlePopState = () => {
+      // Block back navigation - keep user on login
+      window.history.pushState({ page: 'login-trap' }, '', '/login');
+    };
+    
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginCredentials>({
     resolver: zodResolver(LoginSchema),
   });
@@ -34,11 +51,11 @@ export default function LoginPage() {
       const token = `token_${generateUUID()}_${Date.now()}`;
       dispatch(loginSuccess({ user, token }));
       
-      // Redirect based on role
+      // Redirect based on role - use replace to clean history
       if (user.role === 'owner' || user.role === 'admin') {
-        router.push('/admin');
+        router.replace('/admin');
       } else {
-        router.push('/chat');
+        router.replace('/chat');
       }
       
     } catch (err: any) {
@@ -50,7 +67,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-[url('/bg-sonidero.png')] bg-cover bg-center relative">
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" /> {/* Overlay */}
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
       
       <Card className="w-full max-w-md relative z-10 border-primary/50 shadow-[0_0_30px_theme(colors.primary.DEFAULT)] bg-black/90 text-white">
         <CardHeader className="text-center">

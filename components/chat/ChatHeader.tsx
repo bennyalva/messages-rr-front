@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '@/lib/store/hooks';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { logout } from '@/lib/store/features/authSlice';
 import { useRouter } from 'next/navigation';
 import { Menu, Disc, LogOut, User, DollarSign, Info, MessageSquare, Users as UsersIcon, MoreVertical } from 'lucide-react';
@@ -18,6 +19,7 @@ export default function ChatHeader() {
   const { activeUsers } = useAppSelector(state => state.chat);
   const [animationPhase, setAnimationPhase] = useState<'idle' | 'phase1' | 'phase2'>('idle');
   const [config, setConfig] = useState<any>({ appName: 'Cargando...', logoUrl: null });
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const pressStartTime = useRef<number | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const ignoreClickRef = useRef(false);
@@ -90,9 +92,14 @@ export default function ChatHeader() {
       }
   };
 
-  const handleLogout = () => {
+  const handleLogoutClick = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const handleConfirmLogout = () => {
     dispatch(logout());
-    router.push('/login');
+    setShowLogoutConfirm(false);
+    router.replace('/login');
   };
 
   return (
@@ -277,13 +284,25 @@ export default function ChatHeader() {
                 <DropdownMenuItem onClick={() => router.push('/dm-dj')} className="focus:bg-primary/20 cursor-pointer">
                     <MessageSquare className="mr-2 h-4 w-4" /> Mensaje al DJ
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:bg-destructive/20 cursor-pointer">
+                <DropdownMenuItem onClick={handleLogoutClick} className="text-destructive focus:bg-destructive/20 cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" /> Cerrar Sesión
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
 
     </header>
+
+    {/* Logout Confirmation Modal */}
+    <ConfirmDialog
+      open={showLogoutConfirm}
+      onOpenChange={setShowLogoutConfirm}
+      title="¿Cerrar sesión?"
+      description="Estás a punto de salir de la aplicación. Perderás el acceso hasta que vuelvas a iniciar sesión."
+      confirmLabel="Sí, cerrar sesión"
+      cancelLabel="Cancelar"
+      onConfirm={handleConfirmLogout}
+      variant="destructive"
+    />
     </>
   );
 }
