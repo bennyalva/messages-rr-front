@@ -19,6 +19,7 @@ interface MessageItemProps {
   activeReactionMenuId: string | null;
   setActiveReactionMenuId: (id: string | null) => void;
   currentUserId?: string;
+  isNew?: boolean;  // For entrance animation on new messages
 }
 
 const REACTIONS = ['🔥', '💃', '🕺', '🍺', '🔊', '❤️', '🎵'];
@@ -59,7 +60,8 @@ export default function MessageItem({
   isUserOnline,
   activeReactionMenuId,
   setActiveReactionMenuId,
-  currentUserId = CURRENT_USER_ID
+  currentUserId = CURRENT_USER_ID,
+  isNew = false
 }: MessageItemProps) {
   const dispatch = useAppDispatch();
   const [showReactionDetails, setShowReactionDetails] = useState(false);
@@ -71,6 +73,9 @@ export default function MessageItem({
   const longPressTimer = useRef<NodeJS.Timeout | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const bubbleRef = useRef<HTMLDivElement>(null);
+  const messageContainerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const [isHighlighted, setIsHighlighted] = useState(false);  // Track when message is being highlighted
   
   const showReactions = activeReactionMenuId === message.id;
 
@@ -103,6 +108,39 @@ export default function MessageItem({
       document.removeEventListener('touchstart', handleClickOutside);
     };
   }, [showReactions, setActiveReactionMenuId]);
+
+  // Scroll-based visibility detection for subtle fade effect
+  useEffect(() => {
+    const container = messageContainerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.1,  // Trigger when 10% of the element is visible
+        rootMargin: '-10% 0px -10% 0px'  // Add some margin for smoother transition
+      }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
+  // Detect when this message is being highlighted (reply navigation)
+  useEffect(() => {
+    const handleHighlight = (e: CustomEvent<{ messageId: string }>) => {
+      if (e.detail.messageId === message.id) {
+        setIsHighlighted(true);
+        // Reset after 3 seconds
+        setTimeout(() => setIsHighlighted(false), 3000);
+      }
+    };
+
+    window.addEventListener('highlightMessage', handleHighlight as EventListener);
+    return () => window.removeEventListener('highlightMessage', handleHighlight as EventListener);
+  }, [message.id]);
 
   // Long Press on Icon
   const handleIconPress = (e: React.TouchEvent | React.MouseEvent) => {
@@ -279,9 +317,10 @@ export default function MessageItem({
                 const el = document.getElementById(`msg-${message.replyToId}`);
                 if (el) {
                     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    // Add highlight class sytle
-                    el.classList.add('animate-flash-highlight');
-                    setTimeout(() => el.classList.remove('animate-flash-highlight'), 3000);
+                    // Dispatch custom event to highlight the message (React state handles the visual effect)
+                    window.dispatchEvent(new CustomEvent('highlightMessage', { 
+                      detail: { messageId: message.replyToId } 
+                    }));
                 }
             }
         }}
@@ -310,10 +349,19 @@ export default function MessageItem({
   return (
     <div 
         id={`msg-${message.id}`}
+        ref={messageContainerRef}
         className={cn(
-            "relative flex w-full gap-1 transition-colors duration-1000 rounded-xl p-1", 
+            "relative flex w-full gap-1 rounded-xl p-1 transition-all duration-300", 
             showAvatar ? "mt-4 mb-1" : "my-0.5",
-            isOwn ? "justify-end" : "justify-start"
+            isOwn ? "justify-end" : "justify-start",
+            // Entrance animation for new messages
+            isNew && "animate-in fade-in zoom-in-95 duration-300",
+            // HIGHLIGHT EFFECT: Scale up + frosted glass background
+            isHighlighted && "scale-[1.02] bg-white/30 backdrop-blur-md opacity-100",
+            // Scroll-based visibility fade (only when not new and not highlighted)
+            !isNew && !isHighlighted && (isVisible 
+              ? "opacity-100" 
+              : "opacity-40")
         )}
     >
 
