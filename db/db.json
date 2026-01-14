@@ -664,6 +664,66 @@
       "content": "hola",
       "timestamp": "2026-01-13T03:52:08.931Z",
       "reactions": []
+    },
+    {
+      "id": "1c1b0a40-245c-4ee7-aff7-95a0bf593524",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "userAvatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sonidero1",
+      "userGang": "arcolocos",
+      "content": "hola",
+      "timestamp": "2026-01-13T21:32:24.132Z",
+      "reactions": []
+    },
+    {
+      "id": "2bb74ef1-2a88-4453-8261-1520d6c47c9c",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "userAvatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sonidero1",
+      "userGang": "arcolocos",
+      "content": "hola 2",
+      "timestamp": "2026-01-13T21:32:33.497Z",
+      "reactions": []
+    },
+    {
+      "id": "0e5d56e2-8121-462a-ab3d-aac3ef8b73c9",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "userAvatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sonidero1",
+      "userGang": "arcolocos",
+      "content": "hola 3",
+      "timestamp": "2026-01-13T21:35:38.175Z",
+      "reactions": []
+    },
+    {
+      "id": "cd82b470-1b7c-4e4f-8572-b5efe095f82e",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "userAvatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sonidero1",
+      "userGang": "arcolocos",
+      "content": "hola 4",
+      "timestamp": "2026-01-13T21:35:43.838Z",
+      "reactions": []
+    },
+    {
+      "id": "5b3b890d-28b0-40d0-9c67-997fd34297d0",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "userAvatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sonidero1",
+      "userGang": "arcolocos",
+      "content": "hola 5",
+      "timestamp": "2026-01-13T21:35:48.205Z",
+      "reactions": []
+    },
+    {
+      "id": "81a856cd-f021-413d-adb5-7d8ec70b2a5f",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "userAvatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sonidero1",
+      "userGang": "arcolocos",
+      "content": "hola6",
+      "timestamp": "2026-01-13T23:20:43.233Z",
+      "reactions": []
     }
   ],
   "directMessages": [],
