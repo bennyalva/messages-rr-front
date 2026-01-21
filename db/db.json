@@ -114,6 +114,40 @@
         "Cumbia Sonidera",
         "Guaracha"
       ]
+    },
+    {
+      "id": "55cbabda-dffd-4f4b-aefc-199fb21be0be",
+      "name": "Bailarin",
+      "lastName": "Luna",
+      "alias": "BailarinDeLaLuna",
+      "password": "123456",
+      "gang": "",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sonidero1",
+      "musicTypes": [
+        "Cumbia Sonidera"
+      ],
+      "role": "user",
+      "isActive": true,
+      "musicPreferences": [
+        "Cumbia Sonidera"
+      ]
+    },
+    {
+      "id": "adba0f6f-4770-4f52-9613-4d51915daf1b",
+      "name": "Test",
+      "lastName": "User",
+      "alias": "tester123",
+      "password": "123456",
+      "gang": "",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Bailador",
+      "musicTypes": [
+        "Cumbia Sonidera"
+      ],
+      "role": "user",
+      "isActive": true,
+      "musicPreferences": [
+        "Cumbia Sonidera"
+      ]
     }
   ],
   "messages": [

@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server';
 const AUTH_COOKIE_NAME = 'sonidero_auth';
 
 // Routes that require authentication
-const PROTECTED_ROUTES = ['/chat', '/admin', '/profile', '/vote', '/dm-dj', '/about'];
+const PROTECTED_ROUTES = ['/chat', '/dashboard', '/profile', '/vote', '/dm-dj', '/about'];
 
 // Routes that are public (no auth required)
 const PUBLIC_ROUTES = ['/login', '/register'];

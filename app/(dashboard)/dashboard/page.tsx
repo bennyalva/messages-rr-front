@@ -12,7 +12,7 @@ import { Users, Music, Palette, Trash2, Edit, X } from 'lucide-react';
 import { useApiUrl } from '@/lib/config/api';
 import { generateUUID } from '@/lib/utils/uuid';
 
-function AdminPageContent() {
+function DashboardPageContent() {
   const API_URL = useApiUrl();
   const { user } = useAppSelector(state => state.auth);
   const [users, setUsers] = useState<any[]>([]);
@@ -195,10 +195,10 @@ function AdminPageContent() {
   );
 }
 
-export default function AdminPage() {
+export default function DashboardPage() {
   return (
     <AuthGuard allowedRoles={['admin', 'owner']}>
-      <AdminPageContent />
+      <DashboardPageContent />
     </AuthGuard>
   );
 }

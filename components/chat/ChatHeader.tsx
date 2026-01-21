@@ -97,9 +97,12 @@ export default function ChatHeader() {
   };
 
   const handleConfirmLogout = () => {
+    // dispatch(logout) calls sessionService.clearSession() which invalidates sessionId
     dispatch(logout());
     setShowLogoutConfirm(false);
-    router.replace('/login');
+    
+    // Hard navigation to login - use location.href to go to END of history
+    window.location.href = '/login';
   };
 
   return (
