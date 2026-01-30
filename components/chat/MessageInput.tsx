@@ -128,7 +128,7 @@ export default function MessageInput() {
 
     <div className="bg-black/80 backdrop-blur-md p-2 border-t border-white/10 flex flex-col gap-2 safe-area-bottom">
        {/* Input Area */}
-       <div className="flex flex-col gap-2 w-full">
+       <div className="flex flex-col gap-2 w-full max-w-3xl mx-auto">
            
            {/* Image Preview with remove button */}
            {imagePreview && (
@@ -145,7 +145,7 @@ export default function MessageInput() {
                 </div>
            )}
 
-           <div className="flex items-end gap-2 relative">
+           <div className="flex items-center gap-2 relative">
                 <input 
                     type="file" 
                     accept="image/*" 
@@ -164,7 +164,7 @@ export default function MessageInput() {
                 />
                 <label 
                     htmlFor="image-upload" 
-                    className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/10 cursor-pointer transition-colors text-gray-400 hover:text-white"
+                    className="flex items-center justify-center w-11 h-11 rounded-full hover:bg-white/10 cursor-pointer transition-colors text-gray-400 hover:text-white"
                     title="Adjuntar imagen"
                 >
                     <ImageIcon className="w-5 h-5" />
@@ -185,7 +185,7 @@ export default function MessageInput() {
                             placeholder="Escribe un mensaje ..."
                             maxLength={maxLength}
                             className={cn(
-                                "w-full bg-gray-900/50 text-white rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-0 resize-none transition-all duration-300 border",
+                                "w-full bg-gray-900/50 text-white rounded-2xl px-4 py-2.5 text-sm focus:outline-none focus:ring-0 resize-none transition-all duration-300 border",
                                 borderColorClass
                             )}
                             rows={1}
@@ -198,7 +198,7 @@ export default function MessageInput() {
                         onClick={handleSend} 
                         size="icon" 
                         variant="default"
-                        className={`w-10 h-10 rounded-full shadow-[0_0_10px_theme(colors.primary.DEFAULT)] transition-all ${content.trim() || imagePreview ? 'scale-100 opacity-100' : 'scale-90 opacity-70'}`}
+                        className="w-11 h-11 rounded-full shadow-[0_0_10px_theme(colors.primary.DEFAULT)] transition-all flex items-center justify-center"
                         disabled={(!content.trim() && !imagePreview) || isSending}
                 >
                         {isSending ? <span className="animate-spin text-lg">💿</span> : <Send className="w-4 h-4 ml-0.5" />}

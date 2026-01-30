@@ -758,6 +758,26 @@
       "content": "hola6",
       "timestamp": "2026-01-13T23:20:43.233Z",
       "reactions": []
+    },
+    {
+      "id": "3dd5f39d-890d-49fe-9ccd-e02e92815ccd",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "userAvatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sonidero1",
+      "userGang": "arcolocos",
+      "content": "hola",
+      "timestamp": "2026-01-30T19:53:19.041Z",
+      "reactions": []
+    },
+    {
+      "id": "b7062570-9a28-4faf-9ca4-8f9393fc23db",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "userAvatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sonidero1",
+      "userGang": "arcolocos",
+      "content": "hola",
+      "timestamp": "2026-01-30T19:54:00.319Z",
+      "reactions": []
     }
   ],
   "directMessages": [],

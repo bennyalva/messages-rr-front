@@ -47,6 +47,12 @@ export const sessionService = {
     const sessionId = sessionStorage.getItem(SESSION_ID_KEY);
     const session = this.getSession();
     
+    // If we have a valid session in localStorage but no sessionId (e.g. mobile refresh), recover it
+    if (!sessionId && session) {
+      this.generateSessionId();
+      return true;
+    }
+    
     // Both must exist for a valid session
     return !!(sessionId && session);
   },
