@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Users, Music, Palette, Trash2, Edit, X } from 'lucide-react';
 import { useApiUrl } from '@/lib/config/api';
 import { generateUUID } from '@/lib/utils/uuid';
+import ChatHeader from '@/components/chat/ChatHeader';
 
 function DashboardPageContent() {
   const API_URL = useApiUrl();
@@ -74,19 +75,10 @@ function DashboardPageContent() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-background p-4 lg:p-10">
-      <header className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                Panel de Control - Sonidero
-            </h1>
-            <p className="text-muted-foreground">Bienvenido, {user.alias} ({user.role})</p>
-          </div>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={fetchUsers}>Recargar Datos</Button>
-            <Button variant="outline" onClick={() => window.location.href = '/chat'}>Volver al Chat</Button>
-          </div>
-      </header>
+    <div className="min-h-screen bg-background">
+      <ChatHeader variant="admin" />
+      
+      <div className="p-4 lg:p-10">
 
       <Tabs defaultValue="users" className="w-full">
         <TabsList className="grid w-full grid-cols-3 lg:w-[600px] mb-8 bg-black/50 border border-primary/20">
@@ -191,6 +183,7 @@ function DashboardPageContent() {
         </TabsContent>
 
       </Tabs>
+      </div>
     </div>
   );
 }

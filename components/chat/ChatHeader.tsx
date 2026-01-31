@@ -11,12 +11,17 @@ import { Menu, Disc, LogOut, User, DollarSign, Info, MessageSquare, Users as Use
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApiUrl } from '@/lib/config/api';
 
-export default function ChatHeader() {
+interface ChatHeaderProps {
+  variant?: 'user' | 'admin';
+}
+
+export default function ChatHeader({ variant = 'user' }: ChatHeaderProps) {
   const API_URL = useApiUrl();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { user } = useAppSelector(state => state.auth);
   const { activeUsers } = useAppSelector(state => state.chat);
+  const isAdminVariant = variant === 'admin';
   const [animationPhase, setAnimationPhase] = useState<'idle' | 'phase1' | 'phase2'>('idle');
   const [config, setConfig] = useState<any>({ appName: 'Cargando...', logoUrl: null });
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -211,26 +216,30 @@ export default function ChatHeader() {
            )}
       </AnimatePresence>
 
-      <header className="sticky top-0 z-50 w-full bg-black/80 backdrop-blur-md border-b border-primary/20 p-2 flex items-center justify-between relative overflow-hidden">
+      <header className={`sticky top-0 z-50 bg-black/80 backdrop-blur-md p-2 flex items-center justify-between relative overflow-hidden ${
+          isAdminVariant 
+            ? 'mx-4 lg:mx-10 mt-4 rounded-xl border border-white/20' 
+            : 'w-full border-b border-primary/20'
+        }`}>
 
-        {/* Left: Logo - Animation Only */}
+        {/* Left: Logo - Animation Only for user variant */}
         <div 
             className="relative cursor-pointer z-50 flex-shrink-0 outline-none"
-            onPointerDown={handlePointerDown}
-            onPointerUp={handlePointerUp}
-            onPointerLeave={handlePointerUp}
-            onClick={handleLogoClick}
+            onPointerDown={!isAdminVariant ? handlePointerDown : undefined}
+            onPointerUp={!isAdminVariant ? handlePointerUp : undefined}
+            onPointerLeave={!isAdminVariant ? handlePointerUp : undefined}
+            onClick={!isAdminVariant ? handleLogoClick : undefined}
         >
              <motion.div 
                 layoutId="sonidero-logo-hero"
                 animate={
-                    animationPhase === 'phase1' 
+                    !isAdminVariant && animationPhase === 'phase1' 
                     ? { rotate: 360, scale: 1.1, filter: "hue-rotate(90deg)" }
                     : { rotate: 0, scale: 1, filter: "hue-rotate(0deg)" }
                 }
                 transition={{ 
                     duration: animationPhase === 'phase1' ? 0.5 : 0.3, 
-                    repeat: animationPhase === 'phase1' ? Infinity : 0,
+                    repeat: !isAdminVariant && animationPhase === 'phase1' ? Infinity : 0,
                     ease: "linear"
                 }}
                 className="w-12 h-12 rounded-full border-2 border-primary shadow-[0_0_15px_theme(colors.primary.DEFAULT)] overflow-hidden bg-black relative z-50 select-none"
@@ -261,37 +270,55 @@ export default function ChatHeader() {
                 } : {}}
                 className="flex items-center gap-1 text-[10px] text-gray-400 mt-0.5"
             >
-                <UsersIcon className="w-3 h-3 text-green-400" />
-                <span className="text-green-400 font-bold">{activeUsers.length}</span>
-                <span>usuarios conectados</span>
+                {isAdminVariant ? (
+                    <span className="text-white/80">Bienvenido, <span className="text-primary font-bold">{user?.alias}</span></span>
+                ) : (
+                    <>
+                        <UsersIcon className="w-3 h-3 text-green-400" />
+                        <span className="text-green-400 font-bold">{activeUsers.length}</span>
+                        <span>usuarios conectados</span>
+                    </>
+                )}
             </motion.div>
         </div>
 
-        {/* Right: 3-Dots Menu */}
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-white hover:bg-primary/20">
-                    <MoreVertical className="w-6 h-6" />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 bg-black/90 border-primary text-white mr-2 z-[70]">
-                <DropdownMenuItem onClick={() => router.push('/profile')} className="focus:bg-primary/20 cursor-pointer">
-                    <User className="mr-2 h-4 w-4" /> Mi Perfil
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/vote')} className="focus:bg-primary/20 cursor-pointer">
-                    <DollarSign className="mr-2 h-4 w-4" /> Votar Canciones
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/about')} className="focus:bg-primary/20 cursor-pointer">
-                    <Info className="mr-2 h-4 w-4" /> Acerca de
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/dm-dj')} className="focus:bg-primary/20 cursor-pointer">
-                    <MessageSquare className="mr-2 h-4 w-4" /> Mensaje al DJ
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogoutClick} className="text-destructive focus:bg-destructive/20 cursor-pointer">
-                    <LogOut className="mr-2 h-4 w-4" /> Cerrar Sesión
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Right: Menu (Dropdown for user, Logout button for admin) */}
+        {isAdminVariant ? (
+            <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-destructive hover:bg-destructive/20"
+                onClick={handleLogoutClick}
+                title="Cerrar Sesión"
+            >
+                <LogOut className="w-6 h-6" />
+            </Button>
+        ) : (
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="text-white hover:bg-primary/20">
+                        <MoreVertical className="w-6 h-6" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56 bg-black/90 border-primary text-white mr-2 z-[70]">
+                    <DropdownMenuItem onClick={() => router.push('/profile')} className="focus:bg-primary/20 cursor-pointer">
+                        <User className="mr-2 h-4 w-4" /> Mi Perfil
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => router.push('/vote')} className="focus:bg-primary/20 cursor-pointer">
+                        <DollarSign className="mr-2 h-4 w-4" /> Votar Canciones
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => router.push('/about')} className="focus:bg-primary/20 cursor-pointer">
+                        <Info className="mr-2 h-4 w-4" /> Acerca de
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => router.push('/dm-dj')} className="focus:bg-primary/20 cursor-pointer">
+                        <MessageSquare className="mr-2 h-4 w-4" /> Mensaje al DJ
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogoutClick} className="text-destructive focus:bg-destructive/20 cursor-pointer">
+                        <LogOut className="mr-2 h-4 w-4" /> Cerrar Sesión
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        )}
 
     </header>
 

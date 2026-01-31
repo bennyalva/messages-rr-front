@@ -814,7 +814,7 @@
     }
   ],
   "config": {
-    "appName": "Sonidero Chat 3000",
+    "appName": "Sonidero Chat",
     "logoUrl": "/logo.png",
     "defaultTheme": "dark",
     "primaryColor": "hsl(310 100% 50%)",
