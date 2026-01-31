@@ -170,7 +170,7 @@ export default function MessageInput() {
                     <ImageIcon className="w-5 h-5" />
                 </label>
                 
-                <div className="flex-1 relative">
+                <div className="flex-1 relative pt-1">
                     <Tooltip content={tooltipMessage} visible={showTooltip} position="top" className="w-full">
                         <textarea
                             ref={inputRef}
