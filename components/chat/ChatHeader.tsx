@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { logout } from '@/lib/store/features/authSlice';
 import { useRouter } from 'next/navigation';
-import { Menu, Disc, LogOut, User, DollarSign, Info, MessageSquare, Users as UsersIcon, MoreVertical } from 'lucide-react';
+import { Menu, Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApiUrl } from '@/lib/config/api';
 
@@ -305,13 +305,13 @@ export default function ChatHeader({ variant = 'user' }: ChatHeaderProps) {
                         <User className="mr-2 h-4 w-4" /> Mi Perfil
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => router.push('/vote')} className="focus:bg-primary/20 cursor-pointer">
-                        <DollarSign className="mr-2 h-4 w-4" /> Votar Canciones
+                        <Disc className="mr-2 h-4 w-4" /> Votar Canciones
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => router.push('/about')} className="focus:bg-primary/20 cursor-pointer">
                         <Info className="mr-2 h-4 w-4" /> Acerca de
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => router.push('/dm-dj')} className="focus:bg-primary/20 cursor-pointer">
-                        <MessageSquare className="mr-2 h-4 w-4" /> Mensaje al DJ
+                        <Mail className="mr-2 h-4 w-4" /> Mensaje al DJ
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogoutClick} className="text-destructive focus:bg-destructive/20 cursor-pointer">
                         <LogOut className="mr-2 h-4 w-4" /> Cerrar Sesión

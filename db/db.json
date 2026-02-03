@@ -782,22 +782,6 @@
   ],
   "directMessages": [
     {
-      "id": "9f401d08-6b16-49e3-9801-f0d035a460ec",
-      "userId": "7de693a6-85a1-49df-9fbf-43c96f057626",
-      "userAlias": "reny7",
-      "content": "Que paso rey!",
-      "timestamp": "2026-01-31T04:19:43.723Z",
-      "isRead": false
-    },
-    {
-      "id": "9f363c86-ae54-4261-b806-672d57e680fb",
-      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
-      "userAlias": "lbenny",
-      "content": "lbenny es puto, saboorrrr!",
-      "timestamp": "2026-02-02T23:48:29.867Z",
-      "isRead": false
-    },
-    {
       "id": "e4a818cf-c2e8-48b6-9d20-0c2f7e1e3df7",
       "userId": "7de693a6-85a1-49df-9fbf-43c96f057626",
       "userAlias": "reny7",
@@ -821,16 +805,44 @@
   ],
   "songs": [
     {
-      "id": "3",
-      "title": "Espejismo",
-      "votes": 1,
-      "artist": "Grupo Bryndis"
+      "id": "a313fbc1-1ab9-42dd-8d78-a88675b973eb",
+      "title": "la mia",
+      "artist": "kumbia kings",
+      "votes": 1
     },
     {
-      "id": "389c63ef-1593-4536-b0f3-d21abcea4ca9",
-      "title": "la historia de mi vida",
-      "artist": "Grupo Kual",
+      "id": "aa214898-a76e-4746-b14e-caf4e1b72196",
+      "title": "mi razon",
+      "artist": "la ms",
       "votes": 1
+    },
+    {
+      "id": "540f9866-42ea-4d39-9b31-d2d1bd5eb10a",
+      "title": "otra cara",
+      "artist": "arroladora",
+      "votes": 2
+    }
+  ],
+  "userVotes": [
+    {
+      "id": "53fddeba-7f61-475d-b063-b199a18cfe8c",
+      "oderId": "user4",
+      "songId": "540f9866-42ea-4d39-9b31-d2d1bd5eb10a"
+    },
+    {
+      "id": "0ee29b67-0008-412e-9691-a9fa89ff69d0",
+      "oderId": "user5",
+      "songId": "a313fbc1-1ab9-42dd-8d78-a88675b973eb"
+    },
+    {
+      "id": "ebdb9f10-e8e1-4454-af06-4d67bd3edfa9",
+      "oderId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "songId": "540f9866-42ea-4d39-9b31-d2d1bd5eb10a"
+    },
+    {
+      "id": "c365f9c4-af6f-4b22-afd4-dfeefe17dd45",
+      "oderId": "7de693a6-85a1-49df-9fbf-43c96f057626",
+      "songId": "aa214898-a76e-4746-b14e-caf4e1b72196"
     }
   ],
   "config": {
