@@ -780,7 +780,33 @@
       "reactions": []
     }
   ],
-  "directMessages": [],
+  "directMessages": [
+    {
+      "id": "9f401d08-6b16-49e3-9801-f0d035a460ec",
+      "userId": "7de693a6-85a1-49df-9fbf-43c96f057626",
+      "userAlias": "reny7",
+      "content": "Que paso rey!",
+      "timestamp": "2026-01-31T04:19:43.723Z",
+      "isRead": false
+    },
+    {
+      "id": "9f363c86-ae54-4261-b806-672d57e680fb",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "content": "lbenny es puto, saboorrrr!",
+      "timestamp": "2026-02-02T23:48:29.867Z",
+      "isRead": false
+    },
+    {
+      "id": "e4a818cf-c2e8-48b6-9d20-0c2f7e1e3df7",
+      "userId": "7de693a6-85a1-49df-9fbf-43c96f057626",
+      "userAlias": "reny7",
+      "userGang": "arcolocos",
+      "content": "Reny bebe",
+      "timestamp": "2026-02-03T00:05:02.710Z",
+      "isRead": false
+    }
+  ],
   "activeUsers": [
     {
       "userId": "1",
@@ -795,22 +821,16 @@
   ],
   "songs": [
     {
-      "id": "1",
-      "title": "Cumbia de los Pajaritos",
-      "votes": 4,
-      "artist": "Grupo Kual"
-    },
-    {
-      "id": "2",
-      "title": "Danza Azteca",
-      "votes": 1,
-      "artist": "Grupo Maravilla"
-    },
-    {
       "id": "3",
       "title": "Espejismo",
       "votes": 1,
       "artist": "Grupo Bryndis"
+    },
+    {
+      "id": "389c63ef-1593-4536-b0f3-d21abcea4ca9",
+      "title": "la historia de mi vida",
+      "artist": "Grupo Kual",
+      "votes": 1
     }
   ],
   "config": {
