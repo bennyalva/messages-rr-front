@@ -148,6 +148,35 @@
       "musicPreferences": [
         "Cumbia Sonidera"
       ]
+    },
+    {
+      "id": "46e6744c-6b47-4e56-9e39-28108fc96a4e",
+      "name": "bochis",
+      "lastName": "bochis",
+      "alias": "bochis",
+      "password": "bochis100",
+      "gang": "lomero",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=DjMaster",
+      "musicTypes": [
+        "Cumbia Sonidera",
+        "Salsa",
+        "Guaracha",
+        "Weje Weje",
+        "Cumbia Villera",
+        "Tropical",
+        "High Energy"
+      ],
+      "role": "user",
+      "isActive": true,
+      "musicPreferences": [
+        "Cumbia Sonidera",
+        "Salsa",
+        "Guaracha",
+        "Weje Weje",
+        "Cumbia Villera",
+        "Tropical",
+        "High Energy"
+      ]
     }
   ],
   "messages": [
