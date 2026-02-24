@@ -195,9 +195,7 @@ export default function MessageList() {
                 onScroll={handleScroll}
                 className="flex-1 p-2 pb-32 space-y-2 overflow-y-auto scroll-smooth"
                 style={{ 
-                    background: MESSAGE_LIST_BACKGROUND,
-                    maskImage: 'linear-gradient(to bottom, transparent, black 15%)',
-                    WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%)'
+                    background: MESSAGE_LIST_BACKGROUND
                 }}
             >
             {messages.map((msg, index) => {

@@ -4,6 +4,7 @@ import { generateUUID } from '../utils/uuid';
 const SESSION_KEY = 'sonidero_session';
 const TOKEN_KEY = 'sonidero_token';
 const AUTH_COOKIE_NAME = 'sonidero_auth';
+const SESSION_ID_KEY = 'sonidero_session_id'; // Unique ID per login session
 
 export interface SessionData {
   user: User;
@@ -16,6 +17,56 @@ const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000;
 const SESSION_DURATION_DAYS = 7;
 
 export const sessionService = {
+  /**
+   * Generate a new unique session ID for this login
+   * This is used to invalidate cached pages after logout
+   */
+  generateSessionId(): string {
+    const sessionId = `sid_${generateUUID()}_${Date.now()}`;
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem(SESSION_ID_KEY, sessionId);
+    }
+    return sessionId;
+  },
+
+  /**
+   * Get the current session ID
+   */
+  getSessionId(): string | null {
+    if (typeof window === 'undefined') return null;
+    return sessionStorage.getItem(SESSION_ID_KEY);
+  },
+
+  /**
+   * Validate if the current session ID exists and is valid
+   * This is called by protected pages to check if user is still logged in
+   */
+  isSessionValid(): boolean {
+    if (typeof window === 'undefined') return false;
+    
+    const sessionId = sessionStorage.getItem(SESSION_ID_KEY);
+    const session = this.getSession();
+    
+    // If we have a valid session in localStorage but no sessionId (e.g. mobile refresh), recover it
+    if (!sessionId && session) {
+      this.generateSessionId();
+      return true;
+    }
+    
+    // Both must exist for a valid session
+    return !!(sessionId && session);
+  },
+
+  /**
+   * Invalidate the session ID (called on logout)
+   * This makes all cached pages invalid
+   */
+  invalidateSessionId(): void {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem(SESSION_ID_KEY);
+    }
+  },
+
   /**
    * Save user session to localStorage AND cookie (for middleware)
    */
@@ -71,13 +122,16 @@ export const sessionService = {
   },
 
   /**
-   * Clear session (logout) - clears both localStorage AND cookie
+   * Clear session (logout) - clears localStorage, cookie, AND session ID
    */
   clearSession(): void {
     if (typeof window !== 'undefined') {
       // Clear localStorage
       localStorage.removeItem(SESSION_KEY);
       localStorage.removeItem(TOKEN_KEY);
+      
+      // Clear session ID (this invalidates all cached pages!)
+      this.invalidateSessionId();
       
       // Clear cookie by setting expired date
       document.cookie = `${AUTH_COOKIE_NAME}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;

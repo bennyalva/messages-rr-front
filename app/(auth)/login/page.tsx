@@ -8,6 +8,7 @@ import { LoginSchema, LoginCredentials } from '@/lib/types/auth';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { loginStart, loginSuccess, loginFailure } from '@/lib/store/features/authSlice';
 import { authService } from '@/lib/services/authService';
+import { sessionService } from '@/lib/services/sessionService';
 import { generateUUID } from '@/lib/utils/uuid';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,26 +22,17 @@ export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
-  // Clean and trap history on login page
-  useEffect(() => {
-    // Replace to clean any redirect artifacts
-    window.history.replaceState({ page: 'login' }, '', '/login');
-    
-    // Push trap state
-    window.history.pushState({ page: 'login-trap' }, '', '/login');
-    
-    const handlePopState = () => {
-      // Block back navigation - keep user on login
-      window.history.pushState({ page: 'login-trap' }, '', '/login');
-    };
-    
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginCredentials>({
     resolver: zodResolver(LoginSchema),
   });
+
+  // Set clean history state for login page
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    // Set clean state for login page
+    window.history.replaceState({ page: 'login', clean: true }, '', '/login');
+  }, []);
 
   const onSubmit = async (data: LoginCredentials) => {
     dispatch(loginStart());
@@ -49,13 +41,19 @@ export default function LoginPage() {
       const user = await authService.login(data);
       // Generate a simple token for session
       const token = `token_${generateUUID()}_${Date.now()}`;
+      
+      // CRITICAL: Generate a new sessionId for this login
+      // This invalidates any cached protected pages from previous sessions
+      sessionService.generateSessionId();
+      
       dispatch(loginSuccess({ user, token }));
       
-      // Redirect based on role - use replace to clean history
+      // Redirect based on role - use location.href to add to end of history
+      // Then the new page will push its own state
       if (user.role === 'owner' || user.role === 'admin') {
-        router.replace('/admin');
+        window.location.href = '/dashboard';
       } else {
-        router.replace('/chat');
+        window.location.href = '/chat';
       }
       
     } catch (err: any) {

@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import { useApiUrl } from '@/lib/config/api';
 import { generateUUID } from '@/lib/utils/uuid';
+import ConfirmModal from '@/components/ui/ConfirmModal';
 
 function DmDjPageContent() {
   const API_URL = useApiUrl();
@@ -16,8 +17,14 @@ function DmDjPageContent() {
   const { user } = useAppSelector(state => state.auth);
   const [message, setMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  const handleSend = async () => {
+  const handleSendClick = () => {
+    if (!message.trim() || !user) return;
+    setShowConfirm(true);
+  };
+
+  const handleConfirmSend = async () => {
     if (!message.trim() || !user) return;
     
     setIsSending(true);
@@ -29,12 +36,13 @@ function DmDjPageContent() {
                 id: generateUUID(),
                 userId: user.id,
                 userAlias: user.alias,
+                userGang: user.gang || '',
                 content: message.trim(),
                 timestamp: new Date().toISOString(),
                 isRead: false
             })
         });
-        alert("¡Saludos enviados al DJ!");
+        setShowConfirm(false);
         setMessage('');
         router.back();
     } catch (error) {
@@ -69,11 +77,22 @@ function DmDjPageContent() {
                 <div className="text-right text-xs text-gray-500">
                     {message.length}/80
                 </div>
-                <Button className="w-full" variant="default" onClick={handleSend} disabled={!message.trim() || isSending}>
+                <Button className="w-full" variant="default" onClick={handleSendClick} disabled={!message.trim() || isSending}>
                     <Send className="mr-2 h-4 w-4" /> Enviar
                 </Button>
             </CardContent>
        </Card>
+
+       <ConfirmModal
+         isOpen={showConfirm}
+         onConfirm={handleConfirmSend}
+         onCancel={() => setShowConfirm(false)}
+         title="Confirmar envío"
+         message={`¿Enviar tu mensaje al DJ?\n\n"${message}"`}
+         confirmText="Enviar"
+         cancelText="Cancelar"
+         isLoading={isSending}
+       />
     </div>
   );
 }

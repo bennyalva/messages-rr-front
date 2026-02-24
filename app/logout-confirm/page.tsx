@@ -7,8 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LogOut, ArrowLeft, AlertTriangle } from 'lucide-react';
 import { useEffect } from 'react';
+import AuthGuard from '@/components/auth/AuthGuard';
 
-export default function LogoutConfirmPage() {
+function LogoutConfirmContent() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { user } = useAppSelector(state => state.auth);
@@ -16,20 +17,39 @@ export default function LogoutConfirmPage() {
   // Redirect destination based on user role
   const getDashboardPath = () => {
     if (user?.role === 'owner' || user?.role === 'admin') {
-      return '/admin';
+      return '/dashboard';
     }
     return '/chat';
   };
 
+  // Get button text based on user role
+  const getCancelButtonText = () => {
+    // Debug: log the user role
+    console.log('User in logout-confirm:', user);
+    console.log('User role:', user?.role);
+    
+    if (user?.role === 'owner' || user?.role === 'admin') {
+      console.log('Returning: No, volver al dashboard');
+      return 'No, volver al dashboard';
+    }
+    console.log('Returning: No, volver al chat');
+    return 'No, volver al chat';
+  };
+
   const handleConfirmLogout = () => {
+    // dispatch(logout) calls sessionService.clearSession() which invalidates sessionId
     dispatch(logout());
-    // Use replace to avoid history issues
-    router.replace('/login');
+    
+    // Hard navigation to login - use location.href to go to END of history
+    // Using href instead of replace so forward navigation is cleaner
+    window.location.href = '/login';
   };
 
   const handleCancel = () => {
-    // Go back to dashboard
-    router.replace(getDashboardPath());
+    // Clean history and go back to dashboard
+    const dashboardPath = getDashboardPath();
+    window.history.replaceState(null, '', dashboardPath);
+    router.replace(dashboardPath);
   };
 
   // Aggressive history trap to prevent back button bypass
@@ -102,11 +122,19 @@ export default function LogoutConfirmPage() {
               className="w-full font-medium py-6 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white"
             >
               <ArrowLeft className="mr-2 h-5 w-5" />
-              No, volver al chat
+              {getCancelButtonText()}
             </Button>
           </div>
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function LogoutConfirmPage() {
+  return (
+    <AuthGuard>
+      <LogoutConfirmContent />
+    </AuthGuard>
   );
 }
