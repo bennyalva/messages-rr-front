@@ -64,7 +64,7 @@ function DmDjPageContent() {
                     <CardTitle className="text-2xl app-title">Mensaje al DJ</CardTitle>
                 </div>
                 <CardDescription className="text-gray-400">
-                    Pide tu saludo o tu rola favorita (Máx 120 caracteres)
+                    Pide tu saludo o tu rola favorita (Máximo 120 caracteres)
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
