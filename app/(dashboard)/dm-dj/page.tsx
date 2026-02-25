@@ -2,6 +2,7 @@
 
 import AuthGuard from '@/components/auth/AuthGuard';
 import { Button } from '@/components/ui/button';
+import { SubmitButton } from '@/components/ui/submit-button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Send } from 'lucide-react';
@@ -60,26 +61,32 @@ function DmDjPageContent() {
                     <Button variant="ghost" size="icon" onClick={() => router.back()}>
                         <ArrowLeft className="w-5 h-5" />
                     </Button>
-                    <CardTitle>Mensaje al DJ</CardTitle>
+                    <CardTitle className="text-2xl app-title">Mensaje al DJ</CardTitle>
                 </div>
                 <CardDescription className="text-gray-400">
-                    Pide tu saludo o tu rola favorita (Máx 80 caracteres)
+                    Pide tu saludo o tu rola favorita (Máx 120 caracteres)
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 <textarea 
                     className="w-full h-32 bg-gray-900 border border-gray-700 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="Escribe aquí..."
-                    maxLength={80}
+                    maxLength={120}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                 />
                 <div className="text-right text-xs text-gray-500">
-                    {message.length}/80
+                    {message.length}/120
                 </div>
-                <Button className="w-full" variant="default" onClick={handleSendClick} disabled={!message.trim() || isSending}>
-                    <Send className="mr-2 h-4 w-4" /> Enviar
-                </Button>
+                <SubmitButton
+                    isFormValid={!!message.trim()}
+                    isSubmitting={isSending}
+                    label="Enviar"
+                    loadingLabel="Enviando..."
+                    icon={<Send className="mr-2 h-4 w-4" />}
+                    onClick={handleSendClick}
+                    type="button"
+                />
             </CardContent>
        </Card>
 

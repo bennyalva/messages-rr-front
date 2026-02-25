@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { sendMessage, setReplyingTo } from '@/lib/store/features/chatSlice';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
-import { Input } from '@/components/ui/input';
 import { Send, Image as ImageIcon, Smile, Sticker } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { generateUUID } from '@/lib/utils/uuid';

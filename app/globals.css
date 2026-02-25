@@ -226,3 +226,25 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Global reusable title style for the app brand */
+@layer utilities {
+  .app-title {
+    @apply font-extrabold tracking-tighter text-primary uppercase animate-pulse;
+  }
+}
+
+/* Marquee scrolling animation for banners */
+@keyframes marquee {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 15s linear infinite;
+}

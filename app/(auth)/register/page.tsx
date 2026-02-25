@@ -6,19 +6,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { RegisterSchema, RegisterData } from '@/lib/types/auth';
 import { authService } from '@/lib/services/authService';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { SubmitButton } from '@/components/ui/submit-button';
 import Link from 'next/link';
-import { Loader2 } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterData>({
+  const { register, handleSubmit, formState: { errors, isSubmitting, isValid } } = useForm<RegisterData>({
     resolver: zodResolver(RegisterSchema),
+    mode: 'onChange',
     defaultValues: {
         musicTypes: [],
         avatar: '',
@@ -63,10 +63,10 @@ export default function RegisterPage() {
 
       <Card className="w-full max-w-md relative z-10 border-secondary/50 shadow-[0_0_30px_theme(colors.secondary.DEFAULT)] bg-black/90 text-white">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold tracking-tighter text-secondary animate-neon">
+          <CardTitle className="text-3xl app-title">
             NUEVO BAILADOR
           </CardTitle>
-          <CardDescription className="text-gray-400">
+          <CardDescription className="text-gray-500 font-medium">
             Regístrate para entrar al ambiente
           </CardDescription>
         </CardHeader>
@@ -96,7 +96,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-                <Label className="text-secondary">Elige tu Avatar</Label>
+                <Label className="text-gray-300 font-semibold">Elige tu Avatar</Label>
                 <div className="grid grid-cols-3 gap-2">
                     {AVATAR_OPTIONS.map((url, idx) => (
                         <div key={idx} className="relative cursor-pointer group">
@@ -120,7 +120,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-                <Label className="text-secondary">Lo que te mueve (Géneros)</Label>
+                <Label className="text-gray-300 font-semibold">Lo que te mueve (Géneros)</Label>
                 <div className="grid grid-cols-2 gap-2 bg-gray-900/50 p-2 rounded border border-gray-800">
                     {MUSIC_GENRES.map((genre) => (
                         <div key={genre} className="flex items-center space-x-2">
@@ -158,14 +158,12 @@ export default function RegisterPage() {
               </div>
             )}
 
-            <Button 
-                type="submit" 
-                className="w-full font-bold text-lg" 
-                variant="secondary"
-                disabled={isSubmitting}
-            >
-              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Registrarme'}
-            </Button>
+            <SubmitButton
+              isFormValid={isValid}
+              isSubmitting={isSubmitting}
+              label="Registrarme"
+              loadingLabel="Registrando..."
+            />
           </form>
         </CardContent>
         <CardFooter className="flex justify-center">

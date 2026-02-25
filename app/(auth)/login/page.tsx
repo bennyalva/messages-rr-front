@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useApiUrl } from '@/lib/config/api';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -10,20 +11,26 @@ import { loginStart, loginSuccess, loginFailure } from '@/lib/store/features/aut
 import { authService } from '@/lib/services/authService';
 import { sessionService } from '@/lib/services/sessionService';
 import { generateUUID } from '@/lib/utils/uuid';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { SubmitButton } from '@/components/ui/submit-button';
 import Link from 'next/link';
-import { Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
+  const API_URL = useApiUrl();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [config, setConfig] = useState<any>({ appName: 'SONIDERO CHAT' });
 
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginCredentials>({
+  useEffect(() => {
+    fetch(`${API_URL}/config`).then(res => res.json()).then(setConfig).catch(() => {});
+  }, [API_URL]);
+
+  const { register, handleSubmit, formState: { errors, isSubmitting, isValid } } = useForm<LoginCredentials>({
     resolver: zodResolver(LoginSchema),
+    mode: 'onChange',
   });
 
   // Set clean history state for login page
@@ -69,17 +76,17 @@ export default function LoginPage() {
       
       <Card className="w-full max-w-md relative z-10 border-primary/50 shadow-[0_0_30px_theme(colors.primary.DEFAULT)] bg-black/90 text-white">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold tracking-tighter text-primary animate-pulse">
-            SONIDERO CHAT
+          <CardTitle className="text-3xl app-title">
+            {config.appName}
           </CardTitle>
-          <CardDescription className="text-gray-400">
-            Ingresa tu alias y contraseña para entrar al baile
+          <CardDescription className="text-gray-500 font-medium">
+            Ingresa tu alias y contraseña para entrar a la cabina digital
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="alias" className="text-secondary">Alias (Nickname)</Label>
+              <Label htmlFor="alias" className="text-gray-300 font-semibold">Alias (Nickname)</Label>
               <Input 
                 id="alias" 
                 {...register('alias')} 
@@ -90,7 +97,7 @@ export default function LoginPage() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-secondary">Contraseña</Label>
+              <Label htmlFor="password" className="text-gray-300 font-semibold">Contraseña</Label>
               <Input 
                 id="password" 
                 type="password" 
@@ -106,19 +113,17 @@ export default function LoginPage() {
               </div>
             )}
 
-            <Button 
-                type="submit" 
-                className="w-full font-bold text-lg" 
-                variant="default"
-                disabled={isSubmitting}
-            >
-              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Entrar al Mambo'}
-            </Button>
+            <SubmitButton
+              isFormValid={isValid}
+              isSubmitting={isSubmitting}
+              label="Entrar"
+              loadingLabel="Entrando..."
+            />
           </form>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <p className="text-sm text-gray-400">
-            ¿No tienes cuenta? <Link href="/register" className="text-accent hover:underline">Regístrate aquí</Link>
+          <p className="text-sm text-gray-500 font-medium">
+            ¿No tienes cuenta? <Link href="/register" className="text-primary/70 font-semibold hover:underline hover:text-primary transition-colors">Regístrate aquí</Link>
           </p>
         </CardFooter>
       </Card>

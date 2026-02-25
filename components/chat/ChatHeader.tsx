@@ -259,7 +259,7 @@ export default function ChatHeader({ variant = 'user' }: ChatHeaderProps) {
                     y: [0, -3, 0, 3, 0],
                     transition: { duration: 0.5, repeat: Infinity }
                 } : {}}
-                className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-secondary leading-none uppercase tracking-tighter text-center"
+                className="text-xl app-title leading-none text-center"
             >
                 {config.appName}
             </motion.h1>
@@ -301,17 +301,17 @@ export default function ChatHeader({ variant = 'user' }: ChatHeaderProps) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56 bg-black/90 border-primary text-white mr-2 z-[70]">
-                    <DropdownMenuItem onClick={() => router.push('/profile')} className="focus:bg-primary/20 cursor-pointer">
-                        <User className="mr-2 h-4 w-4" /> Mi Perfil
-                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => router.push('/vote')} className="focus:bg-primary/20 cursor-pointer">
                         <Disc className="mr-2 h-4 w-4" /> Votar Canciones
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push('/about')} className="focus:bg-primary/20 cursor-pointer">
-                        <Info className="mr-2 h-4 w-4" /> Acerca de
-                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => router.push('/dm-dj')} className="focus:bg-primary/20 cursor-pointer">
                         <Mail className="mr-2 h-4 w-4" /> Mensaje al DJ
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => router.push('/profile')} className="focus:bg-primary/20 cursor-pointer">
+                        <User className="mr-2 h-4 w-4" /> Mi Perfil
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => router.push('/about')} className="focus:bg-primary/20 cursor-pointer">
+                        <Info className="mr-2 h-4 w-4" /> Acerca de
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogoutClick} className="text-destructive focus:bg-destructive/20 cursor-pointer">
                         <LogOut className="mr-2 h-4 w-4" /> Cerrar Sesión

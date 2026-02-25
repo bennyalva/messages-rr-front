@@ -112,8 +112,7 @@ function VotePageContent() {
           <ArrowLeft className="w-5 h-5 text-white" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Disc className="w-6 h-6 text-secondary animate-spin" style={{ animationDuration: '3s' }} />
+          <h1 className="text-2xl app-title">
             Vota por la siguiente
           </h1>
           <p className="text-gray-400 text-sm">Elige tu rola favorita para que suene</p>
