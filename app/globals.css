@@ -245,6 +245,7 @@
 }
 
 .animate-marquee {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   animation: marquee 15s linear infinite;
 }
