@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Users, Music, Palette, Trash2, Edit, X, Disc, MessageSquare, Settings, Mail } from 'lucide-react';
-import { useApiUrl } from '@/lib/config/api';
+import httpClient from '@/lib/services/httpClient';
 import { generateUUID } from '@/lib/utils/uuid';
 import ChatHeader from '@/components/chat/ChatHeader';
 import ConfirmModal from '@/components/ui/ConfirmModal';
@@ -35,7 +35,6 @@ interface Message {
 }
 
 function DashboardPageContent() {
-  const API_URL = useApiUrl();
   const { user } = useAppSelector(state => state.auth);
   const [users, setUsers] = useState<any[]>([]);
   const [songs, setSongs] = useState<any[]>([]);
@@ -60,42 +59,38 @@ function DashboardPageContent() {
   }, [messages]);
 
   const fetchUsers = async () => {
-    const res = await fetch(`${API_URL}/users`);
-    if (res.ok) setUsers(await res.json());
+    const { data } = await httpClient.get('/users');
+    setUsers(data);
   };
 
   const fetchSongs = async () => {
-    const res = await fetch(`${API_URL}/songs`);
-    if (res.ok) setSongs(await res.json());
+    const { data } = await httpClient.get('/songs');
+    setSongs(data);
   };
 
   const fetchMessages = async () => {
-    const res = await fetch(`${API_URL}/messages`);
-    if (res.ok) setMessages(await res.json());
+    const { data } = await httpClient.get('/messages');
+    setMessages(data);
   };
 
   const fetchDirectMessages = async () => {
-    const res = await fetch(`${API_URL}/directMessages`);
-    if (res.ok) setDirectMessages(await res.json());
+    const { data } = await httpClient.get('/directMessages');
+    setDirectMessages(data);
   };
 
   const handleDeleteUser = async (id: string) => {
     if (!confirm("¿Eliminar usuario permanentemente?")) return;
-    await fetch(`${API_URL}/users/${id}`, { method: 'DELETE' });
+    await httpClient.delete(`/users/${id}`);
     fetchUsers();
   };
 
   const handleAddSong = async () => {
     if (!newSongTitle || !newSongArtist) return;
-    await fetch(`${API_URL}/songs`, { 
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        id: generateUUID(),
-        title: newSongTitle,
-        artist: newSongArtist,
-        votes: 0
-      })
+    await httpClient.post('/songs', {
+      id: generateUUID(),
+      title: newSongTitle,
+      artist: newSongArtist,
+      votes: 0,
     });
     setNewSongTitle('');
     setNewSongArtist('');
@@ -103,7 +98,7 @@ function DashboardPageContent() {
   };
 
   const handleDeleteSong = async (id: string) => {
-    await fetch(`${API_URL}/songs/${id}`, { method: 'DELETE' });
+    await httpClient.delete(`/songs/${id}`);
     fetchSongs();
   };
 
@@ -112,16 +107,13 @@ function DashboardPageContent() {
     try {
       // Delete all songs
       for (const song of songs) {
-        await fetch(`${API_URL}/songs/${song.id}`, { method: 'DELETE' });
+        await httpClient.delete(`/songs/${song.id}`);
       }
       
       // Delete all user votes to allow voting again
-      const userVotesRes = await fetch(`${API_URL}/userVotes`);
-      if (userVotesRes.ok) {
-        const userVotes = await userVotesRes.json();
-        for (const vote of userVotes) {
-          await fetch(`${API_URL}/userVotes/${vote.id}`, { method: 'DELETE' });
-        }
+      const { data: userVotes } = await httpClient.get('/userVotes');
+      for (const vote of userVotes) {
+        await httpClient.delete(`/userVotes/${vote.id}`);
       }
       
       fetchSongs();
@@ -133,12 +125,12 @@ function DashboardPageContent() {
 
   const handleDeleteMessage = async (id: string) => {
     if (!confirm("¿Eliminar este mensaje?")) return;
-    await fetch(`${API_URL}/messages/${id}`, { method: 'DELETE' });
+    await httpClient.delete(`/messages/${id}`);
     fetchMessages();
   };
 
   const handleDeleteDirectMessage = async (id: string) => {
-    await fetch(`${API_URL}/directMessages/${id}`, { method: 'DELETE' });
+    await httpClient.delete(`/directMessages/${id}`);
     fetchDirectMessages();
   };
 

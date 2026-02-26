@@ -9,7 +9,7 @@ import { logout } from '@/lib/store/features/authSlice';
 import { useRouter } from 'next/navigation';
 import { Menu, Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useApiUrl } from '@/lib/config/api';
+import { storageService } from '@/lib/utils/storage';
 
 interface ChatHeaderProps {
   variant?: 'user' | 'admin';
@@ -17,7 +17,6 @@ interface ChatHeaderProps {
 }
 
 export default function ChatHeader({ variant = 'user', showBackButton = false }: ChatHeaderProps) {
-  const API_URL = useApiUrl();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { user } = useAppSelector(state => state.auth);
@@ -31,8 +30,10 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
   const ignoreClickRef = useRef(false);
   const heroTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Read config from localStorage (client-only to avoid hydration mismatch)
   useEffect(() => {
-    fetch(`${API_URL}/config`).then(res => res.json()).then(setConfig).catch(() => {});
+    const stored = storageService.getItem('config');
+    if (stored) setConfig(stored);
   }, []);
 
   // Auto-dismiss hero animation after 5 seconds

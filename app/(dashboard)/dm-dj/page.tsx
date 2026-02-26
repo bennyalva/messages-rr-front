@@ -8,12 +8,12 @@ import { useRouter } from 'next/navigation';
 import { Send } from 'lucide-react';
 import { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
-import { useApiUrl } from '@/lib/config/api';
+import httpClient from '@/lib/services/httpClient';
 import { generateUUID } from '@/lib/utils/uuid';
 import ConfirmModal from '@/components/ui/ConfirmModal';
 
 function DmDjPageContent() {
-  const API_URL = useApiUrl();
+
   const router = useRouter();
   const { user } = useAppSelector(state => state.auth);
   const [message, setMessage] = useState('');
@@ -30,18 +30,14 @@ function DmDjPageContent() {
     
     setIsSending(true);
     try {
-        await fetch(`${API_URL}/directMessages`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                id: generateUUID(),
-                userId: user.id,
-                userAlias: user.alias,
-                userGang: user.gang || '',
-                content: message.trim(),
-                timestamp: new Date().toISOString(),
-                isRead: false
-            })
+        await httpClient.post('/directMessages', {
+            id: generateUUID(),
+            userId: user.id,
+            userAlias: user.alias,
+            userGang: user.gang || '',
+            content: message.trim(),
+            timestamp: new Date().toISOString(),
+            isRead: false,
         });
         setShowConfirm(false);
         setMessage('');

@@ -818,6 +818,15 @@
       "content": "Reny bebe",
       "timestamp": "2026-02-03T00:05:02.710Z",
       "isRead": false
+    },
+    {
+      "id": "86014883-109b-42e7-8379-f0132127e55d",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "userGang": "arcolocos",
+      "content": "que paso rey",
+      "timestamp": "2026-02-26T21:20:29.331Z",
+      "isRead": false
     }
   ],
   "activeUsers": [

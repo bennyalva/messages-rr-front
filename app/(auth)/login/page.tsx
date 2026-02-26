@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useApiUrl } from '@/lib/config/api';
+import httpClient from '@/lib/services/httpClient';
+import { storageService } from '@/lib/utils/storage';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -18,15 +19,23 @@ import { SubmitButton } from '@/components/ui/submit-button';
 import Link from 'next/link';
 
 export default function LoginPage() {
-  const API_URL = useApiUrl();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [config, setConfig] = useState<any>({ appName: 'SONIDERO CHAT' });
 
   useEffect(() => {
-    fetch(`${API_URL}/config`).then(res => res.json()).then(setConfig).catch(() => {});
-  }, [API_URL]);
+    // Try localStorage first (instant), then fetch fresh from API
+    const stored = storageService.getItem('config');
+    if (stored) setConfig(stored);
+
+    httpClient.get('/config')
+      .then(({ data }) => {
+        setConfig(data);
+        storageService.setItem('config', data);
+      })
+      .catch(() => {});
+  }, []);
 
   const { register, handleSubmit, formState: { errors, isSubmitting, isValid } } = useForm<LoginCredentials>({
     resolver: zodResolver(LoginSchema),

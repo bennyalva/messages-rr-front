@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { useRouter } from 'next/navigation';
 import { Music, Disc, ThumbsUp, Check } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useApiUrl } from '@/lib/config/api';
+import httpClient from '@/lib/services/httpClient';
 import { useAppSelector } from '@/lib/store/hooks';
 import { generateUUID } from '@/lib/utils/uuid';
 
@@ -19,7 +19,7 @@ interface Song {
 }
 
 function VotePageContent() {
-  const API_URL = useApiUrl();
+
   const router = useRouter();
   const { user } = useAppSelector(state => state.auth);
   const [songs, setSongs] = useState<Song[]>([]);
@@ -46,21 +46,20 @@ function VotePageContent() {
   }, [showBanner]);
 
   const fetchSongs = async () => {
-    const res = await fetch(`${API_URL}/songs`);
-    if(res.ok) setSongs(await res.json());
+    const { data } = await httpClient.get<Song[]>('/songs');
+    setSongs(data);
   };
 
   const checkUserVote = async () => {
     if (!user) return;
     // Search by oderId (the field name used when storing)
-    const res = await fetch(`${API_URL}/userVotes?oderId=${user.id}`);
-    if (res.ok) {
-      const votes = await res.json();
-      if (votes.length > 0) {
-        setHasVoted(true);
-        setVotedSongId(votes[0].songId);
-        // Don't show banner if already voted on page load
-      }
+    const { data: votes } = await httpClient.get('/userVotes', {
+      params: { oderId: user.id },
+    });
+    if (votes.length > 0) {
+      setHasVoted(true);
+      setVotedSongId(votes[0].songId);
+      // Don't show banner if already voted on page load
     }
   };
 
@@ -70,21 +69,13 @@ function VotePageContent() {
     setIsVoting(true);
     try {
       // Increment vote count
-      await fetch(`${API_URL}/songs/${songId}`, {
-        method: 'PATCH',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ votes: currentVotes + 1 })
-      });
+      await httpClient.patch(`/songs/${songId}`, { votes: currentVotes + 1 });
       
-      // Record user vote - Fixed: use userId consistently
-      await fetch(`${API_URL}/userVotes`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ 
-          id: generateUUID(),
-          oderId: user.id,
-          songId: songId
-        })
+      // Record user vote
+      await httpClient.post('/userVotes', {
+        id: generateUUID(),
+        oderId: user.id,
+        songId: songId,
       });
       
       setHasVoted(true);

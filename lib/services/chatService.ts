@@ -1,90 +1,53 @@
-import { getApiUrl } from '@/lib/config/api';
 import { Message, Reaction } from '@/lib/store/features/chatSlice';
-
-const API_URL = getApiUrl();
+import httpClient from './httpClient';
 
 export const chatService = {
   // Get all messages
   getMessages: async (): Promise<Message[]> => {
-    const response = await fetch(`${API_URL}/messages`);
-    if (!response.ok) throw new Error('Failed to fetch messages');
-    return response.json();
+    const { data } = await httpClient.get<Message[]>('/messages');
+    return data;
   },
 
   // Send a new message
   sendMessage: async (message: Message): Promise<Message> => {
-    const response = await fetch(`${API_URL}/messages`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(message),
-    });
-    if (!response.ok) throw new Error('Failed to send message');
-    return response.json();
+    const { data } = await httpClient.post<Message>('/messages', message);
+    return data;
   },
 
-  // Delete a message (mark as deleted or remove)
-  // Logic: We're marking as deleted instead of actual removal based on previous logic
+  // Delete a message (mark as deleted)
   deleteMessage: async (id: string): Promise<Message> => {
-    const response = await fetch(`${API_URL}/messages/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        isDeleted: true,
-        content: "Mensaje borrado",
-        image: null // Remove image if deleted
-      }),
+    const { data } = await httpClient.patch<Message>(`/messages/${id}`, {
+      isDeleted: true,
+      content: "Mensaje borrado",
+      image: null,
     });
-    if (!response.ok) throw new Error('Failed to delete message');
-    return response.json();
+    return data;
   },
 
   // Add a reaction
   addReaction: async (messageId: string, reaction: Reaction): Promise<Message> => {
     // First get the current message to append the reaction
-    const getResponse = await fetch(`${API_URL}/messages/${messageId}`);
-    if (!getResponse.ok) throw new Error('Message not found');
-    
-    const message: Message = await getResponse.json();
-    
-    // Check if user already reacted with this emoji (toggle logic could be here, but we'll append for now per UI)
-    // Actually, usually we want to avoid duplicates. Let's check.
-    // Ideally the backend handles this, but with json-server we do it here.
+    const { data: message } = await httpClient.get<Message>(`/messages/${messageId}`);
+
     const updatedReactions = [...message.reactions, reaction];
 
-    const response = await fetch(`${API_URL}/messages/${messageId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ reactions: updatedReactions }),
+    const { data: updated } = await httpClient.patch<Message>(`/messages/${messageId}`, {
+      reactions: updatedReactions,
     });
-    
-    if (!response.ok) throw new Error('Failed to add reaction');
-    return response.json();
+    return updated;
   },
 
   // Edit a message
   editMessage: async (id: string, newContent: string): Promise<Message> => {
-    const response = await fetch(`${API_URL}/messages/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ content: newContent }),
+    const { data } = await httpClient.patch<Message>(`/messages/${id}`, {
+      content: newContent,
     });
-    
-    if (!response.ok) throw new Error('Failed to edit message');
-    return response.json();
+    return data;
   },
 
   // Get all users (for resolving reactions)
   getUsers: async (): Promise<any[]> => {
-    const response = await fetch(`${API_URL}/users`);
-    if (!response.ok) throw new Error('Failed to fetch users');
-    return response.json();
-  }
+    const { data } = await httpClient.get<any[]>('/users');
+    return data;
+  },
 };
