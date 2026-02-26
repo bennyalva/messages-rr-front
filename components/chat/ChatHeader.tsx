@@ -219,7 +219,7 @@ export default function ChatHeader({ variant = 'user' }: ChatHeaderProps) {
       <header className={`sticky top-0 z-50 bg-black/80 backdrop-blur-md py-1 flex items-center relative ${
           isAdminVariant 
             ? 'mx-4 lg:mx-10 mt-4 rounded-xl border border-white/20 p-2' 
-            : 'w-full h-16'
+            : 'w-full h-17'
         }`}>
 
         {/* Left: Users counter — flex-1 pushes logo to center */}

@@ -467,7 +467,10 @@ export default function MessageItem({
 
         {/* Right side: Action Icon + Avatar (for own messages) */}
         {isOwn && (
-          <div className="flex flex-col gap-1 items-center">
+          <div className={cn(
+            "flex flex-col items-center w-10",
+            showAvatar ? "justify-start gap-1" : "justify-center h-auto self-stretch"
+          )}>
             <AvatarWithBadge />
             {!message.isDeleted && !isEditing && <ActionIconButton />}
           </div>

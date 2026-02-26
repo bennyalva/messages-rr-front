@@ -8,7 +8,7 @@ import MessageInput from '@/components/chat/MessageInput';
 
 export default function ChatPage() {
   // TODO: esta variable será dinámica más adelante
-  const showBanner = true;
+  const showBanner = false;
 
   return (
     <AuthGuard>
