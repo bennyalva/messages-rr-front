@@ -220,7 +220,7 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
       <header className={`sticky top-0 z-50 bg-black/80 backdrop-blur-md py-1 flex items-center relative ${
           isAdminVariant 
             ? 'mx-4 lg:mx-10 mt-4 rounded-xl border border-white/20 p-2 max-h-20' 
-            : 'w-full h-17'
+            : 'w-full h-17 shadow-[0_4px_20px_rgba(0,0,0,0.5)]'
         }`}>
 
         {/* Left: Back button OR Users counter — flex-1 pushes logo to center */}
@@ -326,6 +326,11 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
             </DropdownMenu>
         )}
         </div>
+
+        {/* Gradient accent line — user variant only */}
+        {!isAdminVariant && (
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-secondary to-primary" />
+        )}
 
     </header>
 
