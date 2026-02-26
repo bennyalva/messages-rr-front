@@ -7,15 +7,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { logout } from '@/lib/store/features/authSlice';
 import { useRouter } from 'next/navigation';
-import { Menu, Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical } from 'lucide-react';
+import { Menu, Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApiUrl } from '@/lib/config/api';
 
 interface ChatHeaderProps {
   variant?: 'user' | 'admin';
+  showBackButton?: boolean;
 }
 
-export default function ChatHeader({ variant = 'user' }: ChatHeaderProps) {
+export default function ChatHeader({ variant = 'user', showBackButton = false }: ChatHeaderProps) {
   const API_URL = useApiUrl();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -218,31 +219,38 @@ export default function ChatHeader({ variant = 'user' }: ChatHeaderProps) {
 
       <header className={`sticky top-0 z-50 bg-black/80 backdrop-blur-md py-1 flex items-center relative ${
           isAdminVariant 
-            ? 'mx-4 lg:mx-10 mt-4 rounded-xl border border-white/20 p-2' 
+            ? 'mx-4 lg:mx-10 mt-4 rounded-xl border border-white/20 p-2 max-h-20' 
             : 'w-full h-17'
         }`}>
 
-        {/* Left: Users counter — flex-1 pushes logo to center */}
+        {/* Left: Back button OR Users counter — flex-1 pushes logo to center */}
         <div className="flex-1 flex items-center pl-3 z-10">
-            <motion.div 
-                animate={(animationPhase === 'phase1' || animationPhase === 'phase2') ? {
-                    y: [0, 1, 0, -1, 0],
-                    transition: { duration: 0.6, repeat: Infinity, delay: 0.1 }
-                } : {}}
-                className="flex flex-col items-center text-[11px] text-gray-300 leading-tight"
-            >
-                {isAdminVariant ? (
-                    <span className="text-white/80">Bienvenido, <span className="text-primary font-bold">{user?.alias}</span></span>
-                ) : (
-                    <>
-                        <span className="flex items-center gap-1">
-                            <UsersIcon className="w-3.5 h-3.5 text-green-400" />
-                            <span className="text-green-400 font-bold">{activeUsers.length}</span>
-                        </span>
-                        <span className="text-[9px] text-gray-400">en línea</span>
-                    </>
-                )}
-            </motion.div>
+            {isAdminVariant ? (
+                <span className="text-white/80 text-[11px]">Bienvenido, <span className="text-primary font-bold">{user?.alias}</span></span>
+            ) : showBackButton ? (
+                <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => router.back()}
+                    className="text-white hover:bg-white/10 -ml-1"
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                </Button>
+            ) : (
+                <motion.div 
+                    animate={(animationPhase === 'phase1' || animationPhase === 'phase2') ? {
+                        y: [0, 1, 0, -1, 0],
+                        transition: { duration: 0.6, repeat: Infinity, delay: 0.1 }
+                    } : {}}
+                    className="flex flex-col items-center text-[11px] text-gray-300 leading-tight"
+                >
+                    <span className="flex items-center gap-1">
+                        <UsersIcon className="w-3.5 h-3.5 text-green-400" />
+                        <span className="text-green-400 font-bold">{activeUsers.length}</span>
+                    </span>
+                    <span className="text-[9px] text-gray-400">en línea</span>
+                </motion.div>
+            )}
         </div>
 
         {/* Center: Logo — flex-shrink-0, visually centered between left and right */}
