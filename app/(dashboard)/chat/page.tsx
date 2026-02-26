@@ -7,6 +7,9 @@ import MessageList from '@/components/chat/MessageList';
 import MessageInput from '@/components/chat/MessageInput';
 
 export default function ChatPage() {
+  // TODO: esta variable será dinámica más adelante
+  const showBanner = true;
+
   return (
     <AuthGuard>
       <div className="flex flex-col h-screen bg-black text-white relative overflow-hidden">
@@ -15,7 +18,7 @@ export default function ChatPage() {
            <div className="absolute top-[20%] left-[50%] -translate-x-1/2 w-[80%] h-[50%] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
 
           <ChatHeader />
-          <SonideroBanner />
+          <SonideroBanner show={showBanner} />
           
           <main className="flex-1 overflow-hidden relative flex flex-col">
               <MessageList />

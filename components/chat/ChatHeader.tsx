@@ -160,12 +160,12 @@ export default function ChatHeader({ variant = 'user' }: ChatHeaderProps) {
                                ease: "easeOut",
                                rotate: { duration: 2.5, ease: "linear" }
                            }}
-                           className="w-52 h-52 rounded-full border-4 border-primary shadow-[0_0_100px_theme(colors.primary.DEFAULT),0_0_150px_theme(colors.secondary.DEFAULT)] overflow-hidden bg-black relative z-10"
+                           className="w-52 h-auto shadow-[0_0_100px_theme(colors.primary.DEFAULT),0_0_150px_theme(colors.secondary.DEFAULT)] relative z-10"
                        >
                            {config.logoUrl ? (
-                               <img src={config.logoUrl} alt="Logo Hero" className="w-full h-full object-cover" />
+                               <img src={config.logoUrl} alt="Logo Hero" className="w-full h-auto object-contain" />
                            ) : (
-                               <Disc className="w-full h-full p-6 text-white" />
+                               <Disc className="w-52 h-52 p-6 text-white" />
                            )}
                        </motion.div>
                        
@@ -216,21 +216,44 @@ export default function ChatHeader({ variant = 'user' }: ChatHeaderProps) {
            )}
       </AnimatePresence>
 
-      <header className={`sticky top-0 z-50 bg-black/80 backdrop-blur-md p-2 flex items-center justify-between relative overflow-hidden ${
+      <header className={`sticky top-0 z-50 bg-black/80 backdrop-blur-md py-1 flex items-center relative ${
           isAdminVariant 
-            ? 'mx-4 lg:mx-10 mt-4 rounded-xl border border-white/20' 
-            : 'w-full border-b border-primary/20'
+            ? 'mx-4 lg:mx-10 mt-4 rounded-xl border border-white/20 p-2' 
+            : 'w-full h-16'
         }`}>
 
-        {/* Left: Logo - Animation Only for user variant */}
-        <div 
-            className="relative cursor-pointer z-50 flex-shrink-0 outline-none"
+        {/* Left: Users counter — flex-1 pushes logo to center */}
+        <div className="flex-1 flex items-center pl-3 z-10">
+            <motion.div 
+                animate={(animationPhase === 'phase1' || animationPhase === 'phase2') ? {
+                    y: [0, 1, 0, -1, 0],
+                    transition: { duration: 0.6, repeat: Infinity, delay: 0.1 }
+                } : {}}
+                className="flex flex-col items-center text-[11px] text-gray-300 leading-tight"
+            >
+                {isAdminVariant ? (
+                    <span className="text-white/80">Bienvenido, <span className="text-primary font-bold">{user?.alias}</span></span>
+                ) : (
+                    <>
+                        <span className="flex items-center gap-1">
+                            <UsersIcon className="w-3.5 h-3.5 text-green-400" />
+                            <span className="text-green-400 font-bold">{activeUsers.length}</span>
+                        </span>
+                        <span className="text-[9px] text-gray-400">en línea</span>
+                    </>
+                )}
+            </motion.div>
+        </div>
+
+        {/* Center: Logo — flex-shrink-0, visually centered between left and right */}
+        <div
+            className="flex-shrink-0 cursor-pointer outline-none h-full flex items-center py-0.5"
             onPointerDown={!isAdminVariant ? handlePointerDown : undefined}
             onPointerUp={!isAdminVariant ? handlePointerUp : undefined}
             onPointerLeave={!isAdminVariant ? handlePointerUp : undefined}
             onClick={!isAdminVariant ? handleLogoClick : undefined}
         >
-             <motion.div 
+            <motion.div 
                 layoutId="sonidero-logo-hero"
                 animate={
                     !isAdminVariant && animationPhase === 'phase1' 
@@ -242,47 +265,22 @@ export default function ChatHeader({ variant = 'user' }: ChatHeaderProps) {
                     repeat: !isAdminVariant && animationPhase === 'phase1' ? Infinity : 0,
                     ease: "linear"
                 }}
-                className="w-12 h-12 rounded-full border-2 border-primary shadow-[0_0_15px_theme(colors.primary.DEFAULT)] overflow-hidden bg-black relative z-50 select-none"
-             >
-                 {config.logoUrl ? (
-                    <img src={config.logoUrl} alt="Logo" className="w-full h-full object-cover pointer-events-none" />
-                 ) : (
-                    <Disc className="w-full h-full p-2 text-white" />
-                 )}
-             </motion.div>
-        </div>
-
-        {/* Center: Title and Users */}
-        <div className="flex-1 flex flex-col items-center justify-center">
-            <motion.h1 
-                animate={(animationPhase === 'phase1' || animationPhase === 'phase2') ? {
-                    y: [0, -3, 0, 3, 0],
-                    transition: { duration: 0.5, repeat: Infinity }
-                } : {}}
-                className="text-xl app-title leading-none text-center"
+                className="h-full w-auto select-none"
             >
-                {config.appName}
-            </motion.h1>
-            <motion.div 
-                animate={(animationPhase === 'phase1' || animationPhase === 'phase2') ? {
-                    y: [0, 2, 0, -2, 0],
-                    transition: { duration: 0.6, repeat: Infinity, delay: 0.1 }
-                } : {}}
-                className="flex items-center gap-1 text-[10px] text-gray-400 mt-0.5"
-            >
-                {isAdminVariant ? (
-                    <span className="text-white/80">Bienvenido, <span className="text-primary font-bold">{user?.alias}</span></span>
+                {config.logoUrl ? (
+                    <img 
+                        src={config.logoUrl} 
+                        alt="Logo" 
+                        className="h-full w-auto object-contain pointer-events-none mix-blend-lighten contrast-125 select-none scale-x-[1.25]" 
+                    />
                 ) : (
-                    <>
-                        <UsersIcon className="w-3 h-3 text-green-400" />
-                        <span className="text-green-400 font-bold">{activeUsers.length}</span>
-                        <span>usuarios conectados</span>
-                    </>
+                    <Disc className="w-12 h-12 p-1 text-white" />
                 )}
             </motion.div>
         </div>
 
-        {/* Right: Menu (Dropdown for user, Logout button for admin) */}
+        {/* Right: Menu — flex-1 mirrors left column for symmetric centering */}
+        <div className="flex-1 flex justify-end items-center pr-1 z-10">
         {isAdminVariant ? (
             <Button 
                 variant="ghost" 
@@ -319,6 +317,7 @@ export default function ChatHeader({ variant = 'user' }: ChatHeaderProps) {
                 </DropdownMenuContent>
             </DropdownMenu>
         )}
+        </div>
 
     </header>
 
