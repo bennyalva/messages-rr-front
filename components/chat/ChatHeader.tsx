@@ -10,6 +10,8 @@ import { useRouter } from 'next/navigation';
 import { Menu, Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { storageService } from '@/lib/utils/storage';
+import { cn } from '@/lib/utils';
+import httpClient from '@/lib/services/httpClient';
 
 interface ChatHeaderProps {
   variant?: 'user' | 'admin';
@@ -21,6 +23,7 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
   const router = useRouter();
   const { user } = useAppSelector(state => state.auth);
   const { activeUsers } = useAppSelector(state => state.chat);
+  const { activeTheme } = useAppSelector(state => state.theme);
   const isAdminVariant = variant === 'admin';
   const [animationPhase, setAnimationPhase] = useState<'idle' | 'phase1' | 'phase2'>('idle');
   const [config, setConfig] = useState<any>({ appName: 'Cargando...', logoUrl: null });
@@ -30,10 +33,17 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
   const ignoreClickRef = useRef(false);
   const heroTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Read config from localStorage (client-only to avoid hydration mismatch)
+  // Read config from localStorage and fetch fresh from API
   useEffect(() => {
     const stored = storageService.getItem('config');
     if (stored) setConfig(stored);
+
+    httpClient.get('/config')
+      .then(({ data }) => {
+        setConfig(data);
+        storageService.setItem('config', data);
+      })
+      .catch(() => {});
   }, []);
 
   // Auto-dismiss hero animation after 5 seconds
@@ -165,7 +175,11 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
                            className="w-52 h-auto shadow-[0_0_100px_theme(colors.primary.DEFAULT),0_0_150px_theme(colors.secondary.DEFAULT)] relative z-10"
                        >
                            {config.logoUrl ? (
-                               <img src={config.logoUrl} alt="Logo Hero" className="w-full h-auto object-contain" />
+                               <img 
+                                   src={activeTheme === 'standard' ? (config.logoUrlStandard || config.logoUrl) : (config.logoUrlDark || config.logoUrl)} 
+                                   alt="Logo Hero" 
+                                   className="w-full h-auto object-contain" 
+                               />
                            ) : (
                                <Disc className="w-52 h-52 p-6 text-white" />
                            )}
@@ -218,22 +232,22 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
            )}
       </AnimatePresence>
 
-      <header className={`sticky top-0 z-50 bg-black/80 backdrop-blur-md py-1 flex items-center relative ${
+      <header className={`sticky top-0 z-50 bg-background/80 backdrop-blur-md py-1 flex items-center relative ${
           isAdminVariant 
-            ? 'mx-4 lg:mx-10 mt-4 rounded-xl border border-white/20 p-2 max-h-20' 
-            : 'w-full h-17 shadow-[0_4px_20px_rgba(0,0,0,0.5)]'
+            ? 'mx-4 lg:mx-10 mt-4 rounded-xl border border-border p-2 max-h-20' 
+            : 'w-full h-17 shadow-[0_4px_20px_rgba(0,0,0,0.2)]'
         }`}>
 
         {/* Left: Back button OR Users counter — flex-1 pushes logo to center */}
         <div className="flex-1 flex items-center pl-3 z-10">
             {isAdminVariant ? (
-                <span className="text-white/80 text-[11px]">Bienvenido, <span className="text-primary font-bold">{user?.alias}</span></span>
+                <span className="text-foreground/80 text-[11px]">Bienvenido, <span className="text-primary font-bold">{user?.alias}</span></span>
             ) : showBackButton ? (
                 <Button 
                     variant="ghost" 
                     size="icon" 
                     onClick={() => router.back()}
-                    className="text-white hover:bg-white/10 -ml-1"
+                    className="text-foreground hover:bg-accent/50 -ml-1"
                 >
                     <ArrowLeft className="w-5 h-5" />
                 </Button>
@@ -243,13 +257,13 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
                         y: [0, 1, 0, -1, 0],
                         transition: { duration: 0.6, repeat: Infinity, delay: 0.1 }
                     } : {}}
-                    className="flex flex-col items-center text-[11px] text-gray-300 leading-tight"
+                    className="flex flex-col items-center text-[11px] text-muted-foreground leading-tight"
                 >
                     <span className="flex items-center gap-1">
-                        <UsersIcon className="w-3.5 h-3.5 text-green-400" />
-                        <span className="text-green-400 font-bold">{activeUsers.length}</span>
+                        <UsersIcon className="w-3.5 h-3.5 text-green-500" />
+                        <span className="text-green-500 font-bold">{activeUsers.length}</span>
                     </span>
-                    <span className="text-[9px] text-gray-400">en línea</span>
+                    <span className="text-[9px] opacity-70">en línea</span>
                 </motion.div>
             )}
         </div>
@@ -278,12 +292,15 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
             >
                 {config.logoUrl ? (
                     <img 
-                        src={config.logoUrl} 
+                        src={activeTheme === 'standard' ? (config.logoUrlStandard || config.logoUrl) : (config.logoUrlDark || config.logoUrl)} 
                         alt="Logo" 
-                        className="h-full w-auto object-contain pointer-events-none mix-blend-lighten contrast-125 select-none scale-x-[1.25]" 
+                        className={cn(
+                            "h-full w-auto object-contain pointer-events-none select-none scale-x-[1.25]",
+                            activeTheme === 'dark' ? "mix-blend-lighten contrast-125" : "contrast-110"
+                        )} 
                     />
                 ) : (
-                    <Disc className="w-12 h-12 p-1 text-white" />
+                    <Disc className="w-12 h-12 p-1 text-primary" />
                 )}
             </motion.div>
         </div>
@@ -303,24 +320,27 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
         ) : (
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="text-white hover:bg-primary/20">
+                    <Button variant="ghost" size="icon" className="text-foreground hover:bg-primary/10">
                         <MoreVertical className="w-6 h-6" />
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 bg-black/90 border-primary text-white mr-2 z-[70]">
-                    <DropdownMenuItem onClick={() => router.push('/vote')} className="focus:bg-primary/20 cursor-pointer">
+                <DropdownMenuContent className="w-56 bg-card border-border text-card-foreground mr-2 z-[70]">
+                    <DropdownMenuItem onClick={() => router.push('/chat')} className="focus:bg-primary/10 cursor-pointer">
+                        <MessageSquare className="mr-2 h-4 w-4" /> Chat
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => router.push('/vote')} className="focus:bg-primary/10 cursor-pointer">
                         <Disc className="mr-2 h-4 w-4" /> Votar Canciones
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push('/dm-dj')} className="focus:bg-primary/20 cursor-pointer">
+                    <DropdownMenuItem onClick={() => router.push('/dm-dj')} className="focus:bg-primary/10 cursor-pointer">
                         <Mail className="mr-2 h-4 w-4" /> Mensaje al DJ
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push('/profile')} className="focus:bg-primary/20 cursor-pointer">
+                    <DropdownMenuItem onClick={() => router.push('/profile')} className="focus:bg-primary/10 cursor-pointer">
                         <User className="mr-2 h-4 w-4" /> Mi Perfil
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push('/about')} className="focus:bg-primary/20 cursor-pointer">
+                    <DropdownMenuItem onClick={() => router.push('/about')} className="focus:bg-primary/10 cursor-pointer">
                         <Info className="mr-2 h-4 w-4" /> Acerca de
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleLogoutClick} className="text-destructive focus:bg-destructive/20 cursor-pointer">
+                    <DropdownMenuItem onClick={handleLogoutClick} className="text-destructive focus:bg-destructive/10 cursor-pointer">
                         <LogOut className="mr-2 h-4 w-4" /> Cerrar Sesión
                     </DropdownMenuItem>
                 </DropdownMenuContent>

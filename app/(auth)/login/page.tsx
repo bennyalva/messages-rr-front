@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { LoginSchema, LoginCredentials } from '@/lib/types/auth';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { loginStart, loginSuccess, loginFailure } from '@/lib/store/features/authSlice';
+import { setThemeConfig, setTheme, ThemeName } from '@/lib/store/features/themeSlice';
 import { authService } from '@/lib/services/authService';
 import { sessionService } from '@/lib/services/sessionService';
 import { generateUUID } from '@/lib/utils/uuid';
@@ -18,24 +19,47 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { SubmitButton } from '@/components/ui/submit-button';
 import Link from 'next/link';
 
+interface AppConfig {
+  appName: string;
+  logoUrl?: string;
+  defaultTheme?: string;
+  themes?: any;
+}
+
 export default function LoginPage() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const [config, setConfig] = useState<any>({ appName: 'SONIDERO CHAT' });
+  const [config, setConfig] = useState<AppConfig>({ appName: 'SONIDERO CHAT' });
 
   useEffect(() => {
     // Try localStorage first (instant), then fetch fresh from API
-    const stored = storageService.getItem('config');
-    if (stored) setConfig(stored);
+    const stored = storageService.getItem('config') as AppConfig;
+    if (stored) {
+      setConfig(stored);
+      // Apply theme from stored config
+      if (stored.themes) {
+        dispatch(setThemeConfig(stored.themes));
+      }
+    }
 
     httpClient.get('/config')
       .then(({ data }) => {
-        setConfig(data);
-        storageService.setItem('config', data);
+        const dataConfig = data as AppConfig;
+        setConfig(dataConfig);
+        storageService.setItem('config', dataConfig);
+        // Dispatch theme config to store
+        if (dataConfig.themes) {
+          dispatch(setThemeConfig(dataConfig.themes));
+        }
+        // Apply default theme if user hasn't chosen one
+        const savedTheme = localStorage.getItem('sonidero_theme');
+        if (!savedTheme && dataConfig.defaultTheme) {
+          dispatch(setTheme(dataConfig.defaultTheme as ThemeName));
+        }
       })
       .catch(() => {});
-  }, []);
+  }, [dispatch]);
 
   const { register, handleSubmit, formState: { errors, isSubmitting, isValid } } = useForm<LoginCredentials>({
     resolver: zodResolver(LoginSchema),
@@ -80,38 +104,38 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-[url('/bg-sonidero.png')] bg-cover bg-center relative">
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+    <div className="min-h-screen flex items-center justify-center p-4 bg-[url('/bg-sonidero.png')] bg-cover bg-center relative overflow-hidden transition-colors duration-500">
+      <div className="absolute inset-0 bg-background/60 dark:bg-background/85 backdrop-blur-[2px] pointer-events-none transition-colors duration-500" />
       
-      <Card className="w-full max-w-md relative z-10 border-primary/50 shadow-[0_0_30px_theme(colors.primary.DEFAULT)] bg-black/90 text-white">
+      <Card className="w-full max-w-md relative z-10 border-border/50 shadow-[0_20px_70px_-10px_rgba(0,0,0,0.25)] dark:shadow-[0_0_40px_-5px_var(--color-primary)]/30 bg-card text-card-foreground transition-all duration-300">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl app-title">
             {config.appName}
           </CardTitle>
-          <CardDescription className="text-gray-500 font-medium">
+          <CardDescription className="text-muted-foreground font-medium">
             Ingresa tu alias y contraseña para entrar a la cabina digital
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="alias" className="text-gray-300 font-semibold">Alias (Nickname)</Label>
+              <Label htmlFor="alias" className="text-foreground font-semibold">Alias (Nickname)</Label>
               <Input 
                 id="alias" 
                 {...register('alias')} 
-                className="bg-gray-900 border-gray-700 focus:border-secondary text-white"
+                className="bg-muted border-input focus:border-secondary text-foreground"
                 placeholder="Ej. ElBailador77"
               />
               {errors.alias && <p className="text-destructive text-xs">{errors.alias.message}</p>}
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-300 font-semibold">Contraseña</Label>
+              <Label htmlFor="password" className="text-foreground font-semibold">Contraseña</Label>
               <Input 
                 id="password" 
                 type="password" 
                 {...register('password')} 
-                className="bg-gray-900 border-gray-700 focus:border-secondary text-white"
+                className="bg-muted border-input focus:border-secondary text-foreground"
               />
               {errors.password && <p className="text-destructive text-xs">{errors.password.message}</p>}
             </div>
@@ -131,7 +155,7 @@ export default function LoginPage() {
           </form>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <p className="text-sm text-gray-500 font-medium">
+          <p className="text-sm text-muted-foreground font-medium">
             ¿No tienes cuenta? <Link href="/register" className="text-primary/70 font-semibold hover:underline hover:text-primary transition-colors">Regístrate aquí</Link>
           </p>
         </CardFooter>

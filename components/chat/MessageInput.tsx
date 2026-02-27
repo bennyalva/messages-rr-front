@@ -112,9 +112,9 @@ export default function MessageInput() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="bg-gray-800/90 backdrop-blur border-t border-primary/30 p-2 flex items-center justify-between mx-2 rounded-t-lg mb-0"
+                className="bg-accent/10 backdrop-blur border-t border-primary/30 p-2 flex items-center justify-between mx-2 rounded-t-lg mb-0"
             >
-                <div className="flex flex-col text-xs text-gray-300 border-l-2 border-primary pl-2">
+                <div className="flex flex-col text-xs text-muted-foreground border-l-2 border-primary pl-2">
                     <span className="font-bold text-primary">Respondiendo a {replyingTo.userAlias}</span>
                     <span className="truncate max-w-[200px] opacity-70">{replyingTo.content}</span>
                 </div>
@@ -125,14 +125,14 @@ export default function MessageInput() {
         )}
       </AnimatePresence>
 
-    <div className="bg-black/80 backdrop-blur-md p-2 border-t border-white/10 flex flex-col gap-2 safe-area-bottom">
+    <div className="bg-background/80 backdrop-blur-md p-2 border-t border-border flex flex-col gap-2 safe-area-bottom">
        {/* Input Area */}
        <div className="flex flex-col gap-2 w-full max-w-3xl mx-auto">
            
            {/* Image Preview with remove button */}
            {imagePreview && (
                 <div className="relative w-fit group">
-                    <div className="w-20 h-20 rounded-lg overflow-hidden border border-white/20">
+                    <div className="w-20 h-20 rounded-lg overflow-hidden border border-border">
                         <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                         <button 
                             onClick={() => setImagePreview(null)}
@@ -163,7 +163,7 @@ export default function MessageInput() {
                 />
                 <label 
                     htmlFor="image-upload" 
-                    className="flex items-center justify-center w-11 h-11 rounded-full hover:bg-white/10 cursor-pointer transition-colors text-gray-400 hover:text-white"
+                    className="flex items-center justify-center w-11 h-11 rounded-full hover:bg-accent cursor-pointer transition-colors text-muted-foreground hover:text-foreground"
                     title="Adjuntar imagen"
                 >
                     <ImageIcon className="w-5 h-5" />
@@ -184,7 +184,7 @@ export default function MessageInput() {
                             placeholder="Escribe un mensaje ..."
                             maxLength={maxLength}
                             className={cn(
-                                "w-full bg-gray-900/50 text-white rounded-2xl px-4 py-2.5 text-sm focus:outline-none focus:ring-0 resize-none transition-all duration-300 border",
+                                "w-full bg-muted/50 text-foreground rounded-2xl px-4 py-2.5 text-sm focus:outline-none focus:ring-0 resize-none transition-all duration-300 border",
                                 borderColorClass
                             )}
                             rows={1}

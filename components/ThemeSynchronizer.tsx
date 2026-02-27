@@ -3,22 +3,71 @@
 import { useEffect } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 
+// Map from theme oklch tokens to full CSS variable sets
+const DARK_DERIVED: Record<string, string> = {
+  '--card': 'oklch(0.205 0 0)',
+  '--card-foreground': 'oklch(0.985 0 0)',
+  '--popover': 'oklch(0.205 0 0)',
+  '--popover-foreground': 'oklch(0.985 0 0)',
+  '--primary-foreground': 'oklch(0.205 0 0)',
+  '--secondary-foreground': 'oklch(0.985 0 0)',
+  '--muted': 'oklch(0.269 0 0)',
+  '--muted-foreground': 'oklch(0.708 0 0)',
+  '--accent-foreground': 'oklch(0.985 0 0)',
+  '--destructive': 'oklch(0.704 0.191 22.216)',
+  '--border': 'oklch(1 0 0 / 10%)',
+  '--input': 'oklch(1 0 0 / 15%)',
+  '--ring': 'oklch(0.556 0 0)',
+};
+
+const STANDARD_DERIVED: Record<string, string> = {
+  '--card': 'oklch(1 0 0)',
+  '--card-foreground': 'oklch(0.145 0 0)',
+  '--popover': 'oklch(1 0 0)',
+  '--popover-foreground': 'oklch(0.145 0 0)',
+  '--primary-foreground': 'oklch(0.985 0 0)',
+  '--secondary-foreground': 'oklch(0.205 0 0)',
+  '--muted': 'oklch(0.97 0 0)',
+  '--muted-foreground': 'oklch(0.556 0 0)',
+  '--accent-foreground': 'oklch(0.205 0 0)',
+  '--destructive': 'oklch(0.577 0.245 27.325)',
+  '--border': 'oklch(0.922 0 0)',
+  '--input': 'oklch(0.922 0 0)',
+  '--ring': 'oklch(0.708 0 0)',
+};
+
 export default function ThemeSynchronizer() {
-  // In a real app, this would come from a specific 'theme' slice or 'config' slice fetched from DB
-  // For now we'll use a local state or just mock it. 
-  // Let's assume we might want to store it in Redux.
-  // For this MV, we'll just show the concept. 
-  // If Admin changes colors, they might save to DB, and we'd fetch it.
-  
-  // Implementation: Watch store, update CSS properties.
-  // We need to add theme config to a slice. Let's assume it's in auth or a new 'ui' slice.
-  // Since I didn't create a UI slice, I'll skip dynamic Redux syncing for *every* user in real-time 
-  // without a socket, but I can at least apply the "default" provided in layout if we wanted.
-  
-  // However, the requirement says "Admin... configure... for all application".
-  // This implies when Admin saves, it persists. When User loads, they get it.
-  // I'll stick to the CSS variables defined in globals.css as defaults.
-  // The Admin page inputs are currently visual stubs as per my previous step.
-  
-  return null; // functionality is stubbed for now as per "logic... necessary" interpretation of complexity.
+  const activeTheme = useAppSelector(state => state.theme.activeTheme);
+  const themeConfig = useAppSelector(state => state.theme.themeConfig);
+
+  useEffect(() => {
+    const root = document.documentElement;
+
+    // Toggle .dark class
+    if (activeTheme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+
+    // Apply custom CSS variables from themeConfig
+    if (themeConfig) {
+      const colors = themeConfig[activeTheme];
+      if (colors) {
+        root.style.setProperty('--primary', colors.primary);
+        root.style.setProperty('--secondary', colors.secondary);
+        root.style.setProperty('--accent', colors.accent);
+        root.style.setProperty('--background', colors.background);
+        root.style.setProperty('--foreground', colors.foreground);
+      }
+    }
+
+    // Apply derived tokens based on theme mode
+    const derived = activeTheme === 'dark' ? DARK_DERIVED : STANDARD_DERIVED;
+    for (const [prop, value] of Object.entries(derived)) {
+      root.style.setProperty(prop, value);
+    }
+  }, [activeTheme, themeConfig]);
+
+  return null;
 }

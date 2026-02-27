@@ -228,7 +228,7 @@ export default function MessageItem({
 
     return (
       <div className={cn("relative flex-shrink-0 group-avatar", className)}>
-         <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-800">
+         <div className="w-10 h-10 rounded-full overflow-hidden bg-muted">
             <img 
             src={message.userAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${message.userId}`} 
             alt="Avatar" 
@@ -258,7 +258,7 @@ export default function MessageItem({
             "w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200",
             isReplying 
               ? "bg-primary/20 border-primary/40" 
-              : "bg-gradient-to-br from-white/10 to-white/5 border border-white/20",
+              : "bg-background/20 border border-border/30",
             "hover:from-primary/20 hover:to-primary/10 hover:border-primary/40",
             "active:scale-95 backdrop-blur-sm",
             "shadow-sm hover:shadow-md"
@@ -268,7 +268,7 @@ export default function MessageItem({
           {isReplying ? (
             <Reply className="w-4 h-4 text-primary transition-colors" />
           ) : (
-            <Smile className="w-4 h-4 text-white/70 hover:text-primary/90 transition-colors" />
+            <Smile className="w-4 h-4 text-muted-foreground hover:text-primary transition-colors" />
           )}
         </button>
       </div>
@@ -306,7 +306,7 @@ export default function MessageItem({
         "mb-2 p-2 rounded-lg text-xs border-l-2 cursor-pointer transition-opacity hover:opacity-80 active:scale-95",
         isOwn 
           ? "bg-black/20 border-white/50" 
-          : "bg-black/10 border-primary"
+          : "bg-muted/50 border-primary"
       )}>
         <span className={cn(
           "font-bold block mb-0.5",
@@ -316,7 +316,7 @@ export default function MessageItem({
         </span>
         <span className={cn(
           "line-clamp-1 opacity-80",
-          isOwn ? "text-white/70" : "text-gray-600"
+          isOwn ? "text-white/70" : "text-card-foreground/70"
         )}>
           {originalContent}
         </span>
@@ -391,10 +391,10 @@ export default function MessageItem({
              <div 
                ref={bubbleRef}
                className={cn(
-                 "p-3 rounded-2xl relative shadow-md text-sm break-words",
+                 "p-3 rounded-2xl relative shadow-lg text-sm break-words transition-all duration-300",
                  isOwn 
-                   ? "bg-gradient-to-r from-pink-500 to-rose-400 text-white rounded-tr-sm" 
-                   : "bg-white/90 backdrop-blur-sm text-gray-800 rounded-tl-sm border border-gray-200/50",
+                   ? "bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground rounded-tr-sm shadow-primary/5 border border-primary/20" 
+                   : "bg-card/95 backdrop-blur-md text-card-foreground rounded-tl-sm border border-border dark:border-white/10 shadow-black/20 dark:shadow-white/[0.02]",
                  message.isDeleted && "italic opacity-50 bg-muted text-muted-foreground"
                )}
              >
@@ -416,7 +416,7 @@ export default function MessageItem({
                             value={editContent}
                             onChange={(e) => setEditContent(e.target.value)}
                             onKeyDown={handleEditKeyDown}
-                            className="bg-black/20 border-white/20 text-white h-8 text-sm"
+                            className="bg-background/20 border-border/50 text-foreground h-8 text-sm"
                         />
                         <div className="flex justify-end gap-2">
                              <button onClick={handleEditCancel} className="p-1 hover:bg-white/10 rounded-full" title="Cancelar">
@@ -454,10 +454,10 @@ export default function MessageItem({
                                  setInitialReactionTab(r.emoji); // Select the emoji tab
                                  setShowReactionDetails(true);
                              }}
-                             className="flex items-center gap-1 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-full px-2 py-0.5 text-sm shadow-sm hover:scale-105 transition-transform"
+                             className="flex items-center gap-1 bg-card/80 backdrop-blur-sm border border-border rounded-full px-2 py-0.5 text-sm shadow-sm hover:scale-105 transition-transform"
                          >
                              <span>{r.emoji}</span>
-                             <span className="text-xs text-gray-600 font-medium">{r.count}</span>
+                             <span className="text-xs text-card-foreground/60 font-medium">{r.count}</span>
                          </button>
                      ))}
                  </div>
@@ -507,10 +507,10 @@ export default function MessageItem({
              onClick={(e) => e.stopPropagation()}
            >
                {hasUserReacted ? (
-                 <div className="px-5 py-3 bg-gradient-to-br from-black/95 to-gray-900/95 border border-primary/60 rounded-2xl shadow-[0_0_25px_theme(colors.primary.DEFAULT)] animate-in zoom-in-90 duration-200 backdrop-blur-sm">
-                   <div className="flex items-center gap-2.5 text-white/90">
+                 <div className="px-5 py-3 bg-card border border-primary/60 rounded-2xl shadow-[0_0_25px_theme(colors.primary.DEFAULT)] animate-in zoom-in-90 duration-200 backdrop-blur-md">
+                   <div className="flex items-center gap-2.5 text-card-foreground">
                      <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center">
-                       <CheckCircle2 className="w-4 h-4 text-green-400" />
+                       <CheckCircle2 className="w-4 h-4 text-green-500" />
                      </div>
                      <span className="text-sm font-medium whitespace-nowrap">
                        Ya reaccionaste
@@ -518,7 +518,7 @@ export default function MessageItem({
                    </div>
                  </div>
                ) : (
-                 <div className="bg-gradient-to-br from-black/95 to-gray-900/95 border border-primary rounded-2xl shadow-[0_0_25px_theme(colors.primary.DEFAULT)] animate-in zoom-in-90 duration-200 overflow-hidden backdrop-blur-sm">
+                 <div className="bg-card border border-primary rounded-2xl shadow-[0_0_25px_theme(colors.primary.DEFAULT)] animate-in zoom-in-90 duration-200 overflow-hidden backdrop-blur-md">
                    <div className="px-3 py-2 flex items-center gap-1">
                      {REACTIONS.map(emoji => (
                        <button 
@@ -532,18 +532,18 @@ export default function MessageItem({
                    </div>
                    {isOwn && !message.isDeleted && (
                      <>
-                       <div className="border-t border-gray-700/50" />
+                       <div className="border-t border-border" />
                        <button 
                          onClick={handleEditStart}
-                         className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm w-full justify-center py-2 hover:bg-blue-500/10 transition-colors"
+                         className="flex items-center gap-2 text-primary hover:text-primary/80 text-sm w-full justify-center py-2 hover:bg-primary/10 transition-colors"
                        >
                          <Pencil className="w-4 h-4" />
                          <span className="font-medium">Editar mensaje</span>
                        </button>
-                       <div className="border-t border-gray-700/50" />
+                       <div className="border-t border-border" />
                        <button 
                          onClick={handleDeleteClick}
-                         className="flex items-center gap-2 text-red-400 hover:text-red-300 text-sm w-full justify-center py-2 hover:bg-red-500/20 transition-colors"
+                         className="flex items-center gap-2 text-destructive hover:text-destructive/80 text-sm w-full justify-center py-2 hover:bg-destructive/10 transition-colors"
                        >
                          <Trash2 className="w-4 h-4" />
                          <span className="font-medium">Eliminar mensaje</span>

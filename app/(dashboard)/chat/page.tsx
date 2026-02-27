@@ -8,14 +8,14 @@ import MessageInput from '@/components/chat/MessageInput';
 
 export default function ChatPage() {
   // TODO: esta variable será dinámica más adelante
-  const showBanner = true;
+  const showBanner = false;
 
   return (
     <AuthGuard>
-      <div className="flex flex-col h-screen bg-black text-white relative overflow-hidden">
+      <div className="flex flex-col h-screen bg-background text-foreground relative overflow-hidden">
           {/* Decorative Background */}
-           <div className="absolute inset-0 bg-[url('/bg-pattern.png')] opacity-10 pointer-events-none" />
-           <div className="absolute top-[20%] left-[50%] -translate-x-1/2 w-[80%] h-[50%] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
+           <div className="absolute inset-0 bg-[url('/bg-pattern.png')] opacity-[0.08] dark:opacity-[0.07] pointer-events-none transition-opacity duration-500" />
+           <div className="absolute top-[20%] left-[50%] -translate-x-1/2 w-[80%] h-[50%] bg-primary/10 dark:bg-primary/8 blur-[120px] rounded-full pointer-events-none transition-colors duration-500" />
 
           <ChatHeader />
           <SonideroBanner show={showBanner} />

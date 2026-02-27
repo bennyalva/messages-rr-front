@@ -6,7 +6,7 @@ import MessageListSkeleton from './MessageListSkeleton';
 import { ChevronsDown } from 'lucide-react';
 
 // Background gradient for message list area
-const MESSAGE_LIST_BACKGROUND = 'linear-gradient(135deg, rgba(255,182,193,0.3) 0%, rgba(173,216,230,0.3) 50%, rgba(255,218,185,0.3) 100%)';
+const MESSAGE_LIST_BACKGROUND = 'transparent';
 
 export default function MessageList() {
     const { messages, user, activeUsers, replyingTo } = useAppSelector(state => ({ 
@@ -225,7 +225,7 @@ export default function MessageList() {
             {showScrollButton && (
                 <button
                     onClick={() => scrollToBottom('smooth')}
-                    className="absolute bottom-32 right-4 p-2 bg-black/20 backdrop-blur-sm text-white/70 rounded-full shadow-sm hover:bg-black/30 hover:text-white active:scale-95 transition-all duration-200 animate-in fade-in z-20"
+                    className="absolute bottom-32 right-4 p-2 bg-background/20 backdrop-blur-sm text-foreground/70 rounded-full shadow-sm hover:bg-background/40 hover:text-foreground active:scale-95 transition-all duration-200 animate-in fade-in z-20"
                     aria-label="Ir al último mensaje"
                 >
                     <ChevronsDown className="w-5 h-5" />

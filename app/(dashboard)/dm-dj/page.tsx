@@ -54,28 +54,28 @@ function DmDjPageContent() {
        <ChatHeader showBackButton />
        
        <div className="flex-1 flex items-center justify-center p-4">
-         <Card className="w-full max-w-md bg-black/90 text-white border-primary">
+         <Card className="w-full max-w-md bg-card border-border/50 shadow-2xl shadow-black/20 dark:shadow-primary/20 transition-all duration-300">
              <CardHeader>
                  <CardTitle className="text-2xl app-title">Mensaje al DJ</CardTitle>
-                 <CardDescription className="text-gray-400">
+                 <CardDescription className="text-muted-foreground font-medium">
                      Pide tu saludo o tu rola favorita (Máximo 120 caracteres)
                  </CardDescription>
              </CardHeader>
              <CardContent className="space-y-4">
                  <textarea 
-                     className="w-full h-32 bg-gray-900 border border-gray-700 rounded-md p-3 text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                     className="w-full h-32 bg-muted/50 border border-border rounded-xl p-4 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all resize-none shadow-inner"
                      placeholder="Escribe aquí..."
                      maxLength={120}
                      value={message}
                      onChange={(e) => setMessage(e.target.value)}
                  />
-                 <div className="text-right text-xs text-gray-500">
-                     {message.length}/120
+                 <div className="text-right text-xs font-bold text-muted-foreground/60 tracking-wider">
+                     {message.length} / 120
                  </div>
                  <SubmitButton
                      isFormValid={!!message.trim()}
                      isSubmitting={isSending}
-                     label="Enviar"
+                     label="Enviar mensaje"
                      loadingLabel="Enviando..."
                      icon={<Send className="mr-2 h-4 w-4" />}
                      onClick={handleSendClick}

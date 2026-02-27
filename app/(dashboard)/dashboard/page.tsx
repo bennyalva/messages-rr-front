@@ -2,17 +2,18 @@
 
 import { useState, useEffect, useRef } from 'react';
 import AuthGuard from '@/components/auth/AuthGuard';
-import { useAppSelector } from '@/lib/store/hooks';
+import { useAppSelector, useAppDispatch } from '@/lib/store/hooks';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Users, Music, Palette, Trash2, Edit, X, Disc, MessageSquare, Settings, Mail } from 'lucide-react';
+import { Users, Music, Palette, Trash2, Edit, X, Disc, MessageSquare, Settings, Mail, Sun, Moon } from 'lucide-react';
 import httpClient from '@/lib/services/httpClient';
 import { generateUUID } from '@/lib/utils/uuid';
 import ChatHeader from '@/components/chat/ChatHeader';
 import ConfirmModal from '@/components/ui/ConfirmModal';
+import { setThemeConfig, ThemeConfig } from '@/lib/store/features/themeSlice';
 
 interface DirectMessage {
   id: string;
@@ -35,6 +36,7 @@ interface Message {
 }
 
 function DashboardPageContent() {
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
   const [users, setUsers] = useState<any[]>([]);
   const [songs, setSongs] = useState<any[]>([]);
@@ -46,17 +48,58 @@ function DashboardPageContent() {
   const [isResetting, setIsResetting] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
+  // Theme Config state
+  const [fullConfig, setFullConfig] = useState<any>(null);
+  const [isSavingConfig, setIsSavingConfig] = useState(false);
+
   useEffect(() => {
     fetchUsers();
     fetchSongs();
     fetchMessages();
     fetchDirectMessages();
+    fetchConfig();
   }, []);
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  const fetchConfig = async () => {
+    const { data } = await httpClient.get('/config');
+    setFullConfig(data);
+  };
+
+  const handleSaveConfig = async () => {
+    if (!fullConfig) return;
+    setIsSavingConfig(true);
+    try {
+      await httpClient.patch('/config', fullConfig);
+      // Update global store
+      if (fullConfig.themes) {
+        dispatch(setThemeConfig(fullConfig.themes));
+      }
+      alert("Configuración guardada exitosamente");
+    } catch (err) {
+      alert("Error al guardar configuración");
+    } finally {
+      setIsSavingConfig(false);
+    }
+  };
+
+  const updateThemeColor = (theme: 'dark' | 'standard', key: string, value: string) => {
+    if (!fullConfig) return;
+    setFullConfig({
+      ...fullConfig,
+      themes: {
+        ...fullConfig.themes,
+        [theme]: {
+          ...fullConfig.themes[theme],
+          [key]: value
+        }
+      }
+    });
+  };
 
   const fetchUsers = async () => {
     const { data } = await httpClient.get('/users');
@@ -394,7 +437,7 @@ function DashboardPageContent() {
                                   <X className="w-4 h-4" />
                                 </Button>
                               </div>
-                          ))}
+                            ))}
                       </div>
                     )}
                  </div>
@@ -484,21 +527,139 @@ function DashboardPageContent() {
           <TabsContent value="config" className="flex-1 overflow-hidden mt-0">
             <Card className="h-full flex flex-col bg-black/50 border-white/20">
               <CardHeader className="flex-shrink-0">
-                <CardTitle className="flex items-center gap-2"><Palette className="text-white"/> Apariencia Global</CardTitle>
+                <CardTitle className="flex items-center gap-2"><Palette className="text-white"/> Configuración de Temas</CardTitle>
+                <CardDescription>Personaliza los colores de los temas Dark y Estándar.</CardDescription>
               </CardHeader>
-              <CardContent className="flex-1 overflow-auto space-y-4">
-                   <p className="text-sm text-gray-400">Esta configuración afectará a la aplicación tras recargar.</p>
-                  <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                          <Label>Color Primario (Neon Pink)</Label>
-                          <Input type="color" defaultValue="#ff00ff" />
+              <CardContent className="flex-1 overflow-auto space-y-8 pt-4 pb-10">
+                {!fullConfig ? (
+                  <p className="text-gray-400 italic">Cargando configuración...</p>
+                ) : (
+                  <>
+                    {/* Dark Theme Section */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-bold text-primary flex items-center gap-2">
+                        <Moon className="w-5 h-5" /> Tema Dark (Activo por defecto)
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="space-y-2">
+                          <Label className="text-gray-300">Primario (Neon)</Label>
+                          <div className="flex gap-2">
+                            <Input 
+                              type="color" 
+                              value={fullConfig.themes.dark.primary} 
+                              onChange={(e) => updateThemeColor('dark', 'primary', e.target.value)}
+                              className="w-12 h-10 p-1 bg-gray-900 border-gray-700" 
+                            />
+                            <Input 
+                              value={fullConfig.themes.dark.primary} 
+                              onChange={(e) => updateThemeColor('dark', 'primary', e.target.value)}
+                              className="flex-1 bg-gray-900 border-gray-700 text-xs font-mono" 
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-gray-300">Secundario (Gris Oscuro)</Label>
+                          <div className="flex gap-2">
+                            <Input 
+                              type="color" 
+                              value={fullConfig.themes.dark.secondary} 
+                              onChange={(e) => updateThemeColor('dark', 'secondary', e.target.value)}
+                              className="w-12 h-10 p-1 bg-gray-900 border-gray-700" 
+                            />
+                            <Input 
+                              value={fullConfig.themes.dark.secondary} 
+                              onChange={(e) => updateThemeColor('dark', 'secondary', e.target.value)}
+                              className="flex-1 bg-gray-900 border-gray-700 text-xs font-mono" 
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-gray-300">Fondo (Background)</Label>
+                          <div className="flex gap-2">
+                            <Input 
+                              type="color" 
+                              value={fullConfig.themes.dark.background} 
+                              onChange={(e) => updateThemeColor('dark', 'background', e.target.value)}
+                              className="w-12 h-10 p-1 bg-gray-900 border-gray-700" 
+                            />
+                            <Input 
+                              value={fullConfig.themes.dark.background} 
+                              onChange={(e) => updateThemeColor('dark', 'background', e.target.value)}
+                              className="flex-1 bg-gray-900 border-gray-700 text-xs font-mono" 
+                            />
+                          </div>
+                        </div>
                       </div>
-                       <div className="space-y-2">
-                          <Label>Color Secundario (Cyan)</Label>
-                          <Input type="color" defaultValue="#00ffff" />
+                    </div>
+
+                    <div className="h-px bg-white/10 w-full" />
+
+                    {/* Standard Theme Section */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-bold text-secondary flex items-center gap-2">
+                        <Sun className="w-5 h-5" /> Tema Estándar (Limpio)
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="space-y-2">
+                          <Label className="text-gray-300">Primario (Oscuro)</Label>
+                          <div className="flex gap-2">
+                            <Input 
+                              type="color" 
+                              value={fullConfig.themes.standard.primary} 
+                              onChange={(e) => updateThemeColor('standard', 'primary', e.target.value)}
+                              className="w-12 h-10 p-1 bg-gray-900 border-gray-700" 
+                            />
+                            <Input 
+                              value={fullConfig.themes.standard.primary} 
+                              onChange={(e) => updateThemeColor('standard', 'primary', e.target.value)}
+                              className="flex-1 bg-gray-900 border-gray-700 text-xs font-mono" 
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-gray-300">Secundario (Gris Claro)</Label>
+                          <div className="flex gap-2">
+                            <Input 
+                              type="color" 
+                              value={fullConfig.themes.standard.secondary} 
+                              onChange={(e) => updateThemeColor('standard', 'secondary', e.target.value)}
+                              className="w-12 h-10 p-1 bg-gray-900 border-gray-700" 
+                            />
+                            <Input 
+                              value={fullConfig.themes.standard.secondary} 
+                              onChange={(e) => updateThemeColor('standard', 'secondary', e.target.value)}
+                              className="flex-1 bg-gray-900 border-gray-700 text-xs font-mono" 
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-gray-300">Fondo (Blanco)</Label>
+                          <div className="flex gap-2">
+                            <Input 
+                              type="color" 
+                              value={fullConfig.themes.standard.background} 
+                              onChange={(e) => updateThemeColor('standard', 'background', e.target.value)}
+                              className="w-12 h-10 p-1 bg-gray-900 border-gray-700" 
+                            />
+                            <Input 
+                              value={fullConfig.themes.standard.background} 
+                              onChange={(e) => updateThemeColor('standard', 'background', e.target.value)}
+                              className="flex-1 bg-gray-900 border-gray-700 text-xs font-mono" 
+                            />
+                          </div>
+                        </div>
                       </div>
-                  </div>
-                  <Button className="w-full">Guardar Configuración Global</Button>
+                    </div>
+
+                    <Button 
+                      className="w-full bg-gradient-to-r from-primary to-secondary text-black font-bold h-12"
+                      onClick={handleSaveConfig}
+                      disabled={isSavingConfig}
+                    >
+                      {isSavingConfig ? 'Guardando...' : 'Guardar Configuración Global'}
+                    </Button>
+                  </>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

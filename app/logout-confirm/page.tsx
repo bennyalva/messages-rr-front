@@ -70,20 +70,20 @@ function LogoutConfirmContent() {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background relative overflow-hidden">
       {/* Background Effects */}
-      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-red-500/10 rounded-full blur-[120px]" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-orange-500/10 rounded-full blur-[120px]" />
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-red-500/5 rounded-full blur-[120px]" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-orange-500/5 rounded-full blur-[120px]" />
       
-      <Card className="w-full max-w-md relative z-10 border-red-500/50 shadow-[0_0_40px_rgba(239,68,68,0.3)] bg-black/90 text-white">
+      <Card className="w-full max-w-md relative z-10 border-destructive/50 shadow-[0_0_40px_rgba(239,68,68,0.2)] bg-card text-card-foreground">
         <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center">
-            <AlertTriangle className="w-8 h-8 text-red-400" />
+          <div className="mx-auto w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center">
+            <AlertTriangle className="w-8 h-8 text-destructive" />
           </div>
-          <CardTitle className="text-2xl font-bold text-red-400">
+          <CardTitle className="text-2xl font-bold text-destructive">
             ¿Cerrar sesión?
           </CardTitle>
-          <CardDescription className="text-gray-300 text-base">
+          <CardDescription className="text-muted-foreground text-base">
             Estás a punto de salir de <span className="text-primary font-semibold">Sonidero Chat</span>. 
             Tu sesión actual se cerrará y tendrás que volver a iniciar sesión para acceder.
           </CardDescription>
@@ -91,8 +91,8 @@ function LogoutConfirmContent() {
         
         <CardContent className="space-y-4">
           {user && (
-            <div className="flex items-center gap-3 p-3 bg-gray-800/50 rounded-lg border border-gray-700">
-              <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-700">
+            <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg border border-border">
+              <div className="w-10 h-10 rounded-full overflow-hidden bg-muted">
                 <img 
                   src={user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.alias}`} 
                   alt="Avatar" 
@@ -100,8 +100,8 @@ function LogoutConfirmContent() {
                 />
               </div>
               <div className="flex-1">
-                <p className="font-medium text-white">{user.alias}</p>
-                <p className="text-xs text-gray-400">Sesión activa</p>
+                <p className="font-medium text-foreground">{user.alias}</p>
+                <p className="text-xs text-muted-foreground">Sesión activa</p>
               </div>
             </div>
           )}
@@ -119,7 +119,7 @@ function LogoutConfirmContent() {
             <Button 
               onClick={handleCancel}
               variant="outline"
-              className="w-full font-medium py-6 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-white"
+              className="w-full font-medium py-6 border-input text-muted-foreground hover:bg-accent hover:text-accent-foreground"
             >
               <ArrowLeft className="mr-2 h-5 w-5" />
               {getCancelButtonText()}
