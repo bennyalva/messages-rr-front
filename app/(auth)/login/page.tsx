@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { SubmitButton } from '@/components/ui/submit-button';
+import { LoadingScreen } from '@/components/ui/loading-screen';
 import Link from 'next/link';
 
 interface AppConfig {
@@ -31,6 +32,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [config, setConfig] = useState<AppConfig>({ appName: 'SONIDERO CHAT' });
+  const [isLoadingConfig, setIsLoadingConfig] = useState(true);
 
   useEffect(() => {
     // Try localStorage first (instant), then fetch fresh from API
@@ -57,8 +59,11 @@ export default function LoginPage() {
         if (!savedTheme && dataConfig.defaultTheme) {
           dispatch(setTheme(dataConfig.defaultTheme as ThemeName));
         }
+        setIsLoadingConfig(false);
       })
-      .catch(() => {});
+      .catch(() => {
+        setIsLoadingConfig(false);
+      });
   }, [dispatch]);
 
   const { register, handleSubmit, formState: { errors, isSubmitting, isValid } } = useForm<LoginCredentials>({
@@ -102,6 +107,10 @@ export default function LoginPage() {
       dispatch(loginFailure(msg));
     }
   };
+
+  if (isLoadingConfig) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-[url('/bg-sonidero.png')] bg-cover bg-center relative overflow-hidden transition-colors duration-500">

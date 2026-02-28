@@ -6,7 +6,7 @@ import { useAppSelector, useAppDispatch } from '@/lib/store/hooks';
 import { hydrateAuth } from '@/lib/store/features/authSlice';
 import { UserRole } from '@/lib/types/auth';
 import { sessionService } from '@/lib/services/sessionService';
-import { Loader2 } from 'lucide-react';
+import { LoadingScreen } from '@/components/ui/loading-screen';
 
 interface AuthGuardProps {
   children: ReactNode;
@@ -46,8 +46,6 @@ export default function AuthGuard({
     const isValid = sessionService.isSessionValid();
     
     if (!isValid) {
-      // Session is invalid - redirect immediately
-      setShouldRedirect(true);
       window.location.replace('/login');
       return;
     }
@@ -133,14 +131,7 @@ export default function AuthGuard({
 
   // Show loading while checking session or hydrating
   if (!isSessionChecked || !isHydrated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-10 h-10 text-primary animate-spin" />
-          <p className="text-gray-400 text-sm animate-pulse">Cargando sesión...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   // Not authenticated or not authorized - show nothing (redirect will happen)
