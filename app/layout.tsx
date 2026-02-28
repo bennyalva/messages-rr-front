@@ -15,8 +15,11 @@ const geistMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sonidero Chat",
-  description: "Sistema de chat sonidero",
+  title: "Cabina Digital",
+  description: "Para Djs y Sonideros",
+  icons: {
+    icon: "/favicon-dj.jpeg",
+  },
 };
 
 export default function RootLayout({

@@ -885,7 +885,7 @@
   ],
   "config": {
     "appName": "Super Loco",
-    "logoUrl": "/superloco-dark.png",
+    "logoUrl": "/superloco.png",
     "logoUrlDark": "/superloco-dark.png",
     "logoUrlStandard": "/superloco-standard.png",
     "defaultTheme": "dark",
