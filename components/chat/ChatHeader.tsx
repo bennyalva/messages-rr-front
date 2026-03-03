@@ -6,12 +6,12 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { logout } from '@/lib/store/features/authSlice';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Menu, Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { storageService } from '@/lib/utils/storage';
 import { cn } from '@/lib/utils';
-import httpClient from '@/lib/services/httpClient';
+import { AnimatedLogo } from '@/components/ui/animated-logo';
 
 interface ChatHeaderProps {
   variant?: 'user' | 'admin';
@@ -21,6 +21,7 @@ interface ChatHeaderProps {
 export default function ChatHeader({ variant = 'user', showBackButton = false }: ChatHeaderProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const pathname = usePathname();
   const { user } = useAppSelector(state => state.auth);
   const { activeUsers } = useAppSelector(state => state.chat);
   const { activeTheme } = useAppSelector(state => state.theme);
@@ -32,18 +33,14 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
   const animationFrameRef = useRef<number | null>(null);
   const ignoreClickRef = useRef(false);
   const heroTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isAboutPage = pathname === '/about';
 
-  // Read config from localStorage and fetch fresh from API
+  // Read config from localStorage (already fetched at login)
   useEffect(() => {
     const stored = storageService.getItem('config');
-    if (stored) setConfig(stored);
-
-    httpClient.get('/config')
-      .then(({ data }) => {
-        setConfig(data);
-        storageService.setItem('config', data);
-      })
-      .catch(() => {});
+    if (stored) {
+      setConfig(stored);
+    }
   }, []);
 
   // Auto-dismiss hero animation after 5 seconds
@@ -290,7 +287,17 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
                 }}
                 className="h-full w-auto select-none"
             >
-                {config.logoUrl ? (
+                {isAboutPage ? (
+                            <AnimatedLogo 
+                                logoUrl={config.logoUrl}  
+                                className="h-full bg-transparent p-0 min-w-0 min-h-0 border-none shadow-none"
+                                imageClassName={cn(
+                                    "h-full w-auto object-contain pointer-events-none select-none scale-x-[1.25]",
+                                    activeTheme === 'dark' ? "mix-blend-lighten contrast-125" : "contrast-110"
+                                )}
+                                glowClassName="hidden"
+                            />
+                ) : config.logoUrl ? (
                     <img 
                         src={activeTheme === 'standard' ? (config.logoUrlStandard || config.logoUrl) : (config.logoUrlDark || config.logoUrl)} 
                         alt="Logo" 

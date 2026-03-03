@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { storageService } from '@/lib/utils/storage';
 import { cn } from '@/lib/utils';
 import { Disc } from 'lucide-react';
+import { AnimatedLogo } from '@/components/ui/animated-logo';
 
 interface AppConfig {
   appName: string;
@@ -38,25 +39,12 @@ export function LoadingScreen() {
       <div className="flex flex-col items-center gap-8">
         
         {/* Rule 5: Container with glassmorphism to distinguish logo from any background */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="relative bg-card/80 backdrop-blur-md border border-border/50 shadow-2xl rounded-3xl p-8 flex items-center justify-center min-w-[200px] min-h-[200px]"
-        >
-           {/* Subtle glow effect behind the logo */}
-           <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full" />
-           
-           {logoSource ? (
-             <img 
-               src={logoSource} 
-               alt="Loading Logo" 
-               className="w-64 h-auto object-contain relative z-10 drop-shadow-lg"
-             />
-           ) : (
-             <Disc className="w-44 h-44 text-primary relative z-10 animate-[spin_3s_linear_infinite]" />
-           )}
-        </motion.div>
+        <AnimatedLogo 
+          logoUrl={logoSource} 
+          className="bg-card/80 backdrop-blur-md border border-border/50 shadow-2xl rounded-3xl p-8 min-w-[200px] min-h-[200px]"
+          imageClassName="w-64 h-auto"
+          discClassName="w-44 h-44"
+        />
 
         {/* Rule 3 & 6: Elegant, modern, and simple spinner */}
         <div className="flex flex-col items-center gap-4">
