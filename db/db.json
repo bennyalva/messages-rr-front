@@ -884,6 +884,29 @@
     }
   ],
   "config": {
+    "item": {
+      "appName": "Super Loco",
+      "logoUrl": "/superloco.png",
+      "logoUrlDark": "/superloco-dark.png",
+      "logoUrlStandard": "/superloco-standard.png",
+      "defaultTheme": "dark",
+      "themes": {
+        "dark": {
+          "primary": "oklch(0.922 0 0)",
+          "secondary": "oklch(0.269 0 0)",
+          "accent": "oklch(0.269 0 0)",
+          "background": "oklch(0.145 0 0)",
+          "foreground": "oklch(0.985 0 0)"
+        },
+        "standard": {
+          "primary": "oklch(0.205 0 0)",
+          "secondary": "oklch(0.97 0 0)",
+          "accent": "oklch(0.97 0 0)",
+          "background": "oklch(1 0 0)",
+          "foreground": "oklch(0.145 0 0)"
+        }
+      }
+    },
     "appName": "Super Loco",
     "logoUrl": "/superloco.png",
     "logoUrlDark": "/superloco-dark.png",
