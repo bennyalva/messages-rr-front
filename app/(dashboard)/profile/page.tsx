@@ -29,10 +29,10 @@ function ProfilePageContent() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="w-full bg-background block min-h-[110vh]">
         <ChatHeader showBackButton />
         
-        <div className="flex-1 flex items-center justify-center p-4">
+        <div className="w-full flex justify-center p-4 py-8 pb-32">
           <Card className="w-full max-w-md border-border/50 shadow-2xl shadow-black/20 dark:shadow-primary/20 bg-card text-foreground transition-all duration-300">
               <CardHeader>
                   <CardTitle>Mi Perfil Sonidero</CardTitle>
