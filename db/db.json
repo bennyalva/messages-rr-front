@@ -849,6 +849,15 @@
       "content": "que paso rey",
       "timestamp": "2026-02-26T21:20:29.331Z",
       "isRead": false
+    },
+    {
+      "id": "bb09d112-82e7-429d-90b1-b5925370a080",
+      "userId": "adba0f6f-4770-4f52-9613-4d51915daf1b",
+      "userAlias": "tester123",
+      "userGang": "",
+      "content": "Jdjsjd",
+      "timestamp": "2026-03-04T22:01:45.674Z",
+      "isRead": false
     }
   ],
   "activeUsers": [

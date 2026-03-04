@@ -120,6 +120,13 @@ function FeedbackPageContent() {
                 onChange={(e) =>
                   setFeedback((prev) => ({ ...prev, comentario: e.target.value }))
                 }
+                enterKeyHint="done"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    e.currentTarget.blur();
+                  }
+                }}
                 className="resize-none min-h-[100px] bg-background/50 border-border/50 focus:border-primary/50 transition-colors"
               />
               <div className="flex justify-end">

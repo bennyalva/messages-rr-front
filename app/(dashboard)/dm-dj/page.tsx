@@ -53,7 +53,7 @@ function DmDjPageContent() {
     <div className="min-h-screen bg-background flex flex-col">
        <ChatHeader showBackButton />
        
-       <main className="flex-1 w-full flex justify-center p-4 py-10">
+       <main className="flex-1 w-full flex items-start justify-center p-4 py-10 overflow-y-auto">
          <Card className="w-full max-w-md bg-card border-border/50 shadow-2xl shadow-black/20 dark:shadow-primary/20 transition-all duration-300">
              <CardHeader>
                  <CardTitle className="text-2xl app-title">Mensaje al DJ</CardTitle>
@@ -68,6 +68,19 @@ function DmDjPageContent() {
                      maxLength={120}
                      value={message}
                      onChange={(e) => setMessage(e.target.value)}
+                     enterKeyHint="send"
+                     onFocus={(e) => {
+                       setTimeout(() => {
+                         e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                       }, 300);
+                     }}
+                     onKeyDown={(e) => {
+                       if (e.key === 'Enter' && !e.shiftKey) {
+                         e.preventDefault();
+                         e.currentTarget.blur();
+                         handleSendClick();
+                       }
+                     }}
                  />
                  <div className="text-right text-xs font-bold text-muted-foreground/60 tracking-wider">
                      {message.length} / 120
