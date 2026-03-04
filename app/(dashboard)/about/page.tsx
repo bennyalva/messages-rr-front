@@ -34,10 +34,13 @@ function AboutPageContent() {
              <Card className="bg-card border-none shadow-2xl shadow-black/10 dark:shadow-primary/5 relative z-0 flex flex-col rounded-3xl overflow-hidden">
                 
                 {/* Unified Cover Banner Area with Sequential Stack Layout (No Title Overlap) */}
-                <div className="w-full flex flex-col relative w-[100%] overflow-hidden">
+                <div className="w-full flex flex-col relative w-[100%] overflow-hidden bg-card">
                    
+                       {/* Subtle Top Gradient to blend outer background with inner card background */}
+                   <div className="absolute top-0 left-0 right-0 h-32 md:h-48 bg-gradient-to-b from-background via-background/60 to-transparent z-[5] pointer-events-none" />
+
                        {/* 1. Header Section (Transparent to blend) containing Logo */}
-                   <div className="w-full flex flex-col items-center px-6 z-10 pt-4">
+                   <div className="w-full flex flex-col items-center px-6 z-10 pt-4 relative">
                        
                        {/* Logo spanning full width organically - No extra top padding */}
                        <div className="w-full flex justify-center mt-[-4rem] md:mt-[-6rem]">
