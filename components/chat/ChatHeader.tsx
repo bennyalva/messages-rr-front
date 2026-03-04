@@ -11,7 +11,6 @@ import { Menu, Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon
 import { motion, AnimatePresence } from 'framer-motion';
 import { storageService } from '@/lib/utils/storage';
 import { cn } from '@/lib/utils';
-import { AnimatedLogo } from '@/components/ui/animated-logo';
 
 interface ChatHeaderProps {
   variant?: 'user' | 'admin';
@@ -229,7 +228,7 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
            )}
       </AnimatePresence>
 
-      <header className={`sticky top-0 z-50 bg-background/80 backdrop-blur-md py-1 flex items-center relative ${
+      <header className={`sticky top-0 z-[100] bg-background/80 backdrop-blur-md py-1 flex items-center relative ${
           isAdminVariant 
             ? 'mx-4 lg:mx-10 mt-4 rounded-xl border border-border p-2 max-h-20' 
             : 'w-full h-17 shadow-[0_4px_20px_rgba(0,0,0,0.2)]'
@@ -288,15 +287,7 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
                 className="h-full w-auto select-none"
             >
                 {isAboutPage ? (
-                            <AnimatedLogo 
-                                logoUrl={config.logoUrl}  
-                                className="h-full bg-transparent p-0 min-w-0 min-h-0 border-none shadow-none"
-                                imageClassName={cn(
-                                    "h-full w-auto object-contain pointer-events-none select-none scale-x-[1.25]",
-                                    activeTheme === 'dark' ? "mix-blend-lighten contrast-125" : "contrast-110"
-                                )}
-                                glowClassName="hidden"
-                            />
+                    <div className="w-12 h-12 md:w-16 md:h-16" /> // Spacer to maintain flex layout structure
                 ) : config.logoUrl ? (
                     <img 
                         src={activeTheme === 'standard' ? (config.logoUrlStandard || config.logoUrl) : (config.logoUrlDark || config.logoUrl)} 
@@ -313,7 +304,7 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
         </div>
 
         {/* Right: Menu — flex-1 mirrors left column for symmetric centering */}
-        <div className="flex-1 flex justify-end items-center pr-1 z-10">
+        <div className="flex-1 flex justify-end items-center pr-3 md:pr-4 z-10">
         {isAdminVariant ? (
             <Button 
                 variant="ghost" 
@@ -325,13 +316,17 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
                 <LogOut className="w-6 h-6" />
             </Button>
         ) : (
-            <DropdownMenu>
+            <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon" className="text-foreground hover:bg-primary/10">
                         <MoreVertical className="w-6 h-6" />
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 bg-card border-border text-card-foreground mr-2 z-[70]">
+                <DropdownMenuContent 
+                    className="w-56 bg-card border-border text-card-foreground z-[99999]"
+                    align="end"
+                    sideOffset={1}
+                >
                     <DropdownMenuItem onClick={() => router.push('/chat')} className="focus:bg-primary/10 cursor-pointer">
                         <MessageSquare className="mr-2 h-4 w-4" /> Chat
                     </DropdownMenuItem>

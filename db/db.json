@@ -859,6 +859,12 @@
       "title": "otra cara",
       "artist": "arroladora",
       "votes": 2
+    },
+    {
+      "id": "e400eb64-44c8-433a-8af7-eb173d78ac0f",
+      "title": "fasdf",
+      "artist": "asdf",
+      "votes": 0
     }
   ],
   "userVotes": [

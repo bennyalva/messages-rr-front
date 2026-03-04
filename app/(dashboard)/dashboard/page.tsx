@@ -35,6 +35,8 @@ interface Message {
   image?: string;
 }
 
+const MAX_SONGS_ALLOWED = 5;
+
 function DashboardPageContent() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
@@ -297,7 +299,7 @@ function DashboardPageContent() {
               <CardContent className="flex-1 overflow-auto space-y-6 pt-6">
                  {/* Add Song Form */}
                  <div className={`p-4 rounded-xl border transition-all ${
-                   songs.length >= 3 
+                   songs.length >= MAX_SONGS_ALLOWED 
                      ? 'bg-gray-800/30 border-gray-700/30 opacity-60' 
                      : 'bg-gradient-to-r from-secondary/10 to-transparent border-secondary/20'
                  }`}>
@@ -306,15 +308,15 @@ function DashboardPageContent() {
                         <Disc className="w-4 h-4" /> Agregar Nueva Rola
                       </span>
                       <span className={`text-xs px-2 py-0.5 rounded-full ${
-                        songs.length >= 3 
+                        songs.length >= MAX_SONGS_ALLOWED 
                           ? 'bg-red-500/20 text-red-400' 
                           : 'bg-secondary/20 text-secondary'
                       }`}>
-                        {songs.length}/3
+                        {songs.length}/{MAX_SONGS_ALLOWED}
                       </span>
                     </h4>
-                    {songs.length >= 3 && (
-                      <p className="text-xs text-gray-500 mb-3">Máximo 3 canciones permitidas. Reinicia para agregar más.</p>
+                    {songs.length >= MAX_SONGS_ALLOWED && (
+                      <p className="text-xs text-gray-500 mb-3">Máximo {MAX_SONGS_ALLOWED} canciones permitidas. Reinicia para agregar más.</p>
                     )}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div className="relative">
@@ -323,7 +325,7 @@ function DashboardPageContent() {
                                value={newSongTitle}
                                onChange={(e) => setNewSongTitle(e.target.value)}
                                className="bg-black/50 border-white/20 focus:border-secondary pl-3"
-                               disabled={songs.length >= 3}
+                               disabled={songs.length >= MAX_SONGS_ALLOWED}
                           />
                         </div>
                         <div className="relative">
@@ -332,17 +334,17 @@ function DashboardPageContent() {
                                value={newSongArtist}
                                onChange={(e) => setNewSongArtist(e.target.value)}
                                className="bg-black/50 border-white/20 focus:border-secondary pl-3"
-                               disabled={songs.length >= 3}
+                               disabled={songs.length >= MAX_SONGS_ALLOWED}
                           />
                         </div>
                         <Button 
                           onClick={handleAddSong}
                           className={`transition-all font-semibold ${
-                            newSongTitle.trim() && newSongArtist.trim() && songs.length < 3
+                            newSongTitle.trim() && newSongArtist.trim() && songs.length < MAX_SONGS_ALLOWED
                               ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white shadow-lg shadow-green-500/25 border-0'
                               : 'bg-white/5 text-gray-500 border border-white/10 cursor-not-allowed'
                           }`}
-                          disabled={!newSongTitle.trim() || !newSongArtist.trim() || songs.length >= 3}
+                          disabled={!newSongTitle.trim() || !newSongArtist.trim() || songs.length >= MAX_SONGS_ALLOWED}
                         >
                           <Music className="w-4 h-4 mr-2" /> Agregar
                         </Button>

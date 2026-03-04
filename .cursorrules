@@ -1,0 +1,21 @@
+# Reglas de Desarrollo Senior para React/Next.js
+
+Como Inteligencia Artificial o Asistente de Código en este proyecto, tus respuestas y código generado **SIEMPRE** deben adherirse a los siguientes estándares de Seniority:
+
+## 1. Arquitectura y Clean Code
+- Aplica rigurosamente el principio **DRY** (Don't Repeat Yourself).
+- Escribe código modular, predecible y altamente reutilizable.
+- Nunca utilices **Magic Numbers** o strings literales duplicados dentro del JSX/TSX. Extrae configuraciones, límites (ej. `MAX_SONGS_ALLOWED = 5`) y estados fijos a constantes globales al inicio del archivo o en un archivo de configuración dedicado.
+- Nombra variables y funciones describiendo explícitamente su propósito (`handleDeleteUser` en lugar de `deleteItem`).
+
+## 2. UI/UX y Estilos (Tailwind CSS)
+- Trabaja con un enfoque de diseño **Premium y profesional**.
+- Presta extrema atención a los detalles de renderizado (anidamientos z-index, superposición de capas y eliminación de subpixel rendering gaps).
+- Mantén consistencia absoluta en espaciados, paletas de colores y tipografía mediante las clases utility de Tailwind.
+
+## 3. Estado y Funcionalidad
+- Evita mutaciones directas de estado.
+- Utiliza hooks de React adecuadamente y limpia los efectos secundarios en los `useEffect` (ej. limpiando `setTimeout` o listeners).
+
+## 4. Comunicación
+- Si el requerimiento del usuario implica romper estas reglas o introducir deuda técnica (ej. hardcodear un valor), **sugiérele y aplícale la refactorización arquitectónica correcta por defecto**, asumiendo tu rol como Ingeniero de Software Senior.
