@@ -26,10 +26,10 @@ function AboutPageContent() {
     <div className="min-h-screen bg-background flex flex-col">
        <ChatHeader showBackButton />
        
-       <main className="flex-1 w-full max-w-4xl mx-auto p-4 md:p-8 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-700 relative z-0">
+       <main className="flex-1 w-full max-w-4xl mx-auto p-4 md:p-8 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-700 relative">
          
          {/* Profile Card Proposal 2 */}
-         <Card className="bg-card border-none shadow-2xl shadow-black/10 dark:shadow-primary/5 relative z-0 flex flex-col rounded-3xl">
+         <Card className="bg-card border-none shadow-2xl shadow-black/10 dark:shadow-primary/5 relative flex flex-col rounded-3xl">
             
             {/* Unified Cover Banner Area with Sequential Stack Layout (No Title Overlap) */}
             <div className="w-full flex flex-col relative">
