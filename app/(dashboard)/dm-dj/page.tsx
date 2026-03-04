@@ -50,10 +50,10 @@ function DmDjPageContent() {
   };
 
   return (
-    <div className="w-full bg-background block min-h-[110vh]">
+    <div className="min-h-screen bg-background flex flex-col">
        <ChatHeader showBackButton />
        
-       <div className="w-full flex justify-center p-4 py-10">
+       <main className="flex-1 w-full flex justify-center p-4 py-10">
          <Card className="w-full max-w-md bg-card border-border/50 shadow-2xl shadow-black/20 dark:shadow-primary/20 transition-all duration-300">
              <CardHeader>
                  <CardTitle className="text-2xl app-title">Mensaje al DJ</CardTitle>
@@ -94,7 +94,7 @@ function DmDjPageContent() {
            cancelText="Cancelar"
            isLoading={isSending}
          />
-       </div>
+       </main>
     </div>
   );
 }

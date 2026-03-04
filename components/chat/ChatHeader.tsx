@@ -32,6 +32,8 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
   const animationFrameRef = useRef<number | null>(null);
   const ignoreClickRef = useRef(false);
   const heroTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastScrollY = useRef(0);
+  const [isVisible, setIsVisible] = useState(true);
   const isAboutPage = pathname === '/about';
 
   // Read config from localStorage (already fetched at login)
@@ -54,6 +56,41 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
       if (heroTimeoutRef.current) clearTimeout(heroTimeoutRef.current);
     };
   }, [animationPhase]);
+
+  // Handle scroll auto-hide
+  useEffect(() => {
+    if (isAdminVariant || pathname === '/chat') return;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Force show if we bounce past the top (rubber-banding) or are at the very top
+      if (currentScrollY <= 10) {
+        setIsVisible(true);
+        lastScrollY.current = Math.max(0, currentScrollY);
+        return;
+      }
+
+      // Ignore scroll bounces at the very bottom of the page
+      if (window.innerHeight + currentScrollY >= document.body.offsetHeight - 10) {
+        return;
+      }
+      
+      // Scrolling down -> hide
+      if (currentScrollY > lastScrollY.current + 8) {
+        setIsVisible(false);
+      } 
+      // Scrolling up -> show
+      else if (currentScrollY < lastScrollY.current - 8) {
+        setIsVisible(true);
+      }
+      
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isAdminVariant, pathname]);
 
   const checkPressDuration = () => {
       if (!pressStartTime.current) return;
@@ -228,10 +265,10 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
            )}
       </AnimatePresence>
 
-      <header className={`sticky top-0 z-[100] bg-background/80 backdrop-blur-md py-1 flex items-center relative ${
+      <header className={`sticky top-0 z-[100] bg-background/80 backdrop-blur-md py-1 flex items-center transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${!isVisible && !isAdminVariant ? '-translate-y-[58px] shadow-none opacity-90 border-b border-primary/30' : 'translate-y-0 opacity-100 border-b-0'} ${
           isAdminVariant 
-            ? 'mx-4 lg:mx-10 mt-4 rounded-xl border border-border p-2 max-h-20' 
-            : 'w-full h-17 shadow-[0_4px_20px_rgba(0,0,0,0.2)]'
+            ? 'mx-4 lg:mx-10 mt-4 rounded-xl border border-border p-2 max-h-20 relative' 
+            : 'w-full h-16 shadow-[0_4px_20px_rgba(0,0,0,0.2)] border-0'
         }`}>
 
         {/* Left: Back button OR Users counter — flex-1 pushes logo to center */}

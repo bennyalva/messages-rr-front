@@ -93,10 +93,10 @@ function VotePageContent() {
   const sortedSongs = [...songs].sort((a, b) => (b.votes || 0) - (a.votes || 0));
 
   return (
-    <div className="w-full bg-background block min-h-[110vh]">
+    <div className="min-h-screen bg-background flex flex-col">
       <ChatHeader showBackButton />
 
-      <div className="w-full p-4 lg:p-8 pb-20">
+      <main className="flex-1 w-full p-4 lg:p-8 pb-20">
         {/* Section Title */}
         <div className="mb-8">
           <h1 className="text-2xl app-title">
@@ -218,7 +218,7 @@ function VotePageContent() {
             })}
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }
