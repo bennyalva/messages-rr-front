@@ -2,6 +2,7 @@
 
 import AuthGuard from '@/components/auth/AuthGuard';
 import ChatHeader from '@/components/chat/ChatHeader';
+import { PageHeader } from '@/components/ui/page-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
@@ -97,13 +98,10 @@ function VotePageContent() {
       <ChatHeader showBackButton />
 
       <main className="flex-1 w-full p-4 lg:p-8 pb-20">
-        {/* Section Title */}
-        <div className="mb-8">
-          <h1 className="text-2xl app-title">
-            Vota por la siguiente
-          </h1>
-          <p className="text-muted-foreground text-sm font-medium">Elige tu rola favorita para que suene</p>
-        </div>
+        <PageHeader
+          title="Vota por la siguiente"
+          subtitle="Elige tu rola favorita para que suene"
+        />
 
         {/* Vote Status Banner - Shows for 5 seconds after voting */}
         {showBanner && (

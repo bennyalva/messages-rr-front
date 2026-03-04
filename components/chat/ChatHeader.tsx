@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { logout } from '@/lib/store/features/authSlice';
 import { useRouter, usePathname } from 'next/navigation';
-import { Menu, Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft } from 'lucide-react';
+import { Menu, Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft, ClipboardPenLine } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { storageService } from '@/lib/utils/storage';
 import { cn } from '@/lib/utils';
@@ -378,6 +378,9 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => router.push('/about')} className="focus:bg-primary/10 cursor-pointer">
                         <Info className="mr-2 h-4 w-4" /> Acerca de
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => router.push('/feedback')} className="focus:bg-primary/10 cursor-pointer">
+                        <ClipboardPenLine className="mr-2 h-4 w-4" /> ¡Dinos!
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogoutClick} className="text-destructive focus:bg-destructive/10 cursor-pointer">
                         <LogOut className="mr-2 h-4 w-4" /> Cerrar Sesión
