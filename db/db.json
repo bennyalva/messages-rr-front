@@ -807,6 +807,28 @@
       "content": "hola",
       "timestamp": "2026-01-30T19:54:00.319Z",
       "reactions": []
+    },
+    {
+      "id": "35da0f08-e153-4d27-89e1-04168993ad86",
+      "userId": "adba0f6f-4770-4f52-9613-4d51915daf1b",
+      "userAlias": "tester123",
+      "userAvatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Bailador",
+      "userGang": "",
+      "content": "Mensaje borrado",
+      "timestamp": "2026-03-04T21:49:02.484Z",
+      "reactions": [],
+      "isDeleted": true,
+      "image": null
+    },
+    {
+      "id": "aafa95d9-2306-424d-a2c8-741db7388d25",
+      "userId": "adba0f6f-4770-4f52-9613-4d51915daf1b",
+      "userAlias": "tester123",
+      "userAvatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Bailador",
+      "userGang": "",
+      "content": "Reny",
+      "timestamp": "2026-03-04T21:52:44.742Z",
+      "reactions": []
     }
   ],
   "directMessages": [
