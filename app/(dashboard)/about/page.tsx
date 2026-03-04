@@ -31,13 +31,13 @@ function AboutPageContent() {
            <main className="flex-1 w-full max-w-4xl mx-auto p-4 md:p-8 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-700 relative z-0">
              
              {/* Profile Card Proposal 2 */}
-             <Card className="bg-card border-none shadow-2xl shadow-black/10 dark:shadow-primary/5 relative z-0 flex flex-col rounded-3xl">
+             <Card className="bg-card border-none shadow-2xl shadow-black/10 dark:shadow-primary/5 relative z-0 flex flex-col rounded-3xl overflow-hidden">
                 
                 {/* Unified Cover Banner Area with Sequential Stack Layout (No Title Overlap) */}
                 <div className="w-full flex flex-col relative w-[100%] overflow-hidden">
                    
-                   {/* 1. Header Section (Solid Background) containing Logo */}
-                   <div className="w-full flex flex-col items-center px-6 z-10 bg-card">
+                       {/* 1. Header Section (Transparent to blend) containing Logo */}
+                   <div className="w-full flex flex-col items-center px-6 z-10 pt-4">
                        
                        {/* Logo spanning full width organically - No extra top padding */}
                        <div className="w-full flex justify-center mt-[-4rem] md:mt-[-6rem]">
@@ -50,8 +50,8 @@ function AboutPageContent() {
                        </div>
                    </div>
 
-                   {/* 2. Background Image Section - Starts cleanly AFTER the logo */}
-                   <div className="w-full h-[28rem] md:h-[36rem] relative flex flex-col items-center -mt-8 bg-card border-t border-card z-0">
+                       {/* 2. Background Image Section - Blends cleanly */}
+                   <div className="w-full h-[28rem] md:h-[36rem] relative flex flex-col items-center -mt-8 z-0">
                        {/* Background image constrained to this natural flow block */}
                        <div className="absolute inset-0 top-8 bg-[url('/sonidero-about-bg.png')] bg-cover bg-[center_10%] md:bg-[center_12%] opacity-90 dark:opacity-80 transition-opacity duration-300" />
                        
