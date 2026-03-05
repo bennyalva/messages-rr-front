@@ -47,8 +47,8 @@ export const chatService = {
   },
 
   // Get all users (for resolving reactions)
-  getUsers: async (): Promise<any[]> => {
-    const { data } = await httpClient.get<any[]>(ENDPOINTS.USERS);
+  getUsers: async (): Promise<{ id: string, alias?: string, username: string, avatar: string }[]> => {
+    const { data } = await httpClient.get<{ id: string, alias?: string, username: string, avatar: string }[]>(ENDPOINTS.USERS);
     return data;
   },
 };

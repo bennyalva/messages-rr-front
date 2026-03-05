@@ -7,10 +7,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import { logout } from '@/lib/store/features/authSlice';
 import { useRouter, usePathname } from 'next/navigation';
-import { Menu, Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft, ClipboardPenLine } from 'lucide-react';
+import { Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft, ClipboardPenLine } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { storageService } from '@/lib/utils/storage';
-import { STORAGE_KEYS } from '@/lib/constants';
+import { STORAGE_KEYS, ROUTES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
 interface ChatHeaderProps {
@@ -35,7 +35,7 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
   const heroTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastScrollY = useRef(0);
   const [isVisible, setIsVisible] = useState(true);
-  const isAboutPage = pathname === '/about';
+  const isAboutPage = pathname === ROUTES.ABOUT;
 
   // Read config from localStorage (already fetched at login)
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
 
   // Handle scroll auto-hide
   useEffect(() => {
-    if (isAdminVariant || pathname === '/chat') return;
+    if (isAdminVariant || pathname === ROUTES.CHAT) return;
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -153,7 +153,7 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
     setShowLogoutConfirm(false);
     
     // Hard navigation to login - use location.href to go to END of history
-    window.location.href = '/login';
+    window.location.href = ROUTES.LOGIN;
   };
 
   return (
@@ -365,22 +365,22 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
                     align="end"
                     sideOffset={1}
                 >
-                    <DropdownMenuItem onClick={() => router.push('/chat')} className="focus:bg-primary/10 cursor-pointer">
+                    <DropdownMenuItem onClick={() => router.push(ROUTES.CHAT)} className="focus:bg-primary/10 cursor-pointer">
                         <MessageSquare className="mr-2 h-4 w-4" /> Chat
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push('/vote')} className="focus:bg-primary/10 cursor-pointer">
+                    <DropdownMenuItem onClick={() => router.push(ROUTES.VOTE)} className="focus:bg-primary/10 cursor-pointer">
                         <Disc className="mr-2 h-4 w-4" /> Votar Canciones
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push('/dm-dj')} className="focus:bg-primary/10 cursor-pointer">
+                    <DropdownMenuItem onClick={() => router.push(ROUTES.DM_DJ)} className="focus:bg-primary/10 cursor-pointer">
                         <Mail className="mr-2 h-4 w-4" /> Mensaje al DJ
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push('/profile')} className="focus:bg-primary/10 cursor-pointer">
+                    <DropdownMenuItem onClick={() => router.push(ROUTES.PROFILE)} className="focus:bg-primary/10 cursor-pointer">
                         <User className="mr-2 h-4 w-4" /> Mi Perfil
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push('/about')} className="focus:bg-primary/10 cursor-pointer">
+                    <DropdownMenuItem onClick={() => router.push(ROUTES.ABOUT)} className="focus:bg-primary/10 cursor-pointer">
                         <Info className="mr-2 h-4 w-4" /> Acerca de
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push('/feedback')} className="focus:bg-primary/10 cursor-pointer">
+                    <DropdownMenuItem onClick={() => router.push(ROUTES.FEEDBACK)} className="focus:bg-primary/10 cursor-pointer">
                         <ClipboardPenLine className="mr-2 h-4 w-4" /> ¡Dinos!
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogoutClick} className="text-destructive focus:bg-destructive/10 cursor-pointer">

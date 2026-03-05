@@ -1,16 +1,21 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-import { STORAGE_KEYS } from './lib/constants';
+import { STORAGE_KEYS, ROUTES } from './lib/constants';
 
 // Cookie name must match sessionService
 const AUTH_COOKIE_NAME = STORAGE_KEYS.AUTH_COOKIE;
 
 // Routes that require authentication
-const PROTECTED_ROUTES = ['/chat', '/dashboard', '/profile', '/vote', '/dm-dj', '/about'];
-
-// Routes that are public (no auth required)
-const PUBLIC_ROUTES = ['/login', '/register'];
+const PROTECTED_ROUTES = [
+  ROUTES.CHAT, 
+  ROUTES.DASHBOARD, 
+  ROUTES.PROFILE, 
+  ROUTES.VOTE, 
+  ROUTES.DM_DJ, 
+  ROUTES.ABOUT,
+  ROUTES.FEEDBACK
+];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -19,9 +24,9 @@ export function proxy(request: NextRequest) {
 
   // Case 1: User WITH session tries to access /login
   // Redirect to logout-confirm page
-  if (hasSession && pathname === '/login') {
+  if (hasSession && pathname === ROUTES.LOGIN) {
     const url = request.nextUrl.clone();
-    url.pathname = '/logout-confirm';
+    url.pathname = ROUTES.LOGOUT_CONFIRM;
     return NextResponse.redirect(url);
   }
 
@@ -29,15 +34,15 @@ export function proxy(request: NextRequest) {
   // Redirect to login
   if (!hasSession && PROTECTED_ROUTES.some(route => pathname.startsWith(route))) {
     const url = request.nextUrl.clone();
-    url.pathname = '/login';
+    url.pathname = ROUTES.LOGIN;
     return NextResponse.redirect(url);
   }
 
   // Case 3: User WITHOUT session tries to access /logout-confirm
   // Redirect to login (nothing to confirm)
-  if (!hasSession && pathname === '/logout-confirm') {
+  if (!hasSession && pathname === ROUTES.LOGOUT_CONFIRM) {
     const url = request.nextUrl.clone();
-    url.pathname = '/login';
+    url.pathname = ROUTES.LOGIN;
     return NextResponse.redirect(url);
   }
 

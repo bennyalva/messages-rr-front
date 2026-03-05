@@ -20,6 +20,21 @@ export const BRAND = {
   COPYRIGHT_YEAR: 2026,
 } as const;
 
+// ── Routes ──────────────────────────────────────────────────────────
+export const ROUTES = {
+  HOME: '/',
+  LOGIN: '/login',
+  REGISTER: '/register',
+  DASHBOARD: '/dashboard',
+  CHAT: '/chat',
+  PROFILE: '/profile',
+  VOTE: '/vote',
+  DM_DJ: '/dm-dj',
+  ABOUT: '/about',
+  LOGOUT_CONFIRM: '/logout-confirm',
+  FEEDBACK: '/feedback', // Add this explicitly as it's protected
+} as const;
+
 // ── API Endpoints ───────────────────────────────────────────────────
 export const ENDPOINTS = {
   USERS: '/users',

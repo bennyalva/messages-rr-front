@@ -7,6 +7,7 @@ import { hydrateAuth } from '@/lib/store/features/authSlice';
 import { UserRole } from '@/lib/types/auth';
 import { sessionService } from '@/lib/services/sessionService';
 import { LoadingScreen } from '@/components/ui/loading-screen';
+import { ROUTES } from '@/lib/constants';
 
 interface AuthGuardProps {
   children: ReactNode;
@@ -28,8 +29,8 @@ interface AuthGuardProps {
 export default function AuthGuard({ 
   children, 
   allowedRoles = [],
-  redirectTo = '/login',
-  unauthorizedRedirect = '/chat'
+  redirectTo = ROUTES.LOGIN,
+  unauthorizedRedirect = ROUTES.CHAT
 }: AuthGuardProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -46,7 +47,7 @@ export default function AuthGuard({
     const isValid = sessionService.isSessionValid();
     
     if (!isValid) {
-      window.location.replace('/login');
+      window.location.replace(ROUTES.LOGIN);
       return;
     }
     
@@ -60,7 +61,7 @@ export default function AuthGuard({
     const validateAndRedirect = () => {
       const isValid = sessionService.isSessionValid();
       if (!isValid) {
-        window.location.replace('/login');
+        window.location.replace(ROUTES.LOGIN);
       }
     };
 

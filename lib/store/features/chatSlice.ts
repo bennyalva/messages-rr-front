@@ -115,7 +115,7 @@ const chatSlice = createSlice({
       // Fetch Users
       .addCase(fetchUsers.fulfilled, (state, action) => {
         const usersMap: Record<string, { alias: string; avatar: string }> = {};
-        action.payload.forEach((u: any) => {
+        action.payload.forEach((u: { id: string, alias?: string, username: string, avatar: string }) => {
             usersMap[u.id] = { alias: u.alias || u.username, avatar: u.avatar };
         });
         state.users = usersMap;

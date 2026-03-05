@@ -11,7 +11,7 @@ import { useAppSelector } from '@/lib/store/hooks';
 import httpClient from '@/lib/services/httpClient';
 import { generateUUID } from '@/lib/utils/uuid';
 import ConfirmModal from '@/components/ui/ConfirmModal';
-import { ENDPOINTS, LIMITS } from '@/lib/constants';
+import { ENDPOINTS, LIMITS, ROUTES } from '@/lib/constants';
 
 function DmDjPageContent() {
 
@@ -54,7 +54,7 @@ function DmDjPageContent() {
 
   const handleSuccessClose = () => {
     setShowSuccess(false);
-    router.push('/chat');
+    router.push(ROUTES.CHAT);
   };
 
   return (

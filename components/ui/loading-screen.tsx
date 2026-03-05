@@ -4,10 +4,8 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { storageService } from '@/lib/utils/storage';
-import { cn } from '@/lib/utils';
-import { Disc } from 'lucide-react';
 import { AnimatedLogo } from '@/components/ui/animated-logo';
-import { ASSETS, BRAND, STORAGE_KEYS } from '@/lib/constants';
+import { ASSETS, BRAND, STORAGE_KEYS, ROUTES } from '@/lib/constants';
 
 interface AppConfig {
   appName: string;
@@ -27,7 +25,7 @@ export function LoadingScreen() {
     }
   }, []);
 
-  const isLoginPage = pathname === '/login';
+  const isLoginPage = pathname === ROUTES.LOGIN;
   
   // Rule 2 & 4: Dynamic text and logo based on route
   const text = isLoginPage ? `Cargando ${BRAND.APP_NAME}...` : "Cargando...";

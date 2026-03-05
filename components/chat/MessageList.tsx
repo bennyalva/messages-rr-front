@@ -198,8 +198,8 @@ export default function MessageList() {
                     background: MESSAGE_LIST_BACKGROUND
                 }}
             >
-            {messages.map((msg, index) => {
-                const prevMsg = messages[index - 1];
+            {messages.filter(msg => !msg.isDeleted).map((msg, index, filtered) => {
+                const prevMsg = filtered[index - 1];
                 const isOwn = msg.userId === user?.id;
                 const showAvatar = !prevMsg || prevMsg.userId !== msg.userId || (new Date(msg.timestamp).getTime() - new Date(prevMsg.timestamp).getTime() > 60000);
 

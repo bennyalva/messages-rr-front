@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { sessionService } from './sessionService';
 import { httpErrorEmitter } from './httpErrorEmitter';
-import { HTTP, STORAGE_KEYS } from '@/lib/constants';
+import { HTTP, STORAGE_KEYS, ROUTES } from '@/lib/constants';
 
 /**
  * Centralized axios instance for all API calls.
@@ -95,7 +95,7 @@ httpClient.interceptors.response.use(
            processQueue(new Error('No refresh token available'));
            isRefreshing = false;
            sessionService.clearSession();
-           if (typeof window !== 'undefined') window.location.href = '/login';
+           if (typeof window !== 'undefined') window.location.href = ROUTES.LOGIN;
            return Promise.reject(error);
         }
 
@@ -124,7 +124,7 @@ httpClient.interceptors.response.use(
           // Session expired or refresh token invalid — redirect to login
           sessionService.clearSession();
           if (typeof window !== 'undefined') {
-            window.location.href = '/login';
+            window.location.href = ROUTES.LOGIN;
           }
           return Promise.reject(refreshError);
         }

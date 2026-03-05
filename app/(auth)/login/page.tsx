@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import httpClient from '@/lib/services/httpClient';
 import { storageService } from '@/lib/utils/storage';
-import { ENDPOINTS, ASSETS, STORAGE_KEYS } from '@/lib/constants';
+import { ENDPOINTS, ASSETS, STORAGE_KEYS, ROUTES } from '@/lib/constants';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -77,7 +77,7 @@ export default function LoginPage() {
     if (typeof window === 'undefined') return;
     
     // Set clean state for login page
-    window.history.replaceState({ page: 'login', clean: true }, '', '/login');
+    window.history.replaceState({ page: 'login', clean: true }, '', ROUTES.LOGIN);
   }, []);
 
   const onSubmit = async (data: LoginCredentials) => {
@@ -98,9 +98,9 @@ export default function LoginPage() {
       // Redirect based on role - use location.href to add to end of history
       // Then the new page will push its own state
       if (user.role === 'owner' || user.role === 'admin') {
-        window.location.href = '/dashboard';
+        window.location.href = ROUTES.DASHBOARD;
       } else {
-        window.location.href = '/chat';
+        window.location.href = ROUTES.CHAT;
       }
       
     } catch (err: any) {
@@ -167,7 +167,7 @@ export default function LoginPage() {
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground font-medium">
-            ¿No tienes cuenta? <Link href="/register" className="text-primary/70 font-semibold hover:underline hover:text-primary transition-colors">Regístrate aquí</Link>
+            ¿No tienes cuenta? <Link href={ROUTES.REGISTER} className="text-primary/70 font-semibold hover:underline hover:text-primary transition-colors">Regístrate aquí</Link>
           </p>
         </CardFooter>
       </Card>

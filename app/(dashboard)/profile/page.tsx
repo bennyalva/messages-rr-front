@@ -14,6 +14,7 @@ import { Check, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import { useRouter } from 'next/navigation';
+import { ROUTES } from '@/lib/constants';
 
 function ProfilePageContent() {
   const router = useRouter();
@@ -115,8 +116,8 @@ function ProfilePageContent() {
 
           <ConfirmModal
             isOpen={showSuccess}
-            onConfirm={() => { setShowSuccess(false); router.push('/chat'); }}
-            onCancel={() => { setShowSuccess(false); router.push('/chat'); }}
+            onConfirm={() => { setShowSuccess(false); router.push(ROUTES.CHAT); }}
+            onCancel={() => { setShowSuccess(false); router.push(ROUTES.CHAT); }}
             mode="info"
             title="¡Cambios guardados!"
             message="Tu perfil se actualizó correctamente."

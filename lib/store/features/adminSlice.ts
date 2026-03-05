@@ -36,7 +36,7 @@ const adminSlice = createSlice({
     deleteUser(state, action: PayloadAction<string>) {
         state.users = state.users.filter(u => u.id !== action.payload);
     },
-    updateUserRole(state, action: PayloadAction<{id: string, role: any}>) { // simplified type
+    updateUserRole(state, action: PayloadAction<{id: string, role: User['role']}>) {
         const user = state.users.find(u => u.id === action.payload.id);
         if (user) user.role = action.payload.role;
     },

@@ -836,37 +836,26 @@
       "userAlias": "tester123",
       "userAvatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Bailador",
       "userGang": "",
-      "content": "Hola",
+      "content": "Mensaje borrado",
       "timestamp": "2026-03-05T19:12:28.629Z",
-      "reactions": []
+      "reactions": [
+        {
+          "emoji": "🔥",
+          "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f"
+        }
+      ],
+      "isDeleted": true,
+      "image": null
     }
   ],
   "directMessages": [
     {
-      "id": "e4a818cf-c2e8-48b6-9d20-0c2f7e1e3df7",
-      "userId": "7de693a6-85a1-49df-9fbf-43c96f057626",
-      "userAlias": "reny7",
-      "userGang": "arcolocos",
-      "content": "Reny bebe",
-      "timestamp": "2026-02-03T00:05:02.710Z",
-      "isRead": false
-    },
-    {
-      "id": "86014883-109b-42e7-8379-f0132127e55d",
+      "id": "40f82a3b-841c-4bf2-a6ae-525aba40ffea",
       "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
       "userAlias": "lbenny",
       "userGang": "arcolocos",
-      "content": "que paso rey",
-      "timestamp": "2026-02-26T21:20:29.331Z",
-      "isRead": false
-    },
-    {
-      "id": "bb09d112-82e7-429d-90b1-b5925370a080",
-      "userId": "adba0f6f-4770-4f52-9613-4d51915daf1b",
-      "userAlias": "tester123",
-      "userGang": "",
-      "content": "Jdjsjd",
-      "timestamp": "2026-03-04T22:01:45.674Z",
+      "content": "del el benny 5 marzo",
+      "timestamp": "2026-03-05T20:17:49.753Z",
       "isRead": false
     }
   ],
@@ -903,12 +892,6 @@
     },
     {
       "id": "e400eb64-44c8-433a-8af7-eb173d78ac0f",
-      "title": "fasdf",
-      "artist": "asdf",
-      "votes": 0
-    },
-    {
-      "id": "0abed9dc-a3c7-4fe6-826c-dd6c8646f5c8",
       "title": "fasdf",
       "artist": "asdf",
       "votes": 0
@@ -1082,6 +1065,16 @@
       "mejora": 2,
       "comentario": "",
       "timestamp": "2026-03-05T18:08:08.534Z"
+    },
+    {
+      "id": "56f532ea-68e0-4a24-9cb9-9e7ff11b3576",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "ambiente": 2,
+      "experiencia": 2,
+      "mejora": 2,
+      "comentario": "",
+      "timestamp": "2026-03-05T20:22:52.939Z"
     }
   ]
 }

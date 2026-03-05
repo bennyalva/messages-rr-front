@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { LogOut, ArrowLeft, AlertTriangle } from 'lucide-react';
 import { useEffect } from 'react';
 import AuthGuard from '@/components/auth/AuthGuard';
+import { ROUTES } from '@/lib/constants';
 
 function LogoutConfirmContent() {
   const dispatch = useAppDispatch();
@@ -17,9 +18,9 @@ function LogoutConfirmContent() {
   // Redirect destination based on user role
   const getDashboardPath = () => {
     if (user?.role === 'owner' || user?.role === 'admin') {
-      return '/dashboard';
+      return ROUTES.DASHBOARD;
     }
-    return '/chat';
+    return ROUTES.CHAT;
   };
 
   // Get button text based on user role
@@ -42,7 +43,7 @@ function LogoutConfirmContent() {
     
     // Hard navigation to login - use location.href to go to END of history
     // Using href instead of replace so forward navigation is cleaner
-    window.location.href = '/login';
+    window.location.href = ROUTES.LOGIN;
   };
 
   const handleCancel = () => {
@@ -55,14 +56,14 @@ function LogoutConfirmContent() {
   // Aggressive history trap to prevent back button bypass
   useEffect(() => {
     // Step 1: Replace current entry to "clean" the stack
-    window.history.replaceState({ page: 'logout-confirm' }, '', '/logout-confirm');
+    window.history.replaceState({ page: 'logout-confirm' }, '', ROUTES.LOGOUT_CONFIRM);
     
     // Step 2: Push a second entry so we can detect back button
-    window.history.pushState({ page: 'logout-trap' }, '', '/logout-confirm');
+    window.history.pushState({ page: 'logout-trap' }, '', ROUTES.LOGOUT_CONFIRM);
     
     const handlePopState = (event: PopStateEvent) => {
       // User tried to go back - immediately push them forward again
-      window.history.pushState({ page: 'logout-trap' }, '', '/logout-confirm');
+      window.history.pushState({ page: 'logout-trap' }, '', ROUTES.LOGOUT_CONFIRM);
     };
 
     window.addEventListener('popstate', handlePopState);
