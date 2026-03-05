@@ -28,7 +28,7 @@ const authSlice = createSlice({
       state.isLoading = true;
       state.error = null;
     },
-    loginSuccess(state, action: PayloadAction<{ user: User; token: string }>) {
+    loginSuccess(state, action: PayloadAction<{ user: User; token: string; refreshToken: string }>) {
       state.isLoading = false;
       state.isAuthenticated = true;
       state.user = action.payload.user;
@@ -36,7 +36,7 @@ const authSlice = createSlice({
       state.isHydrated = true;
       
       // Persist to localStorage
-      sessionService.saveSession(action.payload.user, action.payload.token);
+      sessionService.saveSession(action.payload.user, action.payload.token, action.payload.refreshToken);
     },
     loginFailure(state, action: PayloadAction<string>) {
       state.isLoading = false;
@@ -74,7 +74,9 @@ const authSlice = createSlice({
         state.user = { ...state.user, ...action.payload };
         // Also update in localStorage
         if (state.token) {
-          sessionService.saveSession(state.user, state.token);
+          const session = sessionService.getSession();
+          const refreshToken = session?.refreshToken || '';
+          sessionService.saveSession(state.user, state.token, refreshToken);
         }
       }
     }

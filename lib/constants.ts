@@ -49,6 +49,7 @@ export const STORAGE_KEYS = {
   THEME: 'cabinaDigitalRR_theme',
   SESSION: 'cabinaDigitalRR_session',
   TOKEN: 'cabinaDigitalRR_token',
+  REFRESH_TOKEN: 'cabinaDigitalRR_refresh_token',
   AUTH_COOKIE: 'cabinaDigitalRR_auth',
   SESSION_ID: 'cabinaDigitalRR_session_id',
   CONFIG: 'cabinaDigitalRR_config',

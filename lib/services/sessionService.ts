@@ -11,6 +11,7 @@ const SESSION_ID_KEY = STORAGE_KEYS.SESSION_ID; // Unique ID per login session
 export interface SessionData {
   user: User;
   token: string;
+  refreshToken: string; // Added for OAuth 2.0 flow
   expiresAt: number; // timestamp
 }
 
@@ -72,10 +73,11 @@ export const sessionService = {
   /**
    * Save user session to localStorage AND cookie (for middleware)
    */
-  saveSession(user: User, token: string): void {
+  saveSession(user: User, token: string, refreshToken: string): void {
     const sessionData: SessionData = {
       user,
       token,
+      refreshToken,
       expiresAt: Date.now() + SESSION_DURATION,
     };
     
@@ -83,6 +85,7 @@ export const sessionService = {
       // Save to localStorage (for client-side hydration)
       localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
       localStorage.setItem(TOKEN_KEY, token);
+      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
       
       // Save to cookie (for middleware server-side checks)
       const expires = new Date(Date.now() + SESSION_DURATION);
@@ -131,6 +134,7 @@ export const sessionService = {
       // Clear localStorage
       localStorage.removeItem(SESSION_KEY);
       localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
       
       // Clear session ID (this invalidates all cached pages!)
       this.invalidateSessionId();
@@ -146,7 +150,7 @@ export const sessionService = {
   refreshSession(): void {
     const session = this.getSession();
     if (session) {
-      this.saveSession(session.user, session.token);
+      this.saveSession(session.user, session.token, session.refreshToken);
     }
   },
 

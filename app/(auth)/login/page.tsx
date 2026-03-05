@@ -87,12 +87,13 @@ export default function LoginPage() {
       const user = await authService.login(data);
       // Generate a simple token for session
       const token = `token_${generateUUID()}_${Date.now()}`;
+      const refreshToken = `ref_token_${generateUUID()}_${Date.now()}`; // Mock
       
       // CRITICAL: Generate a new sessionId for this login
       // This invalidates any cached protected pages from previous sessions
       sessionService.generateSessionId();
       
-      dispatch(loginSuccess({ user, token }));
+      dispatch(loginSuccess({ user, token, refreshToken }));
       
       // Redirect based on role - use location.href to add to end of history
       // Then the new page will push its own state
