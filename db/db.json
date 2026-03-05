@@ -829,6 +829,16 @@
       "content": "Reny",
       "timestamp": "2026-03-04T21:52:44.742Z",
       "reactions": []
+    },
+    {
+      "id": "12c2eda5-f8ba-4f70-bfa9-0e6ab5007ad3",
+      "userId": "adba0f6f-4770-4f52-9613-4d51915daf1b",
+      "userAlias": "tester123",
+      "userAvatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Bailador",
+      "userGang": "",
+      "content": "Hola",
+      "timestamp": "2026-03-05T19:12:28.629Z",
+      "reactions": []
     }
   ],
   "directMessages": [

@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 import { useAppSelector, useAppDispatch } from '@/lib/store/hooks';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+import ConfirmModal from '@/components/ui/ConfirmModal';
 import { logout } from '@/lib/store/features/authSlice';
 import { useRouter, usePathname } from 'next/navigation';
 import { Menu, Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft, ClipboardPenLine } from 'lucide-react';
@@ -399,15 +399,15 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
     </header>
 
     {/* Logout Confirmation Modal */}
-    <ConfirmDialog
-      open={showLogoutConfirm}
-      onOpenChange={setShowLogoutConfirm}
+    <ConfirmModal
+      isOpen={showLogoutConfirm}
+      onCancel={() => setShowLogoutConfirm(false)}
       title="¿Cerrar sesión?"
-      description="Estás a punto de salir de la aplicación. Perderás el acceso hasta que vuelvas a iniciar sesión."
-      confirmLabel="Sí, cerrar sesión"
-      cancelLabel="Cancelar"
+      message="Estás a punto de salir de la aplicación. Perderás el acceso hasta que vuelvas a iniciar sesión."
+      confirmText="Sí, cerrar sesión"
+      cancelText="Cancelar"
       onConfirm={handleConfirmLogout}
-      variant="destructive"
+      mode="destructive"
     />
     </>
   );

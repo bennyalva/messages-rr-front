@@ -5,7 +5,7 @@ import { useAppDispatch } from '@/lib/store/hooks';
 import { addReaction, deleteMessage, editMessage } from '@/lib/store/features/chatSlice';
 import { cn } from '@/lib/utils';
 import { Trash2, Reply, CheckCircle2, Smile, Pencil, X, Check } from 'lucide-react';
-import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+import ConfirmModal from '@/components/ui/ConfirmModal';
 import ReactionDetailsModal from './ReactionDetailsModal';
 import { Input } from '@/components/ui/input';
 
@@ -485,15 +485,15 @@ export default function MessageItem({
          />
 
          {/* Delete Confirmation Dialog */}
-         <ConfirmDialog
-           open={showDeleteConfirm}
-           onOpenChange={setShowDeleteConfirm}
+         <ConfirmModal
+           isOpen={showDeleteConfirm}
+           onCancel={() => setShowDeleteConfirm(false)}
            title="¿Eliminar mensaje?"
-           description="Esta acción no se puede deshacer. El mensaje será marcado como eliminado."
-           confirmLabel="Eliminar"
-           cancelLabel="Cancelar"
+           message="Esta acción no se puede deshacer. El mensaje será marcado como eliminado."
+           confirmText="Eliminar"
+           cancelText="Cancelar"
            onConfirm={handleDelete}
-           variant="destructive"
+           mode="destructive"
          />
 
          {/* Reaction Menu Overlay ... */}

@@ -13,8 +13,8 @@ interface ConfirmModalProps {
   confirmText?: string;
   cancelText?: string;
   isLoading?: boolean;
-  /** 'confirm' = 2 buttons (decision), 'info' = 1 button (informational) */
-  mode?: 'confirm' | 'info';
+  /** 'confirm' = 2 buttons (decision), 'info' = 1 button (informational), 'destructive' = 2 vertical buttons with red confirm */
+  mode?: 'confirm' | 'info' | 'destructive';
   /** Optional icon to display above the title */
   icon?: ReactNode;
 }
@@ -106,6 +106,25 @@ export default function ConfirmModal({
                 disabled={isLoading}
               >
                 {isLoading ? 'Enviando...' : confirmText}
+              </Button>
+            </div>
+          ) : mode === 'destructive' ? (
+            <div className="flex flex-col gap-3">
+              <Button
+                variant="destructive"
+                className="w-full bg-red-600 hover:bg-red-700 text-white font-bold h-11"
+                onClick={onConfirm}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Enviando...' : confirmText}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full border-[#333] hover:bg-accent text-foreground font-bold h-11"
+                onClick={onCancel}
+                disabled={isLoading}
+              >
+                {cancelText}
               </Button>
             </div>
           ) : (
