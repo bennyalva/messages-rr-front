@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '@/lib/store/hooks';
+import { shallowEqual } from 'react-redux';
 import { setReplyingTo, fetchMessages, fetchUsers, Message } from '@/lib/store/features/chatSlice';
 import MessageItem from './MessageItem';
 import MessageListSkeleton from './MessageListSkeleton';
@@ -14,7 +15,7 @@ export default function MessageList() {
         user: state.auth.user,
         activeUsers: state.chat.activeUsers,
         replyingTo: state.chat.replyingTo
-    }));
+    }), shallowEqual);
     const containerRef = useRef<HTMLDivElement>(null);
     const dispatch = useAppDispatch();
     const [activeReactionMenuId, setActiveReactionMenuId] = useState<string | null>(null);

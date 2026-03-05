@@ -25,7 +25,7 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   REGISTER: '/register',
-  DASHBOARD: '/dashboard',
+  DASHBOARD: '/admin-panel',
   CHAT: '/chat',
   PROFILE: '/profile',
   VOTE: '/vote',
