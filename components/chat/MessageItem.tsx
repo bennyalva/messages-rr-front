@@ -182,6 +182,7 @@ export default function MessageItem({
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setActiveReactionMenuId(null);
     setShowDeleteConfirm(true);
   };
 
