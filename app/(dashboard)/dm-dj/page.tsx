@@ -12,6 +12,7 @@ import httpClient from '@/lib/services/httpClient';
 import { generateUUID } from '@/lib/utils/uuid';
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import { ENDPOINTS, LIMITS, ROUTES } from '@/lib/constants';
+import { ContentOverlay } from '@/components/ui/content-overlay';
 
 function DmDjPageContent() {
 
@@ -61,7 +62,8 @@ function DmDjPageContent() {
     <div className="min-h-screen bg-background flex flex-col">
        <ChatHeader showBackButton />
        
-       <main className="flex-1 w-full flex items-start justify-center p-4 py-10 overflow-y-auto">
+       <main className="flex-1 w-full flex items-start justify-center p-4 py-10 overflow-y-auto relative">
+         <ContentOverlay isActive={isSending} />
          <Card className="w-full max-w-md bg-card border-border/50 shadow-2xl shadow-black/20 dark:shadow-primary/20 transition-all duration-300">
              <CardHeader>
                  <CardTitle className="text-2xl app-title">Mensaje al DJ</CardTitle>

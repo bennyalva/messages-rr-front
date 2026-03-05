@@ -17,6 +17,7 @@ import { useAppSelector } from '@/lib/store/hooks';
 import { feedbackService } from '@/lib/services/feedbackService';
 import { useTimer } from '@/lib/hooks/useTimer';
 import { useRouter } from 'next/navigation';
+import { ContentOverlay } from '@/components/ui/content-overlay';
 
 interface FeedbackData {
   ambiente: number | null;
@@ -122,7 +123,8 @@ function FeedbackPageContent() {
     <div className="min-h-screen bg-background flex flex-col">
       <ChatHeader showBackButton />
 
-      <main className="flex-1 w-full p-4 lg:p-8 pb-20">
+      <main className="flex-1 w-full p-4 lg:p-8 pb-20 relative">
+        <ContentOverlay isActive={isSubmitting} />
         <PageHeader
           title="¡Tu opinión cuenta!"
           subtitle="Queremos escucharte: cuéntanos un poco más, en qué fallamos y cómo podemos mejorar para ti."

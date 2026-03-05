@@ -19,10 +19,10 @@ interface SubmitButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
 }
 
 /**
- * Reusable submit button with two visual states:
+ * Reusable submit button with visual states:
  * - Incomplete: muted appearance (but still clickable to trigger validation)
  * - Complete: vibrant with glow effect
- * - Submitting: disabled with spinner
+ * - Submitting: disabled, icon replaced by spinner (or spinner prepended if no icon)
  */
 export function SubmitButton({
   isFormValid,
@@ -33,6 +33,8 @@ export function SubmitButton({
   className,
   ...props
 }: SubmitButtonProps) {
+  const spinner = <Loader2 className="mr-2 h-4 w-4 animate-spin" />;
+
   return (
     <Button
       type="submit"
@@ -49,8 +51,8 @@ export function SubmitButton({
     >
       {isSubmitting ? (
         <>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          {loadingLabel}
+          {spinner}
+          {loadingLabel || label}
         </>
       ) : (
         <>

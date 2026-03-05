@@ -14,6 +14,7 @@ import ConfirmModal from '@/components/ui/ConfirmModal';
 import Link from 'next/link';
 import { ASSETS, ROUTES } from '@/lib/constants';
 import { CheckCircle2 } from 'lucide-react';
+import { ContentOverlay } from '@/components/ui/content-overlay';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -67,6 +68,7 @@ export default function RegisterPage() {
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/20 rounded-full blur-[100px]" />
 
       <Card className="w-full max-w-md relative z-10 border-border/50 shadow-2xl shadow-primary/10 bg-card/95 text-foreground">
+        <ContentOverlay isActive={isSubmitting} className="rounded-2xl" />
         <CardHeader className="text-center">
           <CardTitle className="text-3xl app-title">
             NUEVO BAILADOR

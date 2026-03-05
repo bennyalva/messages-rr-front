@@ -21,6 +21,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { SubmitButton } from '@/components/ui/submit-button';
 import { LoadingScreen } from '@/components/ui/loading-screen';
+import { ContentOverlay } from '@/components/ui/content-overlay';
 import Link from 'next/link';
 
 interface AppConfig {
@@ -186,6 +187,7 @@ export default function LoginPage() {
       <div className="absolute inset-0 bg-background/60 dark:bg-background/85 backdrop-blur-[2px] pointer-events-none transition-colors duration-500" />
       
       <Card className="w-full max-w-md relative z-10 border-border/50 shadow-[0_20px_70px_-10px_rgba(0,0,0,0.25)] dark:shadow-[0_0_40px_-5px_var(--color-primary)]/30 bg-card text-card-foreground transition-all duration-300">
+        <ContentOverlay isActive={isSubmitting} className="rounded-2xl" />
         <CardHeader className="text-center">
           <CardTitle className="text-3xl app-title">
             {config.appName}
