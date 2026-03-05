@@ -7,6 +7,7 @@ import { storageService } from '@/lib/utils/storage';
 import { cn } from '@/lib/utils';
 import { Disc } from 'lucide-react';
 import { AnimatedLogo } from '@/components/ui/animated-logo';
+import { ASSETS, BRAND } from '@/lib/constants';
 
 interface AppConfig {
   appName: string;
@@ -29,9 +30,9 @@ export function LoadingScreen() {
   const isLoginPage = pathname === '/login';
   
   // Rule 2 & 4: Dynamic text and logo based on route
-  const text = isLoginPage ? "Cargando Cabina Digital..." : "Cargando...";
+  const text = isLoginPage ? `Cargando ${BRAND.APP_NAME}...` : "Cargando...";
   // As requested, login uses the specific local asset, others use base config.logoUrl
-  const logoSource = isLoginPage ? "/cabinaDigitalSonidos.png" : config.logoUrl;
+  const logoSource = isLoginPage ? ASSETS.LOGO_CABINA : config.logoUrl;
 
   return (
     // Rule 1: Theme aware background (bg-background instead of hardcoded bg-black)

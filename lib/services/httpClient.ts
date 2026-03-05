@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { sessionService } from './sessionService';
+import { HTTP } from '@/lib/constants';
 
 /**
  * Centralized axios instance for all API calls.
@@ -14,14 +15,14 @@ import { sessionService } from './sessionService';
 
 function getBaseUrl(): string {
   if (typeof window !== 'undefined') {
-    return `http://${window.location.hostname}:3001`;
+    return `http://${window.location.hostname}:${HTTP.API_PORT}`;
   }
-  return 'http://localhost:3001';
+  return `http://localhost:${HTTP.API_PORT}`;
 }
 
 const httpClient = axios.create({
   baseURL: getBaseUrl(),
-  timeout: 10000,
+  timeout: HTTP.TIMEOUT,
   headers: {
     'Content-Type': 'application/json',
   },

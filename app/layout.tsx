@@ -4,6 +4,7 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "@/lib/store/StoreProvider";
 import ThemeSynchronizer from "@/components/ThemeSynchronizer";
+import { BRAND, ASSETS } from "@/lib/constants";
 
 const roboto = localFont({
   src: [
@@ -34,10 +35,10 @@ const geistMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cabina Digital",
-  description: "Para Djs y Sonideros",
+  title: BRAND.APP_NAME,
+  description: BRAND.DESCRIPTION,
   icons: {
-    icon: "/favicon-dj.jpeg",
+    icon: ASSETS.FAVICON,
   },
 };
 

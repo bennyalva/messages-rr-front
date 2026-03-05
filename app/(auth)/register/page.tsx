@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { SubmitButton } from '@/components/ui/submit-button';
 import Link from 'next/link';
+import { ASSETS } from '@/lib/constants';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -25,11 +26,7 @@ export default function RegisterPage() {
     }
   });
 
-  const SONIDERO_AVATARS = [
-      '/avatars/boy1.svg', '/avatars/girl1.svg', 
-      '/avatars/boy2.svg', '/avatars/girl2.svg',
-      '/avatars/skull.svg', '/avatars/mask.svg'
-  ]; // We will use dicebear urls for now as placeholders if local files don't exist, or just use dicebear direct links
+  const SONIDERO_AVATARS = ASSETS.AVATARS;
 
   const AVATAR_OPTIONS = [
     "https://api.dicebear.com/7.x/avataaars/svg?seed=Sonidero1",

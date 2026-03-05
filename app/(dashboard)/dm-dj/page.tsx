@@ -11,6 +11,7 @@ import { useAppSelector } from '@/lib/store/hooks';
 import httpClient from '@/lib/services/httpClient';
 import { generateUUID } from '@/lib/utils/uuid';
 import ConfirmModal from '@/components/ui/ConfirmModal';
+import { ENDPOINTS, LIMITS } from '@/lib/constants';
 
 function DmDjPageContent() {
 
@@ -30,7 +31,7 @@ function DmDjPageContent() {
     
     setIsSending(true);
     try {
-        await httpClient.post('/directMessages', {
+        await httpClient.post(ENDPOINTS.DIRECT_MESSAGES, {
             id: generateUUID(),
             userId: user.id,
             userAlias: user.alias,
@@ -65,7 +66,7 @@ function DmDjPageContent() {
                  <textarea 
                      className="w-full h-32 bg-muted/50 border border-border rounded-xl p-4 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all resize-none shadow-inner"
                      placeholder="Escribe aquí..."
-                     maxLength={120}
+                     maxLength={LIMITS.DM_DJ_MESSAGE}
                      value={message}
                      onChange={(e) => setMessage(e.target.value)}
                      enterKeyHint="send"
@@ -83,7 +84,7 @@ function DmDjPageContent() {
                      }}
                  />
                  <div className="text-right text-xs font-bold text-muted-foreground/60 tracking-wider">
-                     {message.length} / 120
+                     {message.length} / {LIMITS.DM_DJ_MESSAGE}
                  </div>
                  <SubmitButton
                      isFormValid={!!message.trim()}

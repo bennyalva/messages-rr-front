@@ -1,10 +1,11 @@
 import { LoginCredentials, RegisterData, User } from "../types/auth";
 import { generateUUID } from "../utils/uuid";
 import httpClient from "./httpClient";
+import { ENDPOINTS } from '@/lib/constants';
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<User> {
-    const { data: users } = await httpClient.get<User[]>('/users', {
+    const { data: users } = await httpClient.get<User[]>(ENDPOINTS.USERS, {
       params: { alias: credentials.alias },
     });
 
@@ -26,7 +27,7 @@ export const authService = {
 
   async register(data: RegisterData): Promise<User> {
     // Check if alias exists
-    const { data: existing } = await httpClient.get<User[]>('/users', {
+    const { data: existing } = await httpClient.get<User[]>(ENDPOINTS.USERS, {
       params: { alias: data.alias },
     });
 
@@ -44,7 +45,7 @@ export const authService = {
       confirmPassword: undefined,
     };
 
-    const { data: created } = await httpClient.post<User>('/users', newUser);
+    const { data: created } = await httpClient.post<User>(ENDPOINTS.USERS, newUser);
     return created;
   }
 };

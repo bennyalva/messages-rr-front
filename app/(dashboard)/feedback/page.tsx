@@ -10,6 +10,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Send, MessageSquareHeart } from 'lucide-react';
 import { useState }  from 'react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { ASSETS, BRAND, LIMITS } from '@/lib/constants';
+import { BrandLink } from '@/components/ui/brand-link';
 
 interface FeedbackData {
   ambiente: number | null;
@@ -73,8 +76,21 @@ function FeedbackPageContent() {
           </div>
           <h2 className="text-2xl font-bold text-foreground mb-2">¡Gracias por tu opinión!</h2>
           <p className="text-muted-foreground text-sm max-w-sm">
-            Tu retroalimentación nos ayuda a mejorar cada evento. ¡Nos vemos en la pista!
+            Tu retroalimentación nos ayuda a mejorar cada día y recuerda que estos comentarios son de manera anónima.
           </p>
+
+          {/* Branding */}
+          <div className="mt-10 flex flex-col items-center gap-3">
+            <span className="text-lg app-title">{BRAND.APP_NAME}</span>
+            <Image
+              src={ASSETS.LOGO_CABINA}
+              alt={BRAND.APP_NAME}
+              width={120}
+              height={120}
+              className="opacity-80"
+            />
+            <BrandLink className="mt-2" />
+          </div>
         </main>
       </div>
     );
@@ -115,7 +131,7 @@ function FeedbackPageContent() {
               <p className="text-foreground font-semibold text-[15px]">¡Queremos leerte!</p>
               <Textarea
                 placeholder="Cuéntanos un poco y dinos si tienes alguna sugerencia, opinion o  queja..."
-                maxLength={150}
+                maxLength={LIMITS.FEEDBACK_COMMENT}
                 value={feedback.comentario}
                 onChange={(e) =>
                   setFeedback((prev) => ({ ...prev, comentario: e.target.value }))

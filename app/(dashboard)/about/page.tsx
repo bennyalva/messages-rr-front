@@ -6,8 +6,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Headphones, Link as LinkIcon, Instagram, Facebook, Globe, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import { AnimatedLogo } from '@/components/ui/animated-logo';
+import { BrandLink } from '@/components/ui/brand-link';
 import { useEffect, useState } from 'react';
 import { storageService } from '@/lib/utils/storage';
+import { ASSETS, BRAND } from '@/lib/constants';
 
 
 
@@ -56,7 +58,7 @@ function AboutPageContent() {
                        {/* 2. Background Image Section - Blends cleanly */}
                    <div className="w-full h-[28rem] md:h-[36rem] relative flex flex-col items-center -mt-8 z-0">
                        {/* Background image constrained to this natural flow block */}
-                       <div className="absolute inset-0 top-8 bg-[url('/sonidero-about-bg.png')] bg-cover bg-[center_10%] md:bg-[center_12%] opacity-90 dark:opacity-80 transition-opacity duration-300" />
+                       <div className="absolute inset-0 top-8 bg-cover bg-[center_10%] md:bg-[center_12%] opacity-90 dark:opacity-80 transition-opacity duration-300" style={{ backgroundImage: `url('${ASSETS.BG_SONIDERO_ABOUT}')` }} />
                        
                        {/* Gradient blending top card solid color into the image smoothly (adjusted for overlap) */}
                        <div className="absolute inset-x-0 top-8 h-32 bg-gradient-to-b from-card via-card/80 to-transparent pointer-events-none" />
@@ -116,12 +118,9 @@ function AboutPageContent() {
 
              {/* Footer */}
              <footer className="mt-8 mb-4 flex flex-col items-center justify-center gap-2 text-center opacity-80 hover:opacity-100 transition-opacity">
-                <div className="flex items-center gap-2 text-foreground/80 mb-1">
-                    <Globe className="w-4 h-4 text-primary" />
-                    <span className="text-sm font-bold tracking-wide">www.cabina-digital.mx</span>
-                </div>
+                <BrandLink />
                 <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-[0.2em]">
-                    Todos los derechos reservados © 2026
+                    Todos los derechos reservados © {BRAND.COPYRIGHT_YEAR}
                 </p>
              </footer>
              

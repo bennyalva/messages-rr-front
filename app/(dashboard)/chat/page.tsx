@@ -5,6 +5,7 @@ import ChatHeader from '@/components/chat/ChatHeader';
 import SonideroBanner from '@/components/chat/SonideroBanner';
 import MessageList from '@/components/chat/MessageList';
 import MessageInput from '@/components/chat/MessageInput';
+import { ASSETS } from '@/lib/constants';
 
 export default function ChatPage() {
   // TODO: esta variable será dinámica más adelante
@@ -14,7 +15,7 @@ export default function ChatPage() {
     <AuthGuard>
       <div className="flex flex-col h-screen bg-background text-foreground relative overflow-hidden">
           {/* Decorative Background */}
-           <div className="absolute inset-0 bg-[url('/bg-pattern.png')] opacity-[0.08] dark:opacity-[0.07] pointer-events-none transition-opacity duration-500" />
+           <div className="absolute inset-0 opacity-[0.08] dark:opacity-[0.07] pointer-events-none transition-opacity duration-500" style={{ backgroundImage: `url('${ASSETS.BG_PATTERN}')` }} />
            <div className="absolute top-[20%] left-[50%] -translate-x-1/2 w-[80%] h-[50%] bg-primary/10 dark:bg-primary/8 blur-[120px] rounded-full pointer-events-none transition-colors duration-500" />
 
           <ChatHeader />

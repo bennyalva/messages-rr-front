@@ -14,6 +14,7 @@ import { generateUUID } from '@/lib/utils/uuid';
 import ChatHeader from '@/components/chat/ChatHeader';
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import { setThemeConfig, ThemeConfig } from '@/lib/store/features/themeSlice';
+import { ENDPOINTS } from '@/lib/constants';
 
 interface DirectMessage {
   id: string;
@@ -68,7 +69,7 @@ function DashboardPageContent() {
   }, [messages]);
 
   const fetchConfig = async () => {
-    const { data } = await httpClient.get('/config');
+    const { data } = await httpClient.get(ENDPOINTS.CONFIG);
     setFullConfig(data);
   };
 
@@ -76,7 +77,7 @@ function DashboardPageContent() {
     if (!fullConfig) return;
     setIsSavingConfig(true);
     try {
-      await httpClient.patch('/config', fullConfig);
+      await httpClient.patch(ENDPOINTS.CONFIG, fullConfig);
       // Update global store
       if (fullConfig.themes) {
         dispatch(setThemeConfig(fullConfig.themes));
@@ -104,34 +105,34 @@ function DashboardPageContent() {
   };
 
   const fetchUsers = async () => {
-    const { data } = await httpClient.get('/users');
+    const { data } = await httpClient.get(ENDPOINTS.USERS);
     setUsers(data);
   };
 
   const fetchSongs = async () => {
-    const { data } = await httpClient.get('/songs');
+    const { data } = await httpClient.get(ENDPOINTS.SONGS);
     setSongs(data);
   };
 
   const fetchMessages = async () => {
-    const { data } = await httpClient.get('/messages');
+    const { data } = await httpClient.get(ENDPOINTS.MESSAGES);
     setMessages(data);
   };
 
   const fetchDirectMessages = async () => {
-    const { data } = await httpClient.get('/directMessages');
+    const { data } = await httpClient.get(ENDPOINTS.DIRECT_MESSAGES);
     setDirectMessages(data);
   };
 
   const handleDeleteUser = async (id: string) => {
     if (!confirm("¿Eliminar usuario permanentemente?")) return;
-    await httpClient.delete(`/users/${id}`);
+    await httpClient.delete(`${ENDPOINTS.USERS}/${id}`);
     fetchUsers();
   };
 
   const handleAddSong = async () => {
     if (!newSongTitle || !newSongArtist) return;
-    await httpClient.post('/songs', {
+    await httpClient.post(ENDPOINTS.SONGS, {
       id: generateUUID(),
       title: newSongTitle,
       artist: newSongArtist,
@@ -143,7 +144,7 @@ function DashboardPageContent() {
   };
 
   const handleDeleteSong = async (id: string) => {
-    await httpClient.delete(`/songs/${id}`);
+    await httpClient.delete(`${ENDPOINTS.SONGS}/${id}`);
     fetchSongs();
   };
 
@@ -152,13 +153,13 @@ function DashboardPageContent() {
     try {
       // Delete all songs
       for (const song of songs) {
-        await httpClient.delete(`/songs/${song.id}`);
+        await httpClient.delete(`${ENDPOINTS.SONGS}/${song.id}`);
       }
       
       // Delete all user votes to allow voting again
-      const { data: userVotes } = await httpClient.get('/userVotes');
+      const { data: userVotes } = await httpClient.get(ENDPOINTS.USER_VOTES);
       for (const vote of userVotes) {
-        await httpClient.delete(`/userVotes/${vote.id}`);
+        await httpClient.delete(`${ENDPOINTS.USER_VOTES}/${vote.id}`);
       }
       
       fetchSongs();
@@ -170,12 +171,12 @@ function DashboardPageContent() {
 
   const handleDeleteMessage = async (id: string) => {
     if (!confirm("¿Eliminar este mensaje?")) return;
-    await httpClient.delete(`/messages/${id}`);
+    await httpClient.delete(`${ENDPOINTS.MESSAGES}/${id}`);
     fetchMessages();
   };
 
   const handleDeleteDirectMessage = async (id: string) => {
-    await httpClient.delete(`/directMessages/${id}`);
+    await httpClient.delete(`${ENDPOINTS.DIRECT_MESSAGES}/${id}`);
     fetchDirectMessages();
   };
 

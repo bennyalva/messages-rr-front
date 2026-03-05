@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import httpClient from '@/lib/services/httpClient';
 import { storageService } from '@/lib/utils/storage';
+import { ENDPOINTS, ASSETS } from '@/lib/constants';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -45,7 +46,7 @@ export default function LoginPage() {
       }
     }
 
-    httpClient.get('/config')
+    httpClient.get(ENDPOINTS.CONFIG)
       .then(({ data }) => {
         const dataConfig = data as AppConfig;
         setConfig(dataConfig);
@@ -113,7 +114,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-[url('/bg-sonidero.png')] bg-cover bg-center relative overflow-hidden transition-colors duration-500">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center relative overflow-hidden transition-colors duration-500" style={{ backgroundImage: `url('${ASSETS.BG_SONIDERO}')` }}>
       <div className="absolute inset-0 bg-background/60 dark:bg-background/85 backdrop-blur-[2px] pointer-events-none transition-colors duration-500" />
       
       <Card className="w-full max-w-md relative z-10 border-border/50 shadow-[0_20px_70px_-10px_rgba(0,0,0,0.25)] dark:shadow-[0_0_40px_-5px_var(--color-primary)]/30 bg-card text-card-foreground transition-all duration-300">

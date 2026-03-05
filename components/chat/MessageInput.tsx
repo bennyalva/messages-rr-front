@@ -11,6 +11,7 @@ import { generateUUID } from '@/lib/utils/uuid';
 import { cn } from '@/lib/utils';
 
 import { Tooltip } from '@/components/ui/Tooltip';
+import { LIMITS } from '@/lib/constants';
 
 export default function MessageInput() {
   const dispatch = useAppDispatch();

@@ -12,6 +12,7 @@ import httpClient from '@/lib/services/httpClient';
 import { useAppSelector } from '@/lib/store/hooks';
 import { generateUUID } from '@/lib/utils/uuid';
 import { cn } from '@/lib/utils';
+import { ENDPOINTS } from '@/lib/constants';
 
 interface Song {
   id: string;
@@ -48,14 +49,14 @@ function VotePageContent() {
   }, [showBanner]);
 
   const fetchSongs = async () => {
-    const { data } = await httpClient.get<Song[]>('/songs');
+    const { data } = await httpClient.get<Song[]>(ENDPOINTS.SONGS);
     setSongs(data);
   };
 
   const checkUserVote = async () => {
     if (!user) return;
     // Search by oderId (the field name used when storing)
-    const { data: votes } = await httpClient.get('/userVotes', {
+    const { data: votes } = await httpClient.get(ENDPOINTS.USER_VOTES, {
       params: { oderId: user.id },
     });
     if (votes.length > 0) {
@@ -71,10 +72,10 @@ function VotePageContent() {
     setIsVoting(true);
     try {
       // Increment vote count
-      await httpClient.patch(`/songs/${songId}`, { votes: currentVotes + 1 });
+      await httpClient.patch(`${ENDPOINTS.SONGS}/${songId}`, { votes: currentVotes + 1 });
       
       // Record user vote
-      await httpClient.post('/userVotes', {
+      await httpClient.post(ENDPOINTS.USER_VOTES, {
         id: generateUUID(),
         oderId: user.id,
         songId: songId,
