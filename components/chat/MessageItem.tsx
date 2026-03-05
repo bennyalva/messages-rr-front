@@ -445,7 +445,7 @@ export default function MessageItem({
              {/* Reactions Display */}
              {groupedReactions.length > 0 && !message.isDeleted && (
                  <div className={cn(
-                     "flex flex-wrap gap-1 mt-2",
+                     "flex flex-nowrap gap-1 mt-2 overflow-x-auto scrollbar-hide max-w-full pb-1",
                      isOwn ? "justify-end" : "justify-start"
                  )}>
                      {groupedReactions.map((r, i) => (
@@ -455,7 +455,7 @@ export default function MessageItem({
                                  setInitialReactionTab(r.emoji); // Select the emoji tab
                                  setShowReactionDetails(true);
                              }}
-                             className="flex items-center gap-1 bg-card/80 backdrop-blur-sm border border-border rounded-full px-2 py-0.5 text-sm shadow-sm hover:scale-105 transition-transform"
+                             className="flex-shrink-0 flex items-center gap-1 bg-card/80 backdrop-blur-sm border border-border rounded-full px-2 py-0.5 text-sm shadow-sm hover:scale-105 transition-transform"
                          >
                              <span>{r.emoji}</span>
                              <span className="text-xs text-card-foreground/60 font-medium">{r.count}</span>
@@ -519,13 +519,13 @@ export default function MessageItem({
                    </div>
                  </div>
                ) : (
-                 <div className="bg-card border border-primary rounded-2xl shadow-[0_0_25px_theme(colors.primary.DEFAULT)] animate-in zoom-in-90 duration-200 overflow-hidden backdrop-blur-md">
-                   <div className="px-3 py-2 flex items-center gap-1">
+                 <div className="bg-card border border-primary rounded-2xl shadow-[0_0_25px_theme(colors.primary.DEFAULT)] animate-in zoom-in-90 duration-200 overflow-hidden backdrop-blur-md max-w-[280px]">
+                   <div className="px-3 py-2 flex items-center gap-1 overflow-x-auto scrollbar-hide">
                      {REACTIONS.map(emoji => (
                        <button 
                          key={emoji}
                          onClick={(e) => handleReaction(emoji, e)}
-                         className="text-2xl hover:scale-125 active:scale-110 transition-transform p-1"
+                         className="text-2xl hover:scale-125 active:scale-110 transition-transform p-1 flex-shrink-0"
                        >
                          {emoji}
                        </button>

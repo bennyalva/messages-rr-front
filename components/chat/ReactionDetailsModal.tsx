@@ -56,28 +56,28 @@ export default function ReactionDetailsModal({ isOpen, onClose, reactions, initi
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-gray-900 border border-gray-800 w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+          className="bg-card border border-border w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden flex flex-col"
           style={{ height: '400px' }} 
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-800 flex-shrink-0">
-            <h3 className="text-white font-bold">Reacciones</h3>
-            <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
+          <div className="flex items-center justify-between p-4 border-b border-border flex-shrink-0">
+            <h3 className="text-foreground font-bold">Reacciones</h3>
+            <button onClick={onClose} className="text-muted-foreground hover:text-foreground transition-colors">
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Tabs */}
-          <div className="flex overflow-x-auto p-2 gap-2 border-b border-gray-800 scrollbar-hide flex-shrink-0">
+          <div className="flex overflow-x-auto p-2 gap-2 border-b border-border scrollbar-hide flex-shrink-0">
             {emojis.map(emoji => (
               <button
                 key={emoji}
                 onClick={() => setActiveTab(emoji)}
                 className={cn(
-                  "px-4 py-2 rounded-full text-lg transition-colors relative flex items-center gap-2 flex-shrink-0",
+                  "px-4 py-2 rounded-full text-lg transition-colors relative flex items-center gap-2 flex-shrink-0 select-none cursor-pointer",
                   activeTab === emoji 
-                    ? "bg-gray-800 text-white" 
-                    : "text-gray-500 hover:bg-gray-800/50 hover:text-gray-300"
+                    ? "bg-primary/20 text-primary" 
+                    : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                 )}
               >
                 <span>{emoji}</span>
@@ -100,25 +100,25 @@ export default function ReactionDetailsModal({ isOpen, onClose, reactions, initi
               const avatar = userDetail?.avatar;
 
               return (
-                  <div key={idx} className="flex items-center gap-3 p-3 hover:bg-gray-800/50 rounded-xl transition-colors">
+                  <div key={idx} className="flex items-center gap-3 p-3 hover:bg-muted/50 rounded-xl transition-colors">
                      {/* Avatar */}
-                     <div className="w-10 h-10 rounded-full bg-gray-700 flex-shrink-0 overflow-hidden border border-white/10">
+                     <div className="w-10 h-10 rounded-full bg-muted flex-shrink-0 overflow-hidden border border-border">
                         {avatar ? (
                             <img src={avatar} alt={displayName} className="w-full h-full object-cover" />
                         ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-[10px]">
+                            <div className="w-full h-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-primary-foreground font-bold text-[10px]">
                                 {reaction.userId.slice(0, 2).toUpperCase()}
                             </div>
                         )}
                      </div>
                      <div className="flex flex-col">
-                        <span className="text-white text-sm font-medium">{displayName}</span>
+                        <span className="text-foreground text-sm font-medium">{displayName}</span>
                      </div>
                   </div>
               );
             })}
             {emojis.length === 0 && (
-              <div className="p-8 text-center text-gray-500">
+              <div className="p-8 text-center text-muted-foreground">
                 No hay reacciones todavía
               </div>
             )}
