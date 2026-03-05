@@ -1,8 +1,7 @@
 'use client';
 
 import { Globe } from 'lucide-react';
-import Image from 'next/image';
-import { BRAND, ASSETS } from '@/lib/constants';
+import { BRAND } from '@/lib/constants';
 
 interface BrandLinkProps {
   href?: string;
@@ -22,13 +21,6 @@ export function BrandLink({ href = 'https://google.com', className = '' }: Brand
         <span className="text-sm font-bold tracking-wide text-foreground/80 group-hover:text-primary transition-colors">
           {BRAND.WEBSITE}
         </span>
-        <Image
-          src={ASSETS.FAVICON}
-          alt={BRAND.APP_NAME}
-          width={24}
-          height={24}
-          className="rounded-full object-cover ml-auto"
-        />
       </div>
     </a>
   );

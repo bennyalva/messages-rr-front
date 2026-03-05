@@ -971,5 +971,107 @@
         "foreground": "oklch(0.145 0 0)"
       }
     }
-  }
+  },
+  "feedbacks": [
+    {
+      "id": "ed9c3c60-d7e8-4a94-8a44-d621e1f0438c",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "ambiente": 2,
+      "experiencia": 2,
+      "mejora": 2,
+      "comentario": "",
+      "timestamp": "2026-03-05T17:59:30.452Z"
+    },
+    {
+      "id": "c2bc40dc-694b-49d8-bdc8-91323922f299",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "ambiente": 1,
+      "experiencia": 1,
+      "mejora": 1,
+      "comentario": "",
+      "timestamp": "2026-03-05T18:00:28.482Z"
+    },
+    {
+      "id": "c42770e4-9f02-4b42-a999-5d7a18176623",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "ambiente": 2,
+      "experiencia": 2,
+      "mejora": 2,
+      "comentario": "",
+      "timestamp": "2026-03-05T18:01:19.139Z"
+    },
+    {
+      "id": "de584e71-021d-48b4-a7ec-dbb0df3d56de",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "ambiente": 1,
+      "experiencia": 1,
+      "mejora": 1,
+      "comentario": "",
+      "timestamp": "2026-03-05T18:03:07.919Z"
+    },
+    {
+      "id": "fa95af4c-fa62-4da7-9fef-a10a76c277d0",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "ambiente": 2,
+      "experiencia": 2,
+      "mejora": 2,
+      "comentario": "",
+      "timestamp": "2026-03-05T18:03:54.078Z"
+    },
+    {
+      "id": "91fdec94-fe51-4730-9112-482c9ffb85c9",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "ambiente": 3,
+      "experiencia": 3,
+      "mejora": 3,
+      "comentario": "",
+      "timestamp": "2026-03-05T18:05:04.321Z"
+    },
+    {
+      "id": "e3262ea3-bcb7-4099-93a3-f9fb49bbfca2",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "ambiente": 3,
+      "experiencia": 3,
+      "mejora": 3,
+      "comentario": "",
+      "timestamp": "2026-03-05T18:05:19.826Z"
+    },
+    {
+      "id": "a19dd401-8f93-44fc-8f57-547094f4444f",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "ambiente": 3,
+      "experiencia": 3,
+      "mejora": 3,
+      "comentario": "",
+      "timestamp": "2026-03-05T18:06:56.511Z"
+    },
+    {
+      "id": "43509600-7eda-444a-8694-21f19af5e5e9",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "ambiente": 2,
+      "experiencia": 2,
+      "mejora": 2,
+      "comentario": "",
+      "timestamp": "2026-03-05T18:07:59.014Z"
+    },
+    {
+      "id": "05f98f80-0bdc-474d-a38a-30afc66b0bc0",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "ambiente": 2,
+      "experiencia": 2,
+      "mejora": 2,
+      "comentario": "",
+      "timestamp": "2026-03-05T18:08:08.534Z"
+    }
+  ]
 }

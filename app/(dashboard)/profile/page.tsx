@@ -10,18 +10,27 @@ import { Label } from '@/components/ui/label';
 import { updateUser } from '@/lib/store/features/authSlice';
 import { setTheme, ThemeName } from '@/lib/store/features/themeSlice';
 import { cn } from '@/lib/utils';
-import { Check } from 'lucide-react';
+import { Check, CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
+import ConfirmModal from '@/components/ui/ConfirmModal';
+import { useRouter } from 'next/navigation';
 
 function ProfilePageContent() {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
   const activeTheme = useAppSelector(state => state.theme.activeTheme);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [alias, setAlias] = useState(user?.alias || '');
+  const [gang, setGang] = useState(user?.gang || '');
 
   if (!user) return null;
 
+  const isDirty = alias !== user.alias || gang !== (user.gang || '');
+
   const handleSave = () => {
        // Dispatch update user (stub) or save to DB
-       alert("Perfil guardado (Simulación)");
+       setShowSuccess(true);
   };
 
   const handleThemeChange = (theme: ThemeName) => {
@@ -48,11 +57,11 @@ function ProfilePageContent() {
               <CardContent className="space-y-4">
                   <div className="space-y-2">
                       <Label>Alias</Label>
-                      <Input defaultValue={user.alias} className="bg-muted border-border" />
+                      <Input value={alias} onChange={(e) => setAlias(e.target.value)} className="bg-muted border-border" />
                   </div>
                    <div className="space-y-2">
                       <Label>Pandilla</Label>
-                      <Input defaultValue={user.gang || ''} placeholder="Sin pandilla" className="bg-muted border-border" />
+                      <Input value={gang} onChange={(e) => setGang(e.target.value)} placeholder="Sin pandilla" className="bg-muted border-border" />
                   </div>
                   
                    <div className="space-y-3">
@@ -98,11 +107,22 @@ function ProfilePageContent() {
                       </div>
                   </div>
 
-                  <Button className="w-full mt-4" variant="default" onClick={handleSave}>
+                  <Button className="w-full mt-4" variant="default" onClick={handleSave} disabled={!isDirty}>
                       Guardar Cambios
                   </Button>
               </CardContent>
           </Card>
+
+          <ConfirmModal
+            isOpen={showSuccess}
+            onConfirm={() => { setShowSuccess(false); router.push('/chat'); }}
+            onCancel={() => { setShowSuccess(false); router.push('/chat'); }}
+            mode="info"
+            title="¡Cambios guardados!"
+            message="Tu perfil se actualizó correctamente."
+            confirmText="Aceptar"
+            icon={<div className="p-3 rounded-full bg-emerald-500/10"><CheckCircle2 className="w-8 h-8 text-emerald-400" /></div>}
+          />
         </main>
     </div>
   );

@@ -35,14 +35,15 @@ export const authService = {
       throw new Error("El alias ya está en uso");
     }
 
+    const { confirmPassword, ...userData } = data;
+
     const newUser = {
       id: generateUUID(),
-      ...data,
+      ...userData,
       role: "user",
       isActive: true,
       avatar: data.avatar,
       musicPreferences: data.musicTypes,
-      confirmPassword: undefined,
     };
 
     const { data: created } = await httpClient.post<User>(ENDPOINTS.USERS, newUser);

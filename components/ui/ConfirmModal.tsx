@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 
@@ -13,6 +13,10 @@ interface ConfirmModalProps {
   confirmText?: string;
   cancelText?: string;
   isLoading?: boolean;
+  /** 'confirm' = 2 buttons (decision), 'info' = 1 button (informational) */
+  mode?: 'confirm' | 'info';
+  /** Optional icon to display above the title */
+  icon?: ReactNode;
 }
 
 export default function ConfirmModal({
@@ -24,6 +28,8 @@ export default function ConfirmModal({
   confirmText = 'Confirmar',
   cancelText = 'Cancelar',
   isLoading = false,
+  mode = 'confirm',
+  icon,
 }: ConfirmModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -54,47 +60,66 @@ export default function ConfirmModal({
     >
       <div
         ref={modalRef}
-        className="relative w-full max-w-md mx-4 bg-gradient-to-br from-gray-900/95 to-black/95 border border-primary/30 rounded-xl shadow-2xl shadow-primary/20 animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-md mx-4 bg-card border border-border/50 rounded-2xl shadow-2xl shadow-primary/10 animate-in zoom-in-95 duration-200"
       >
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-white/10">
-          <h3 className="text-lg font-bold text-white">{title}</h3>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-gray-400 hover:text-white"
-            onClick={onCancel}
-            disabled={isLoading}
-          >
-            <X className="w-4 h-4" />
-          </Button>
-        </div>
+        {/* Close button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute top-3 right-3 h-8 w-8 text-muted-foreground hover:text-foreground"
+          onClick={onCancel}
+          disabled={isLoading}
+        >
+          <X className="w-4 h-4" />
+        </Button>
 
-        {/* Body */}
-        <div className="p-6">
-          <p className="text-gray-300 text-center">{message}</p>
-        </div>
+        {/* Content */}
+        <div className="p-6 pt-8">
+          {/* Icon (optional) */}
+          {icon && (
+            <div className="flex justify-center mb-4">
+              {icon}
+            </div>
+          )}
 
-        {/* Footer */}
-        <div className="flex gap-3 p-4 border-t border-white/10">
-          <Button
-            variant="outline"
-            className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-800"
-            onClick={onCancel}
-            disabled={isLoading}
-          >
-            {cancelText}
-          </Button>
-          <Button
-            variant="default"
-            className="flex-1 bg-primary hover:bg-primary/80"
-            onClick={onConfirm}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Enviando...' : confirmText}
-          </Button>
+          {/* Title */}
+          <h3 className="text-lg font-bold text-foreground text-center mb-2">{title}</h3>
+
+          {/* Message */}
+          <p className="text-muted-foreground text-center text-sm leading-relaxed mb-6">{message}</p>
+
+          {/* Buttons */}
+          {mode === 'confirm' ? (
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                className="flex-1 border-border text-muted-foreground hover:bg-muted"
+                onClick={onCancel}
+                disabled={isLoading}
+              >
+                {cancelText}
+              </Button>
+              <Button
+                variant="default"
+                className="flex-1 bg-primary hover:bg-primary/80 text-primary-foreground"
+                onClick={onConfirm}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Enviando...' : confirmText}
+              </Button>
+            </div>
+          ) : (
+            <Button
+              className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-bold"
+              onClick={onConfirm}
+              disabled={isLoading}
+            >
+              {confirmText}
+            </Button>
+          )}
         </div>
       </div>
     </div>
   );
 }
+

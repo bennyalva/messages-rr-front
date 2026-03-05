@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { sessionService } from './sessionService';
+import { httpErrorEmitter } from './httpErrorEmitter';
 import { HTTP } from '@/lib/constants';
 
 /**
@@ -9,6 +10,7 @@ import { HTTP } from '@/lib/constants';
  * - Dynamic baseURL based on current hostname (LAN-friendly)
  * - Request interceptor: injects auth token automatically
  * - Response interceptor: centralizes error handling (401 → redirect to login)
+ * - Global error emission for UI notifications
  * - Default timeout: 10 seconds
  * - Default Content-Type: application/json
  */
@@ -55,7 +57,28 @@ httpClient.interceptors.response.use(
         if (typeof window !== 'undefined') {
           window.location.href = '/login';
         }
+      } else {
+        // Emit error for global AlertModal display
+        httpErrorEmitter.emit({
+          status,
+          message: error.response.data?.message || error.message,
+          url: error.config?.url,
+        });
       }
+    } else if (error.code === 'ECONNABORTED') {
+      // Timeout
+      httpErrorEmitter.emit({
+        status: 408,
+        message: 'La solicitud tardó demasiado tiempo.',
+        url: error.config?.url,
+      });
+    } else {
+      // Network error (no response)
+      httpErrorEmitter.emit({
+        status: 0,
+        message: 'No se pudo conectar con el servidor.',
+        url: error.config?.url,
+      });
     }
 
     return Promise.reject(error);

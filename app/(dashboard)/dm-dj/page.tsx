@@ -5,7 +5,7 @@ import ChatHeader from '@/components/chat/ChatHeader';
 import { SubmitButton } from '@/components/ui/submit-button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
-import { Send } from 'lucide-react';
+import { Send, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
 import { useAppSelector } from '@/lib/store/hooks';
 import httpClient from '@/lib/services/httpClient';
@@ -20,6 +20,7 @@ function DmDjPageContent() {
   const [message, setMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleSendClick = () => {
     if (!message.trim() || !user) return;
@@ -42,12 +43,18 @@ function DmDjPageContent() {
         });
         setShowConfirm(false);
         setMessage('');
-        router.back();
+        setShowSuccess(true);
     } catch (error) {
-        alert("Error al enviar mensaje");
+        setShowConfirm(false);
+        // Error handled globally by httpClient interceptor
     } finally {
         setIsSending(false);
     }
+  };
+
+  const handleSuccessClose = () => {
+    setShowSuccess(false);
+    router.push('/chat');
   };
 
   return (
@@ -107,6 +114,17 @@ function DmDjPageContent() {
            confirmText="Enviar"
            cancelText="Cancelar"
            isLoading={isSending}
+         />
+
+         <ConfirmModal
+           isOpen={showSuccess}
+           onConfirm={handleSuccessClose}
+           onCancel={handleSuccessClose}
+           mode="info"
+           title="¡Mensaje enviado!"
+           message="Tu mensaje fue enviado al DJ exitosamente."
+           confirmText="Aceptar"
+           icon={<div className="p-3 rounded-full bg-emerald-500/10"><CheckCircle2 className="w-8 h-8 text-emerald-400" /></div>}
          />
        </main>
     </div>

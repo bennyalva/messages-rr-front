@@ -57,7 +57,7 @@ function VotePageContent() {
     if (!user) return;
     // Search by oderId (the field name used when storing)
     const { data: votes } = await httpClient.get(ENDPOINTS.USER_VOTES, {
-      params: { oderId: user.id },
+      params: { userId: user.id },
     });
     if (votes.length > 0) {
       setHasVoted(true);
@@ -77,7 +77,7 @@ function VotePageContent() {
       // Record user vote
       await httpClient.post(ENDPOINTS.USER_VOTES, {
         id: generateUUID(),
-        oderId: user.id,
+        userId: user.id,
         songId: songId,
       });
       

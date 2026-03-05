@@ -4,6 +4,7 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "@/lib/store/StoreProvider";
 import ThemeSynchronizer from "@/components/ThemeSynchronizer";
+import HttpErrorListener from "@/components/providers/HttpErrorListener";
 import { BRAND, ASSETS } from "@/lib/constants";
 
 const roboto = localFont({
@@ -54,6 +55,7 @@ export default function RootLayout({
       >
         <StoreProvider>
           <ThemeSynchronizer />
+          <HttpErrorListener />
           {children}
         </StoreProvider>
       </body>

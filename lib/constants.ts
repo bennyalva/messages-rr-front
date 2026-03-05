@@ -28,6 +28,7 @@ export const ENDPOINTS = {
   CONFIG: '/config',
   DIRECT_MESSAGES: '/directMessages',
   USER_VOTES: '/userVotes',
+  FEEDBACKS: '/feedbacks',
 } as const;
 
 // ── Input Limits ────────────────────────────────────────────────────

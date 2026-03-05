@@ -13,6 +13,10 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { ASSETS, BRAND, LIMITS } from '@/lib/constants';
 import { BrandLink } from '@/components/ui/brand-link';
+import { useAppSelector } from '@/lib/store/hooks';
+import { feedbackService } from '@/lib/services/feedbackService';
+import { useTimer } from '@/lib/hooks/useTimer';
+import { useRouter } from 'next/navigation';
 
 interface FeedbackData {
   ambiente: number | null;
@@ -27,7 +31,49 @@ const QUESTIONS = [
   { key: 'mejora' as const, question: '¿Nos ayudarías a seguir mejorando?' },
 ];
 
+function FeedbackSuccess() {
+  const router = useRouter();
+  const { timeLeft } = useTimer({
+    duration: 30000,
+    onComplete: () => router.back(),
+  });
+
+  const seconds = Math.ceil(timeLeft / 1000);
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+      <ChatHeader showBackButton />
+      <main className="flex-1 w-full p-4 lg:p-8 flex flex-col items-center justify-center text-center animate-in fade-in zoom-in-95 duration-500">
+        <div className="p-6 rounded-full bg-primary/10 mb-6 animate-[bounce_1s_ease-out]">
+          <MessageSquareHeart className="w-16 h-16 text-primary" />
+        </div>
+        <h2 className="text-2xl font-bold text-foreground mb-2">¡Gracias por tu opinión!</h2>
+        <p className="text-muted-foreground text-sm max-w-sm">
+          Tu retroalimentación nos ayuda a mejorar cada día y recuerda que estos comentarios son de manera anónima.
+        </p>
+        <p className="text-xs text-muted-foreground/60 mt-3">
+          Regresando en <span className="font-bold text-primary">{seconds}s</span>
+        </p>
+
+        {/* Branding */}
+        <div className="mt-10 flex flex-col items-center gap-3">
+          <span className="text-lg app-title">{BRAND.APP_NAME}</span>
+          <Image
+            src={ASSETS.LOGO_CABINA}
+            alt={BRAND.APP_NAME}
+            width={120}
+            height={120}
+            className="opacity-80"
+          />
+          <BrandLink className="mt-2" />
+        </div>
+      </main>
+    </div>
+  );
+}
+
 function FeedbackPageContent() {
+  const { user } = useAppSelector(state => state.auth);
   const [feedback, setFeedback] = useState<FeedbackData>({
     ambiente: null,
     experiencia: null,
@@ -48,52 +94,28 @@ function FeedbackPageContent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isFormValid) return;
+    if (!isFormValid || !user) return;
 
     setIsSubmitting(true);
-
-    // TODO: Replace with API call
-    console.log('📝 Feedback enviado:', {
-      ambiente: feedback.ambiente,
-      experiencia: feedback.experiencia,
-      mejora: feedback.mejora,
-      comentario: feedback.comentario.trim(),
-    });
-
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
+    try {
+      await feedbackService.sendFeedback({
+        userId: user.id,
+        userAlias: user.alias,
+        ambiente: feedback.ambiente!,
+        experiencia: feedback.experiencia!,
+        mejora: feedback.mejora!,
+        comentario: feedback.comentario.trim(),
+      });
+      setIsSubmitted(true);
+    } catch (error) {
+      // Error handled globally by httpClient interceptor
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted) {
-    return (
-      <div className="min-h-screen bg-background flex flex-col">
-        <ChatHeader showBackButton />
-        <main className="flex-1 w-full p-4 lg:p-8 flex flex-col items-center justify-center text-center animate-in fade-in zoom-in-95 duration-500">
-          <div className="p-6 rounded-full bg-primary/10 mb-6 animate-[bounce_1s_ease-out]">
-            <MessageSquareHeart className="w-16 h-16 text-primary" />
-          </div>
-          <h2 className="text-2xl font-bold text-foreground mb-2">¡Gracias por tu opinión!</h2>
-          <p className="text-muted-foreground text-sm max-w-sm">
-            Tu retroalimentación nos ayuda a mejorar cada día y recuerda que estos comentarios son de manera anónima.
-          </p>
-
-          {/* Branding */}
-          <div className="mt-10 flex flex-col items-center gap-3">
-            <span className="text-lg app-title">{BRAND.APP_NAME}</span>
-            <Image
-              src={ASSETS.LOGO_CABINA}
-              alt={BRAND.APP_NAME}
-              width={120}
-              height={120}
-              className="opacity-80"
-            />
-            <BrandLink className="mt-2" />
-          </div>
-        </main>
-      </div>
-    );
+    return <FeedbackSuccess />;
   }
 
   return (
