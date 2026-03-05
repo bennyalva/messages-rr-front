@@ -10,6 +10,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { Menu, Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft, ClipboardPenLine } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { storageService } from '@/lib/utils/storage';
+import { STORAGE_KEYS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
 interface ChatHeaderProps {
@@ -38,7 +39,7 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
 
   // Read config from localStorage (already fetched at login)
   useEffect(() => {
-    const stored = storageService.getItem('config');
+    const stored = storageService.getItem(STORAGE_KEYS.CONFIG);
     if (stored) {
       setConfig(stored);
     }

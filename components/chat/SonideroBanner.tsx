@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 import { Megaphone } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { storageService } from '@/lib/utils/storage';
+import { STORAGE_KEYS } from '@/lib/constants';
 
 interface SonideroBannerProps {
   show?: boolean;
@@ -13,7 +14,7 @@ export default function SonideroBanner({ show = true }: SonideroBannerProps) {
   const [config, setConfig] = useState<any>({ appName: 'SONIDERO' });
 
   useEffect(() => {
-    const stored = storageService.getItem('config');
+    const stored = storageService.getItem(STORAGE_KEYS.CONFIG);
     if (stored) setConfig(stored);
   }, []);
 

@@ -43,3 +43,13 @@ export const HTTP = {
   TIMEOUT: 10000,
   API_PORT: 3001,
 } as const;
+
+// ── Storage Keys ────────────────────────────────────────────────────
+export const STORAGE_KEYS = {
+  THEME: 'cabinaDigitalRR_theme',
+  SESSION: 'cabinaDigitalRR_session',
+  TOKEN: 'cabinaDigitalRR_token',
+  AUTH_COOKIE: 'cabinaDigitalRR_auth',
+  SESSION_ID: 'cabinaDigitalRR_session_id',
+  CONFIG: 'cabinaDigitalRR_config',
+} as const;

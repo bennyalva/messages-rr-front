@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+import { STORAGE_KEYS } from './lib/constants';
+
 // Cookie name must match sessionService
-const AUTH_COOKIE_NAME = 'sonidero_auth';
+const AUTH_COOKIE_NAME = STORAGE_KEYS.AUTH_COOKIE;
 
 // Routes that require authentication
 const PROTECTED_ROUTES = ['/chat', '/dashboard', '/profile', '/vote', '/dm-dj', '/about'];

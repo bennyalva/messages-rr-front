@@ -1,22 +1,13 @@
 'use client';
 
 /**
- * Reusable localStorage utility — type-safe, SSR-safe, prefixed keys.
- * 
- * All keys are prefixed with `sonidero_` to avoid collisions with
- * other apps on the same domain.
+ * Reusable localStorage utility — type-safe, SSR-safe.
  * 
  * Usage:
- *   storageService.setItem('config', { appName: 'Mi App' });
- *   const config = storageService.getItem<AppConfig>('config', defaultConfig);
- *   storageService.removeItem('config');
+ *   storageService.setItem(STORAGE_KEYS.CONFIG, { appName: 'Mi App' });
+ *   const config = storageService.getItem<AppConfig>(STORAGE_KEYS.CONFIG, defaultConfig);
+ *   storageService.removeItem(STORAGE_KEYS.CONFIG);
  */
-
-const PREFIX = 'cabinaDigitalRR_';
-
-function prefixKey(key: string): string {
-  return `${PREFIX}${key}`;
-}
 
 function isClient(): boolean {
   return typeof window !== 'undefined';
@@ -32,7 +23,7 @@ export const storageService = {
 
     try {
       const serialized = JSON.stringify(value);
-      localStorage.setItem(prefixKey(key), serialized);
+      localStorage.setItem(key, serialized);
     } catch (error) {
       console.error(`[storageService] Error saving key "${key}":`, error);
     }
@@ -46,7 +37,7 @@ export const storageService = {
     if (!isClient()) return fallback ?? null;
 
     try {
-      const raw = localStorage.getItem(prefixKey(key));
+      const raw = localStorage.getItem(key);
       if (raw === null) return fallback ?? null;
 
       return JSON.parse(raw) as T;
@@ -63,7 +54,7 @@ export const storageService = {
     if (!isClient()) return;
 
     try {
-      localStorage.removeItem(prefixKey(key));
+      localStorage.removeItem(key);
     } catch (error) {
       console.error(`[storageService] Error removing key "${key}":`, error);
     }

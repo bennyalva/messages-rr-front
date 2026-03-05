@@ -1,10 +1,12 @@
 import { User } from '../types/auth';
 import { generateUUID } from '../utils/uuid';
 
-const SESSION_KEY = 'sonidero_session';
-const TOKEN_KEY = 'sonidero_token';
-const AUTH_COOKIE_NAME = 'sonidero_auth';
-const SESSION_ID_KEY = 'sonidero_session_id'; // Unique ID per login session
+import { STORAGE_KEYS } from '../constants';
+
+const SESSION_KEY = STORAGE_KEYS.SESSION;
+const TOKEN_KEY = STORAGE_KEYS.TOKEN;
+const AUTH_COOKIE_NAME = STORAGE_KEYS.AUTH_COOKIE;
+const SESSION_ID_KEY = STORAGE_KEYS.SESSION_ID; // Unique ID per login session
 
 export interface SessionData {
   user: User;

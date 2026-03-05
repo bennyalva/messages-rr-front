@@ -7,7 +7,7 @@ import { storageService } from '@/lib/utils/storage';
 import { cn } from '@/lib/utils';
 import { Disc } from 'lucide-react';
 import { AnimatedLogo } from '@/components/ui/animated-logo';
-import { ASSETS, BRAND } from '@/lib/constants';
+import { ASSETS, BRAND, STORAGE_KEYS } from '@/lib/constants';
 
 interface AppConfig {
   appName: string;
@@ -21,7 +21,7 @@ export function LoadingScreen() {
 
   useEffect(() => {
     // Try localStorage for instant config
-    const stored = storageService.getItem('config') as AppConfig;
+    const stored = storageService.getItem(STORAGE_KEYS.CONFIG) as AppConfig;
     if (stored) {
       setConfig(stored);
     }

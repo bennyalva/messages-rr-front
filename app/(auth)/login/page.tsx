@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import httpClient from '@/lib/services/httpClient';
 import { storageService } from '@/lib/utils/storage';
-import { ENDPOINTS, ASSETS } from '@/lib/constants';
+import { ENDPOINTS, ASSETS, STORAGE_KEYS } from '@/lib/constants';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -37,7 +37,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     // Try localStorage first (instant), then fetch fresh from API
-    const stored = storageService.getItem('config') as AppConfig;
+    const stored = storageService.getItem(STORAGE_KEYS.CONFIG) as AppConfig;
     if (stored) {
       setConfig(stored);
       // Apply theme from stored config
@@ -50,13 +50,13 @@ export default function LoginPage() {
       .then(({ data }) => {
         const dataConfig = data as AppConfig;
         setConfig(dataConfig);
-        storageService.setItem('config', dataConfig);
+        storageService.setItem(STORAGE_KEYS.CONFIG, dataConfig);
         // Dispatch theme config to store
         if (dataConfig.themes) {
           dispatch(setThemeConfig(dataConfig.themes));
         }
         // Apply default theme if user hasn't chosen one
-        const savedTheme = localStorage.getItem('sonidero_theme');
+        const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME);
         if (!savedTheme && dataConfig.defaultTheme) {
           dispatch(setTheme(dataConfig.defaultTheme as ThemeName));
         }

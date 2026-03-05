@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { STORAGE_KEYS } from '@/lib/constants';
 
 export interface ThemeColors {
   primary: string;
@@ -24,7 +25,7 @@ interface ThemeState {
 function getInitialTheme(): ThemeName {
   if (typeof window === 'undefined') return 'dark';
   try {
-    const saved = localStorage.getItem('sonidero_theme');
+    const saved = localStorage.getItem(STORAGE_KEYS.THEME);
     if (saved === 'dark' || saved === 'standard') return saved;
   } catch { /* ignore */ }
   return 'dark';
@@ -44,7 +45,7 @@ const themeSlice = createSlice({
       // Persist to localStorage
       if (typeof window !== 'undefined') {
         try {
-          localStorage.setItem('sonidero_theme', action.payload);
+          localStorage.setItem(STORAGE_KEYS.THEME, action.payload);
         } catch { /* ignore */ }
       }
     },
@@ -56,7 +57,7 @@ const themeSlice = createSlice({
       state.activeTheme = next;
       if (typeof window !== 'undefined') {
         try {
-          localStorage.setItem('sonidero_theme', next);
+          localStorage.setItem(STORAGE_KEYS.THEME, next);
         } catch { /* ignore */ }
       }
     },

@@ -9,7 +9,7 @@ import { AnimatedLogo } from '@/components/ui/animated-logo';
 import { BrandLink } from '@/components/ui/brand-link';
 import { useEffect, useState } from 'react';
 import { storageService } from '@/lib/utils/storage';
-import { ASSETS, BRAND } from '@/lib/constants';
+import { ASSETS, BRAND, STORAGE_KEYS } from '@/lib/constants';
 
 
 
@@ -18,7 +18,7 @@ function AboutPageContent() {
 
     
       useEffect(() => {
-        const stored = storageService.getItem('config');
+        const stored = storageService.getItem(STORAGE_KEYS.CONFIG);
         if (stored) {
           setConfig(stored);
         }
