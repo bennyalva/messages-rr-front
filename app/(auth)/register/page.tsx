@@ -12,7 +12,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { SubmitButton } from '@/components/ui/submit-button';
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import Link from 'next/link';
-import { ASSETS } from '@/lib/constants';
+import { ASSETS, ROUTES } from '@/lib/constants';
 import { CheckCircle2 } from 'lucide-react';
 
 export default function RegisterPage() {
@@ -173,7 +173,7 @@ export default function RegisterPage() {
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
-            ¿Ya tienes cuenta? <Link href="/login" className="text-primary hover:underline">Inicia Sesión</Link>
+            ¿Ya tienes cuenta? <Link href={ROUTES.LOGIN} className="text-primary font-bold underline underline-offset-4 hover:text-primary/80 transition-colors">Inicia Sesión</Link>
           </p>
         </CardFooter>
       </Card>

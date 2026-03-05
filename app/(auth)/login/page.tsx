@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import httpClient from '@/lib/services/httpClient';
 import { storageService } from '@/lib/utils/storage';
-import { ENDPOINTS, ASSETS, STORAGE_KEYS, ROUTES } from '@/lib/constants';
+import { ENDPOINTS, ASSETS, STORAGE_KEYS, ROUTES, LOGIN_SECURITY } from '@/lib/constants';
+
+const ERROR_DISPLAY_SECONDS = 8;
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -34,6 +36,40 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [config, setConfig] = useState<AppConfig>({ appName: 'SONIDERO CHAT' });
   const [isLoadingConfig, setIsLoadingConfig] = useState(true);
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [cooldownRemaining, setCooldownRemaining] = useState(0);
+  const cooldownTimer = useRef<NodeJS.Timeout | null>(null);
+  const errorDismissTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const isLockedOut = cooldownRemaining > 0;
+
+  // Cooldown countdown timer
+  const startCooldown = useCallback(() => {
+    setCooldownRemaining(LOGIN_SECURITY.COOLDOWN_SECONDS);
+
+    if (cooldownTimer.current) clearInterval(cooldownTimer.current);
+
+    cooldownTimer.current = setInterval(() => {
+      setCooldownRemaining(prev => {
+        if (prev <= 1) {
+          clearInterval(cooldownTimer.current!);
+          cooldownTimer.current = null;
+          setFailedAttempts(0);
+          setError(null);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, []);
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      if (cooldownTimer.current) clearInterval(cooldownTimer.current);
+      if (errorDismissTimer.current) clearTimeout(errorDismissTimer.current);
+    };
+  }, []);
 
   useEffect(() => {
     // Try localStorage first (instant), then fetch fresh from API
@@ -67,10 +103,32 @@ export default function LoginPage() {
       });
   }, [dispatch]);
 
-  const { register, handleSubmit, formState: { errors, isSubmitting, isValid } } = useForm<LoginCredentials>({
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting, isValid } } = useForm<LoginCredentials>({
     resolver: zodResolver(LoginSchema),
     mode: 'onChange',
   });
+
+  // Clear error when user focuses an input to start typing
+  const handleInputFocus = () => {
+    if (error && !isLockedOut) {
+      setError(null);
+    }
+  };
+
+  // Auto-dismiss error after N seconds
+  useEffect(() => {
+    if (error && !isLockedOut) {
+      if (errorDismissTimer.current) clearTimeout(errorDismissTimer.current);
+      errorDismissTimer.current = setTimeout(() => {
+        setError(null);
+        errorDismissTimer.current = null;
+      }, ERROR_DISPLAY_SECONDS * 1000);
+    }
+    return () => {
+      if (errorDismissTimer.current) clearTimeout(errorDismissTimer.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
 
   // Set clean history state for login page
   useEffect(() => {
@@ -107,6 +165,15 @@ export default function LoginPage() {
       const msg = err.message || "Error al iniciar sesión";
       setError(msg);
       dispatch(loginFailure(msg));
+      reset();
+
+      const newAttempts = failedAttempts + 1;
+      setFailedAttempts(newAttempts);
+
+      if (newAttempts >= LOGIN_SECURITY.MAX_ATTEMPTS) {
+        startCooldown();
+        setError(`Demasiados intentos fallidos. Espera ${LOGIN_SECURITY.COOLDOWN_SECONDS} segundos.`);
+      }
     }
   };
 
@@ -136,6 +203,7 @@ export default function LoginPage() {
                 {...register('alias')} 
                 className="bg-muted border-input focus:border-secondary text-foreground"
                 placeholder="Ej. ElBailador77"
+                onFocus={handleInputFocus}
               />
               {errors.alias && <p className="text-destructive text-xs">{errors.alias.message}</p>}
             </div>
@@ -147,27 +215,31 @@ export default function LoginPage() {
                 type="password" 
                 {...register('password')} 
                 className="bg-muted border-input focus:border-secondary text-foreground"
+                onFocus={handleInputFocus}
               />
               {errors.password && <p className="text-destructive text-xs">{errors.password.message}</p>}
             </div>
 
             {error && (
               <div className="p-3 rounded-md bg-destructive/20 border border-destructive/50 text-destructive text-sm text-center">
-                {error}
+                {isLockedOut
+                  ? `Demasiados intentos. Inténtalo de nuevo en ${cooldownRemaining}s`
+                  : error
+                }
               </div>
             )}
 
             <SubmitButton
-              isFormValid={isValid}
+              isFormValid={isValid && !isLockedOut}
               isSubmitting={isSubmitting}
-              label="Entrar"
+              label={isLockedOut ? `Espera ${cooldownRemaining}s` : 'Entrar'}
               loadingLabel="Entrando..."
             />
           </form>
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground font-medium">
-            ¿No tienes cuenta? <Link href={ROUTES.REGISTER} className="text-primary/70 font-semibold hover:underline hover:text-primary transition-colors">Regístrate aquí</Link>
+            ¿No tienes cuenta? <Link href={ROUTES.REGISTER} className="text-primary font-bold underline underline-offset-4 hover:text-primary/80 transition-colors">Regístrate aquí</Link>
           </p>
         </CardFooter>
       </Card>

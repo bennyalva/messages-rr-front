@@ -53,6 +53,12 @@ export const LIMITS = {
   FEEDBACK_COMMENT: 150,
 } as const;
 
+// ── Login Security ──────────────────────────────────────────────────
+export const LOGIN_SECURITY = {
+  MAX_ATTEMPTS: 5,
+  COOLDOWN_SECONDS: 30,
+} as const;
+
 // ── HTTP Config ─────────────────────────────────────────────────────
 export const HTTP = {
   TIMEOUT: 10000,

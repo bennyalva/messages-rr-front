@@ -10,12 +10,12 @@ export const authService = {
     });
 
     if (users.length === 0) {
-      throw new Error("Usuario no encontrado");
+      throw new Error("Alias o contraseña incorrectos");
     }
 
     const user = users[0];
     if (user.password !== credentials.password) {
-      throw new Error("Contraseña incorrecta");
+      throw new Error("Alias o contraseña incorrectos");
     }
 
     if (!user.isActive) {
