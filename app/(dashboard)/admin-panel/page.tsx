@@ -15,6 +15,7 @@ import { generateUUID } from '@/lib/utils/uuid';
 import { cn } from '@/lib/utils';
 import ChatHeader from '@/components/chat/ChatHeader';
 import ConfirmModal from '@/components/ui/ConfirmModal';
+import { SubmitButton } from '@/components/ui/submit-button';
 import { setThemeConfig, ThemeConfig, setTheme } from '@/lib/store/features/themeSlice';
 import { ENDPOINTS, STORAGE_KEYS } from '@/lib/constants';
 import { ADMIN_TABS_CONTENT } from './constants';
@@ -422,64 +423,73 @@ function DashboardPageContent() {
                 title={ADMIN_TABS_CONTENT.ROLAS.title}
                 description={ADMIN_TABS_CONTENT.ROLAS.description}
               />
-              <CardContent className="flex-1 overflow-auto space-y-6 pt-6 themed-scrollbar">
-                 {/* Add Song Form */}
-                 <div className={`p-4 rounded-xl border transition-all ${
+              <CardContent className="flex-1 overflow-hidden p-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+                 
+                 {/* Left Column: Add Song Form */}
+                 <div className={cn(
+                   "lg:col-span-1 flex flex-col gap-4 p-5 rounded-2xl border transition-all h-fit",
                    songs.length >= MAX_SONGS_ALLOWED 
                      ? 'bg-muted/30 border-border/30 opacity-60' 
-                     : 'bg-gradient-to-r from-secondary/10 to-transparent border-secondary/20'
-                 }`}>
-                    <h4 className="text-sm font-semibold text-secondary mb-3 flex items-center justify-between">
+                     : 'bg-gradient-to-br from-secondary/10 via-background to-background border-secondary/30 shadow-[0_4px_20px_-4px_rgba(var(--secondary),0.15)] ring-1 ring-secondary/20'
+                 )}>
+                    <h4 className="text-sm font-semibold text-secondary flex items-center justify-between">
                       <span className="flex items-center gap-2">
-                        <Disc className="w-4 h-4" /> Agregar Nueva Rola
+                        <Disc className="w-5 h-5" /> Agregar Nueva Rola
                       </span>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${
+                      <span className={`text-xs px-2.5 py-0.5 rounded-full font-bold ${
                         songs.length >= MAX_SONGS_ALLOWED 
-                          ? 'bg-red-500/20 text-red-400' 
+                          ? 'bg-red-500/20 text-red-500' 
                           : 'bg-secondary/20 text-secondary'
                       }`}>
                         {songs.length}/{MAX_SONGS_ALLOWED}
                       </span>
                     </h4>
+                    
                     {songs.length >= MAX_SONGS_ALLOWED && (
-                      <p className="text-xs text-muted-foreground mb-3">Máximo {MAX_SONGS_ALLOWED} canciones permitidas. Reinicia para agregar más.</p>
+                      <p className="text-xs text-muted-foreground bg-muted p-2 rounded-md border border-border">Máximo {MAX_SONGS_ALLOWED} canciones permitidas. Reinicia para agregar más.</p>
                     )}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div className="relative">
+                    
+                    <div className="flex flex-col gap-4 mt-2">
+                        <div className="space-y-1.5">
+                          <Label htmlFor="songTitle" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Nombre de la canción</Label>
                           <Input 
-                               placeholder="Nombre de la canción" 
+                               id="songTitle"
+                               placeholder="Ej. El Paso del Gigante" 
                                value={newSongTitle}
                                onChange={(e) => setNewSongTitle(e.target.value)}
-                               className="bg-muted border-border focus:border-secondary pl-3"
+                               className="bg-card border-border/60 focus:border-secondary text-foreground pl-3 h-11"
                                disabled={songs.length >= MAX_SONGS_ALLOWED}
                           />
                         </div>
-                        <div className="relative">
+                        <div className="space-y-1.5">
+                          <Label htmlFor="songArtist" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Artista / Grupo</Label>
                           <Input 
-                               placeholder="Artista / Grupo" 
+                               id="songArtist"
+                               placeholder="Ej. Grupo Soñador" 
                                value={newSongArtist}
                                onChange={(e) => setNewSongArtist(e.target.value)}
-                               className="bg-muted border-border focus:border-secondary pl-3"
+                               className="bg-card border-border/60 focus:border-secondary text-foreground pl-3 h-11"
                                disabled={songs.length >= MAX_SONGS_ALLOWED}
                           />
                         </div>
-                        <Button 
-                          onClick={handleAddSong}
-                          className={`transition-all font-semibold ${
-                            newSongTitle.trim() && newSongArtist.trim() && songs.length < MAX_SONGS_ALLOWED
-                              ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white shadow-lg shadow-green-500/25 border-0 cursor-pointer'
-                              : 'bg-muted text-muted-foreground border border-border cursor-not-allowed'
-                          }`}
-                          disabled={!newSongTitle.trim() || !newSongArtist.trim() || songs.length >= MAX_SONGS_ALLOWED}
-                        >
-                          <Music className="w-4 h-4 mr-2" /> Agregar
-                        </Button>
+                        <div className="pt-2">
+                          <SubmitButton 
+                            onClick={handleAddSong}
+                            isFormValid={Boolean(newSongTitle.trim() && newSongArtist.trim() && songs.length < MAX_SONGS_ALLOWED)}
+                            isSubmitting={false}
+                            label="Agregar Rola"
+                            icon={<Music className="w-4 h-4 mr-2" />}
+                            className="w-full h-11 text-base shadow-[0_4px_14px_0_rgba(var(--secondary),0.39)] hover:shadow-[0_6px_20px_rgba(var(--secondary),0.23)] hover:-translate-y-0.5"
+                            style={{ backgroundColor: 'hsl(var(--secondary))', color: 'hsl(var(--secondary-foreground))' }}
+                          />
+                        </div>
                     </div>
                  </div>
                  
-                 {/* Active Votes Section */}
-                 <div>
-                    <div className="flex items-center justify-between mb-4">
+                 {/* Right Column: Active Votes Section */}
+                 <div className="lg:col-span-2 flex flex-col min-h-0 bg-card/40 rounded-2xl border border-border/50 p-5">
+                    <div className="flex items-center justify-between mb-4 flex-shrink-0 border-b border-border/50 pb-4">
                       <h3 className="font-bold text-lg flex items-center gap-2">
                         <span className="text-foreground">🎵 Votaciones Activas</span>
                       </h3>
@@ -514,47 +524,44 @@ function DashboardPageContent() {
                           {songs
                             .sort((a, b) => b.votes - a.votes)
                             .map((song, i) => (
-                              <div 
-                                key={song.id} 
-                                className={`
-                                  group flex items-center gap-3 p-3 rounded-lg border transition-all duration-200
-                                  ${i === 0 && songs.length > 1 
-                                    ? 'bg-gradient-to-r from-yellow-500/10 to-transparent border-yellow-500/30 shadow-lg shadow-yellow-500/5' 
-                                    : 'bg-muted/50 border-border hover:bg-muted'
-                                  }
-                                `}
-                              >
-                                {/* Position Badge */}
-                                <div className={`
-                                  w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 shadow-md
-                                  ${i === 0 && songs.length > 1 
-                                    ? 'bg-gradient-to-br from-yellow-300 via-yellow-400 to-amber-500 text-yellow-900 ring-2 ring-yellow-400/50' 
-                                    : i === 1 
-                                      ? 'bg-gradient-to-br from-slate-200 via-gray-300 to-slate-400 text-slate-700 ring-2 ring-slate-300/50'
-                                      : i === 2 
-                                        ? 'bg-gradient-to-br from-orange-400 via-amber-600 to-orange-700 text-orange-100 ring-2 ring-orange-500/50'
-                                        : 'bg-muted text-muted-foreground'
-                                  }
-                                `}>
-                                  {i + 1}
-                                </div>
-                                
-                                {/* Song Info */}
-                                <div className="flex-1 min-w-0">
-                                  <p className="font-medium text-foreground truncate">{song.title}</p>
-                                  <p className="text-sm text-muted-foreground truncate">{song.artist}</p>
-                                </div>
-                                
-                                {/* Votes Badge */}
-                                <div className={`
-                                  px-3 py-1 rounded-full text-sm font-bold flex-shrink-0
-                                  ${song.votes > 0 
-                                    ? 'bg-gradient-to-r from-secondary/30 to-secondary/10 text-secondary' 
-                                    : 'bg-muted text-muted-foreground'
-                                  }
-                                `}>
-                                  {song.votes} {song.votes === 1 ? 'voto' : 'votos'}
-                                </div>
+                                <div 
+                                  key={song.id} 
+                                  className={cn(
+                                    "group flex items-center gap-3 p-3 rounded-lg border transition-all duration-200",
+                                    i === 0 && songs.length > 1 
+                                      ? "bg-gradient-to-r from-yellow-500/10 to-transparent border-yellow-500/30 shadow-lg shadow-yellow-500/5" 
+                                      : "bg-muted/20 border-border/60 hover:bg-muted/60"
+                                  )}
+                                >
+                                  {/* Position Badge */}
+                                  <div className={cn(
+                                    "w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 shadow-md",
+                                    i === 0 && songs.length > 1 
+                                      ? "bg-gradient-to-br from-yellow-300 via-yellow-400 to-amber-500 text-yellow-900 ring-2 ring-yellow-400/50" 
+                                      : i === 1 
+                                        ? "bg-gradient-to-br from-slate-200 via-gray-300 to-slate-400 text-slate-800 ring-2 ring-slate-300/50"
+                                        : i === 2 
+                                          ? "bg-gradient-to-br from-orange-300 via-amber-500 to-orange-600 text-orange-950 ring-2 ring-orange-500/50"
+                                          : "bg-muted-foreground/20 text-foreground ring-1 ring-border"
+                                  )}>
+                                    {i + 1}
+                                  </div>
+                                  
+                                  {/* Song Info */}
+                                  <div className="flex-1 min-w-0">
+                                    <p className="font-semibold text-foreground truncate text-base">{song.title}</p>
+                                    <p className="text-sm text-muted-foreground truncate">{song.artist}</p>
+                                  </div>
+                                  
+                                  {/* Votes Badge */}
+                                  <div className={cn(
+                                    "px-3 py-1 rounded-full text-sm font-bold flex-shrink-0",
+                                    song.votes > 0 
+                                      ? "bg-secondary/10 text-secondary ring-1 ring-secondary/30" 
+                                      : "bg-muted/50 text-muted-foreground ring-1 ring-border/50"
+                                  )}>
+                                    {song.votes} {song.votes === 1 ? 'voto' : 'votos'}
+                                  </div>
                                 
                                 {/* Delete Button */}
                                 <Button 
@@ -570,6 +577,7 @@ function DashboardPageContent() {
                       </div>
                     )}
                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

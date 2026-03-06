@@ -888,22 +888,10 @@
       "votes": 1
     },
     {
-      "id": "aa214898-a76e-4746-b14e-caf4e1b72196",
-      "title": "mi razon",
-      "artist": "la ms",
-      "votes": 1
-    },
-    {
       "id": "540f9866-42ea-4d39-9b31-d2d1bd5eb10a",
       "title": "otra cara",
       "artist": "arroladora",
       "votes": 2
-    },
-    {
-      "id": "e400eb64-44c8-433a-8af7-eb173d78ac0f",
-      "title": "fasdf",
-      "artist": "asdf",
-      "votes": 0
     }
   ],
   "userVotes": [
@@ -925,7 +913,7 @@
     {
       "id": "c365f9c4-af6f-4b22-afd4-dfeefe17dd45",
       "oderId": "7de693a6-85a1-49df-9fbf-43c96f057626",
-      "songId": "aa214898-a76e-4746-b14e-caf4e1b72196"
+      "songId": null
     }
   ],
   "config": {
