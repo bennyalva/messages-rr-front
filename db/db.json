@@ -850,12 +850,21 @@
   ],
   "directMessages": [
     {
-      "id": "40f82a3b-841c-4bf2-a6ae-525aba40ffea",
+      "id": "4435558e-89e2-424e-a1b8-0d342f0e425b",
       "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
       "userAlias": "lbenny",
       "userGang": "arcolocos",
-      "content": "del el benny 5 marzo",
-      "timestamp": "2026-03-05T20:17:49.753Z",
+      "content": "jlka fj alksjdf lakjsdf lkajsd fklsajd flkajds flkjads flasldkjf lkasdjf lsdkajf lkas dflkdsaj flkajds flkjads flkjadsl",
+      "timestamp": "2026-03-06T21:22:07.841Z",
+      "isRead": false
+    },
+    {
+      "id": "01ab18fa-a213-4b52-b4ec-565415d48118",
+      "userId": "adba0f6f-4770-4f52-9613-4d51915daf1b",
+      "userAlias": "tester123",
+      "userGang": "",
+      "content": "👋 mi buen que paso no nos vemos desde hace tiempo pero después de todo te sigo amando!❤️",
+      "timestamp": "2026-03-06T21:31:02.651Z",
       "isRead": false
     }
   ],

@@ -8,10 +8,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Users, Music, Palette, Trash2, Edit, X, Disc, MessageSquare, Settings, Mail, Sun, Moon, Info } from 'lucide-react';
+import { Users, Music, Palette, Trash2, Edit, X, Disc, MessageSquare, Settings, Mail, Sun, Moon, Info, Mic } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import httpClient from '@/lib/services/httpClient';
 import { generateUUID } from '@/lib/utils/uuid';
+import { cn } from '@/lib/utils';
 import ChatHeader from '@/components/chat/ChatHeader';
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import { setThemeConfig, ThemeConfig, setTheme } from '@/lib/store/features/themeSlice';
@@ -318,46 +319,95 @@ function DashboardPageContent() {
                     <p className="text-muted-foreground/60 text-sm">Los saludos de los bailadores aparecerán aquí</p>
                   </div>
                 ) : (
-                  <div className="space-y-3">
-                    {directMessages.map(dm => (
-                      <div 
-                        key={dm.id} 
-                        className="group flex items-start gap-3 p-4 rounded-xl border border-border bg-gradient-to-r from-muted/50 to-transparent hover:from-muted transition-all duration-200"
-                      >
-                        {/* Avatar Initial */}
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/40 to-primary/20 flex items-center justify-center text-primary font-bold text-sm flex-shrink-0">
-                          {dm.userAlias?.charAt(0).toUpperCase() || '?'}
-                        </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-max p-1">
+                    <AnimatePresence mode="popLayout">
+                      {directMessages.map((dm, index) => {
+                        const isFirst = index === 0;
+                        const isRecent = index > 0 && index < 3;
                         
-                        {/* Content */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1 flex-wrap">
-                            <span className="font-bold text-sm text-primary">{dm.userAlias}</span>
-                            {dm.userGang && (
-                              <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-                                {dm.userGang}
-                              </span>
+                        return (
+                          <motion.div 
+                            key={dm.id} 
+                            layout
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
+                            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                            className={cn(
+                              "group relative flex flex-col p-5 rounded-2xl border transition-all duration-500",
+                              isFirst 
+                                ? "bg-gradient-to-br from-primary/10 via-background to-background border-primary shadow-[0_4px_20px_-4px_rgba(var(--primary),0.3)] md:col-span-2 xl:col-span-2 ring-1 ring-primary/20 z-10" 
+                                : isRecent
+                                  ? "bg-card border-border/80 opacity-[0.98] z-[9]"
+                                  : "bg-muted/20 border-border/40 opacity-70 scale-[0.98] grayscale-[0.2] z-[8] hover:opacity-100 hover:grayscale-0 hover:scale-[0.99]"
                             )}
-                            {!dm.userGang && (
-                              <span className="text-xs px-2 py-0.5 rounded-full bg-muted/50 text-muted-foreground/60 italic">
-                                Sin pandilla
-                              </span>
+                          >
+                            {/* Header */}
+                            <div className="flex items-start justify-between gap-3 mb-3">
+                              <div className="flex items-center gap-3">
+                                  <div className={cn(
+                                      "rounded-full flex items-center justify-center font-bold flex-shrink-0 transition-all duration-500",
+                                      isFirst ? "w-12 h-12 bg-primary text-primary-foreground shadow-inner text-xl" : "w-10 h-10 bg-primary/20 text-primary text-sm"
+                                  )}>
+                                    {dm.userAlias?.charAt(0).toUpperCase() || '?'}
+                                  </div>
+                                  <div className="flex flex-col">
+                                    <span className={cn(
+                                        "font-bold transition-all duration-500", 
+                                        isFirst ? "text-lg text-primary" : "text-sm text-foreground"
+                                    )}>
+                                      {dm.userAlias}
+                                    </span>
+                                    <div className="flex items-center gap-2 mt-0.5">
+                                      {dm.userGang ? (
+                                        <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground/80 font-medium transition-colors">
+                                          {dm.userGang}
+                                        </span>
+                                      ) : (
+                                        <span className="text-xs text-muted-foreground/50 italic opacity-80">
+                                          Sin pandilla
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                              </div>
+                              
+                              <Button 
+                                size="icon" 
+                                variant="ghost" 
+                                className="h-8 w-8 text-muted-foreground/50 hover:text-red-500 hover:bg-red-500/10 transition-all flex-shrink-0 cursor-pointer rounded-full" 
+                                onClick={() => handleDeleteDirectMessage(dm.id)}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                            
+                            {/* Content */}
+                            <div className="flex-1">
+                              <p className={cn(
+                                  "leading-relaxed break-words transition-all duration-500",
+                                  isFirst ? "text-xl text-foreground font-medium leading-normal" : "text-sm text-foreground/80 line-clamp-4"
+                              )}>
+                                {dm.content}
+                              </p>
+                            </div>
+                            
+                            {/* Footer only for the first priority message */}
+                            {isFirst && (
+                              <motion.div 
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="mt-4 pt-3 border-t border-border/50 flex justify-end"
+                              >
+                                <div className="bg-primary/10 p-1.5 rounded-full ring-1 ring-primary/20">
+                                  <Mic className="w-3.5 h-3.5 text-primary animate-[pulse_1.5s_ease-in-out_infinite]" />
+                                </div>
+                              </motion.div>
                             )}
-                          </div>
-                          <p className="text-sm text-foreground/90 leading-relaxed">{dm.content}</p>
-                        </div>
-                        
-                        {/* Delete Button - siempre visible */}
-                        <Button 
-                          size="icon" 
-                          variant="ghost" 
-                          className="h-8 w-8 text-muted-foreground/50 hover:text-red-500 hover:bg-red-500/10 transition-all flex-shrink-0 cursor-pointer" 
-                          onClick={() => handleDeleteDirectMessage(dm.id)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    ))}
+                          </motion.div>
+                        );
+                      })}
+                    </AnimatePresence>
                   </div>
                 )}
               </CardContent>
