@@ -190,7 +190,7 @@ function DashboardPageContent() {
       <div className="flex-1 flex flex-col overflow-hidden p-4 lg:px-10 lg:py-6">
         <Tabs defaultValue="dm" className="flex-1 flex flex-col overflow-hidden">
           {/* Tab List */}
-          <TabsList className="grid w-full grid-cols-5 lg:w-[800px] mb-4 bg-black/50 border border-white/20 flex-shrink-0">
+          <TabsList className="grid w-full grid-cols-5 lg:w-[800px] mb-4 bg-muted/50 border border-border flex-shrink-0">
             <TabsTrigger value="dm" className="flex items-center justify-center gap-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary">
               DM <Mail className="w-4 h-4" />
             </TabsTrigger>
@@ -210,8 +210,8 @@ function DashboardPageContent() {
 
           {/* Tab Content - DM (new) */}
           <TabsContent value="dm" className="flex-1 overflow-hidden mt-0">
-            <Card className="h-full flex flex-col bg-black/50 border-white/20">
-              <CardHeader className="flex-shrink-0 border-b border-white/10">
+            <Card className="h-full flex flex-col bg-card/50 border-border">
+              <CardHeader className="flex-shrink-0 border-b border-border">
                 <CardTitle className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-gradient-to-br from-primary/30 to-primary/10">
                     <Mail className="text-primary w-5 h-5"/>
@@ -223,25 +223,25 @@ function DashboardPageContent() {
                     </span>
                   )}
                 </CardTitle>
-                <CardDescription className="text-gray-400">
+                <CardDescription className="text-muted-foreground">
                   Peticiones y saludos de los bailadores.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="flex-1 overflow-auto pt-4">
+              <CardContent className="flex-1 overflow-auto pt-4 themed-scrollbar">
                 {directMessages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-center py-12">
-                    <div className="p-4 rounded-full bg-white/5 mb-4">
-                      <Mail className="w-8 h-8 text-gray-500" />
+                    <div className="p-4 rounded-full bg-muted mb-4">
+                      <Mail className="w-8 h-8 text-muted-foreground" />
                     </div>
-                    <p className="text-gray-500">No hay mensajes directos</p>
-                    <p className="text-gray-600 text-sm">Los saludos de los bailadores aparecerán aquí</p>
+                    <p className="text-muted-foreground">No hay mensajes directos</p>
+                    <p className="text-muted-foreground/60 text-sm">Los saludos de los bailadores aparecerán aquí</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
                     {directMessages.map(dm => (
                       <div 
                         key={dm.id} 
-                        className="group flex items-start gap-3 p-4 rounded-xl border border-white/10 bg-gradient-to-r from-white/5 to-transparent hover:from-white/10 transition-all duration-200"
+                        className="group flex items-start gap-3 p-4 rounded-xl border border-border bg-gradient-to-r from-muted/50 to-transparent hover:from-muted transition-all duration-200"
                       >
                         {/* Avatar Initial */}
                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/40 to-primary/20 flex items-center justify-center text-primary font-bold text-sm flex-shrink-0">
@@ -253,24 +253,24 @@ function DashboardPageContent() {
                           <div className="flex items-center gap-2 mb-1 flex-wrap">
                             <span className="font-bold text-sm text-primary">{dm.userAlias}</span>
                             {dm.userGang && (
-                              <span className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-400">
+                              <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
                                 {dm.userGang}
                               </span>
                             )}
                             {!dm.userGang && (
-                              <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-gray-600 italic">
+                              <span className="text-xs px-2 py-0.5 rounded-full bg-muted/50 text-muted-foreground/60 italic">
                                 Sin pandilla
                               </span>
                             )}
                           </div>
-                          <p className="text-sm text-white/90 leading-relaxed">{dm.content}</p>
+                          <p className="text-sm text-foreground/90 leading-relaxed">{dm.content}</p>
                         </div>
                         
-                        {/* Delete Button */}
+                        {/* Delete Button - siempre visible */}
                         <Button 
                           size="icon" 
                           variant="ghost" 
-                          className="h-8 w-8 text-gray-500 hover:text-red-500 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all flex-shrink-0" 
+                          className="h-8 w-8 text-muted-foreground/50 hover:text-red-500 hover:bg-red-500/10 transition-all flex-shrink-0" 
                           onClick={() => handleDeleteDirectMessage(dm.id)}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -285,23 +285,23 @@ function DashboardPageContent() {
           
           {/* Tab Content - Rolas */}
           <TabsContent value="rolas" className="flex-1 overflow-hidden mt-0">
-            <Card className="h-full flex flex-col bg-black/50 border-white/20">
-              <CardHeader className="flex-shrink-0 border-b border-white/10">
+            <Card className="h-full flex flex-col bg-card/50 border-border">
+              <CardHeader className="flex-shrink-0 border-b border-border">
                 <CardTitle className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-gradient-to-br from-secondary/30 to-secondary/10">
                     <Music className="text-secondary w-5 h-5"/>
                   </div>
                   <span>Votaciones de Rolas</span>
                 </CardTitle>
-                <CardDescription className="text-gray-400">
+                <CardDescription className="text-muted-foreground">
                   Crea la lista de éxitos para que voten los bailadores.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="flex-1 overflow-auto space-y-6 pt-6">
+              <CardContent className="flex-1 overflow-auto space-y-6 pt-6 themed-scrollbar">
                  {/* Add Song Form */}
                  <div className={`p-4 rounded-xl border transition-all ${
                    songs.length >= MAX_SONGS_ALLOWED 
-                     ? 'bg-gray-800/30 border-gray-700/30 opacity-60' 
+                     ? 'bg-muted/30 border-border/30 opacity-60' 
                      : 'bg-gradient-to-r from-secondary/10 to-transparent border-secondary/20'
                  }`}>
                     <h4 className="text-sm font-semibold text-secondary mb-3 flex items-center justify-between">
@@ -317,7 +317,7 @@ function DashboardPageContent() {
                       </span>
                     </h4>
                     {songs.length >= MAX_SONGS_ALLOWED && (
-                      <p className="text-xs text-gray-500 mb-3">Máximo {MAX_SONGS_ALLOWED} canciones permitidas. Reinicia para agregar más.</p>
+                      <p className="text-xs text-muted-foreground mb-3">Máximo {MAX_SONGS_ALLOWED} canciones permitidas. Reinicia para agregar más.</p>
                     )}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div className="relative">
@@ -325,7 +325,7 @@ function DashboardPageContent() {
                                placeholder="Nombre de la canción" 
                                value={newSongTitle}
                                onChange={(e) => setNewSongTitle(e.target.value)}
-                               className="bg-black/50 border-white/20 focus:border-secondary pl-3"
+                               className="bg-muted border-border focus:border-secondary pl-3"
                                disabled={songs.length >= MAX_SONGS_ALLOWED}
                           />
                         </div>
@@ -334,7 +334,7 @@ function DashboardPageContent() {
                                placeholder="Artista / Grupo" 
                                value={newSongArtist}
                                onChange={(e) => setNewSongArtist(e.target.value)}
-                               className="bg-black/50 border-white/20 focus:border-secondary pl-3"
+                               className="bg-muted border-border focus:border-secondary pl-3"
                                disabled={songs.length >= MAX_SONGS_ALLOWED}
                           />
                         </div>
@@ -343,7 +343,7 @@ function DashboardPageContent() {
                           className={`transition-all font-semibold ${
                             newSongTitle.trim() && newSongArtist.trim() && songs.length < MAX_SONGS_ALLOWED
                               ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white shadow-lg shadow-green-500/25 border-0'
-                              : 'bg-white/5 text-gray-500 border border-white/10 cursor-not-allowed'
+                              : 'bg-muted text-muted-foreground border border-border cursor-not-allowed'
                           }`}
                           disabled={!newSongTitle.trim() || !newSongArtist.trim() || songs.length >= MAX_SONGS_ALLOWED}
                         >
@@ -356,7 +356,7 @@ function DashboardPageContent() {
                  <div>
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="font-bold text-lg flex items-center gap-2">
-                        <span className="text-white">🎵 Votaciones Activas</span>
+                        <span className="text-foreground">🎵 Votaciones Activas</span>
                       </h3>
                       {songs.length > 0 && (
                         <div className="flex items-center gap-3">
@@ -377,11 +377,11 @@ function DashboardPageContent() {
                     
                     {songs.length === 0 ? (
                       <div className="flex flex-col items-center justify-center py-12 text-center">
-                        <div className="p-4 rounded-full bg-white/5 mb-4">
-                          <Disc className="w-8 h-8 text-gray-500" />
+                        <div className="p-4 rounded-full bg-muted mb-4">
+                          <Disc className="w-8 h-8 text-muted-foreground" />
                         </div>
-                        <p className="text-gray-500">No hay rolas en votación</p>
-                        <p className="text-gray-600 text-sm">Agrega canciones arriba para empezar</p>
+                        <p className="text-muted-foreground">No hay rolas en votación</p>
+                        <p className="text-muted-foreground/60 text-sm">Agrega canciones arriba para empezar</p>
                       </div>
                     ) : (
                       <div className="space-y-2">
@@ -394,7 +394,7 @@ function DashboardPageContent() {
                                   group flex items-center gap-3 p-3 rounded-lg border transition-all duration-200
                                   ${i === 0 && songs.length > 1 
                                     ? 'bg-gradient-to-r from-yellow-500/10 to-transparent border-yellow-500/30 shadow-lg shadow-yellow-500/5' 
-                                    : 'bg-white/5 border-white/10 hover:bg-white/10'
+                                    : 'bg-muted/50 border-border hover:bg-muted'
                                   }
                                 `}
                               >
@@ -407,7 +407,7 @@ function DashboardPageContent() {
                                       ? 'bg-gradient-to-br from-slate-200 via-gray-300 to-slate-400 text-slate-700 ring-2 ring-slate-300/50'
                                       : i === 2 
                                         ? 'bg-gradient-to-br from-orange-400 via-amber-600 to-orange-700 text-orange-100 ring-2 ring-orange-500/50'
-                                        : 'bg-white/10 text-gray-400'
+                                        : 'bg-muted text-muted-foreground'
                                   }
                                 `}>
                                   {i + 1}
@@ -415,8 +415,8 @@ function DashboardPageContent() {
                                 
                                 {/* Song Info */}
                                 <div className="flex-1 min-w-0">
-                                  <p className="font-medium text-white truncate">{song.title}</p>
-                                  <p className="text-sm text-gray-400 truncate">{song.artist}</p>
+                                  <p className="font-medium text-foreground truncate">{song.title}</p>
+                                  <p className="text-sm text-muted-foreground truncate">{song.artist}</p>
                                 </div>
                                 
                                 {/* Votes Badge */}
@@ -424,7 +424,7 @@ function DashboardPageContent() {
                                   px-3 py-1 rounded-full text-sm font-bold flex-shrink-0
                                   ${song.votes > 0 
                                     ? 'bg-gradient-to-r from-secondary/30 to-secondary/10 text-secondary' 
-                                    : 'bg-white/5 text-gray-500'
+                                    : 'bg-muted text-muted-foreground'
                                   }
                                 `}>
                                   {song.votes} {song.votes === 1 ? 'voto' : 'votos'}
@@ -434,7 +434,7 @@ function DashboardPageContent() {
                                 <Button 
                                   size="sm" 
                                   variant="ghost" 
-                                  className="h-8 w-8 p-0 text-gray-500 hover:text-red-500 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" 
+                                  className="h-8 w-8 p-0 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" 
                                   onClick={() => handleDeleteSong(song.id)}
                                 >
                                   <X className="w-4 h-4" />
@@ -450,12 +450,12 @@ function DashboardPageContent() {
 
           {/* Tab Content - Chat */}
           <TabsContent value="chat" className="flex-1 overflow-hidden mt-0">
-            <Card className="h-full flex flex-col bg-black/50 border-white/20">
+            <Card className="h-full flex flex-col bg-card/50 border-border">
               <CardHeader className="flex-shrink-0">
                 <CardTitle className="flex items-center gap-2"><MessageSquare className="text-primary"/> Gestión del Chat</CardTitle>
                 <CardDescription>Administra y modera los mensajes del chat público.</CardDescription>
               </CardHeader>
-              <CardContent className="flex-1 overflow-auto">
+              <CardContent className="flex-1 overflow-auto themed-scrollbar">
                 {messages.length === 0 ? (
                   <div className="flex items-center justify-center h-full text-muted-foreground">
                     <p>No hay mensajes en el chat.</p>
@@ -463,8 +463,8 @@ function DashboardPageContent() {
                 ) : (
                   <div className="space-y-2">
                     {messages.map(msg => (
-                      <div key={msg.id} className="flex items-start gap-3 p-3 border border-white/10 rounded bg-card/50">
-                        <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-700 flex-shrink-0">
+                      <div key={msg.id} className="flex items-start gap-3 p-3 border border-border rounded bg-card/50">
+                        <div className="w-8 h-8 rounded-full overflow-hidden bg-muted flex-shrink-0">
                           <img src={msg.userAvatar} alt="av" className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -472,7 +472,7 @@ function DashboardPageContent() {
                             <span className="font-bold text-sm text-primary">{msg.userAlias}</span>
                             <span className="text-xs text-muted-foreground">| {msg.userGang || 'Sin pandilla'}</span>
                           </div>
-                          <p className="text-sm text-white/90 break-words">{msg.content}</p>
+                          <p className="text-sm text-foreground/90 break-words">{msg.content}</p>
                           {msg.image && (
                             <img src={msg.image} alt="attached" className="mt-2 max-w-[200px] rounded" />
                           )}
@@ -496,16 +496,16 @@ function DashboardPageContent() {
 
           {/* Tab Content - Users */}
           <TabsContent value="users" className="flex-1 overflow-hidden mt-0">
-            <Card className="h-full flex flex-col bg-black/50 border-white/20">
+            <Card className="h-full flex flex-col bg-card/50 border-border">
               <CardHeader className="flex-shrink-0">
                 <CardTitle className="flex items-center gap-2"><Users className="text-primary"/> Gestión de Usuarios</CardTitle>
               </CardHeader>
-              <CardContent className="flex-1 overflow-auto">
+              <CardContent className="flex-1 overflow-auto themed-scrollbar">
                 <div className="space-y-2">
                     {users.map(u => (
-                        <div key={u.id} className="flex items-center justify-between p-2 border border-white/10 rounded bg-card/50">
+                        <div key={u.id} className="flex items-center justify-between p-2 border border-border rounded bg-card/50">
                             <div className="flex items-center gap-3">
-                                 <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-700">
+                                 <div className="w-8 h-8 rounded-full overflow-hidden bg-muted">
                                      <img src={u.avatar} alt="av" className="w-full h-full object-cover" />
                                  </div>
                                  <div>
@@ -528,14 +528,14 @@ function DashboardPageContent() {
 
           {/* Tab Content - Config */}
           <TabsContent value="config" className="flex-1 overflow-hidden mt-0">
-            <Card className="h-full flex flex-col bg-black/50 border-white/20">
+            <Card className="h-full flex flex-col bg-card/50 border-border">
               <CardHeader className="flex-shrink-0">
-                <CardTitle className="flex items-center gap-2"><Palette className="text-white"/> Configuración de Temas</CardTitle>
+                <CardTitle className="flex items-center gap-2"><Palette className="text-primary"/> Configuración de Temas</CardTitle>
                 <CardDescription>Personaliza los colores de los temas Dark y Estándar.</CardDescription>
               </CardHeader>
-              <CardContent className="flex-1 overflow-auto space-y-8 pt-4 pb-10">
+              <CardContent className="flex-1 overflow-auto space-y-8 pt-4 pb-10 themed-scrollbar">
                 {!fullConfig ? (
-                  <p className="text-gray-400 italic">Cargando configuración...</p>
+                  <p className="text-muted-foreground italic">Cargando configuración...</p>
                 ) : (
                   <>
                     {/* Dark Theme Section */}
@@ -545,57 +545,57 @@ function DashboardPageContent() {
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div className="space-y-2">
-                          <Label className="text-gray-300">Primario (Neon)</Label>
+                          <Label className="text-muted-foreground">Primario (Neon)</Label>
                           <div className="flex gap-2">
                             <Input 
                               type="color" 
                               value={fullConfig.themes.dark.primary} 
                               onChange={(e) => updateThemeColor('dark', 'primary', e.target.value)}
-                              className="w-12 h-10 p-1 bg-gray-900 border-gray-700" 
+                              className="w-12 h-10 p-1 bg-muted border-border" 
                             />
                             <Input 
                               value={fullConfig.themes.dark.primary} 
                               onChange={(e) => updateThemeColor('dark', 'primary', e.target.value)}
-                              className="flex-1 bg-gray-900 border-gray-700 text-xs font-mono" 
+                              className="flex-1 bg-muted border-border text-xs font-mono" 
                             />
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-gray-300">Secundario (Gris Oscuro)</Label>
+                          <Label className="text-muted-foreground">Secundario (Gris Oscuro)</Label>
                           <div className="flex gap-2">
                             <Input 
                               type="color" 
                               value={fullConfig.themes.dark.secondary} 
                               onChange={(e) => updateThemeColor('dark', 'secondary', e.target.value)}
-                              className="w-12 h-10 p-1 bg-gray-900 border-gray-700" 
+                              className="w-12 h-10 p-1 bg-muted border-border" 
                             />
                             <Input 
                               value={fullConfig.themes.dark.secondary} 
                               onChange={(e) => updateThemeColor('dark', 'secondary', e.target.value)}
-                              className="flex-1 bg-gray-900 border-gray-700 text-xs font-mono" 
+                              className="flex-1 bg-muted border-border text-xs font-mono" 
                             />
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-gray-300">Fondo (Background)</Label>
+                          <Label className="text-muted-foreground">Fondo (Background)</Label>
                           <div className="flex gap-2">
                             <Input 
                               type="color" 
                               value={fullConfig.themes.dark.background} 
                               onChange={(e) => updateThemeColor('dark', 'background', e.target.value)}
-                              className="w-12 h-10 p-1 bg-gray-900 border-gray-700" 
+                              className="w-12 h-10 p-1 bg-muted border-border" 
                             />
                             <Input 
                               value={fullConfig.themes.dark.background} 
                               onChange={(e) => updateThemeColor('dark', 'background', e.target.value)}
-                              className="flex-1 bg-gray-900 border-gray-700 text-xs font-mono" 
+                              className="flex-1 bg-muted border-border text-xs font-mono" 
                             />
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="h-px bg-white/10 w-full" />
+                    <div className="h-px bg-border w-full" />
 
                     {/* Standard Theme Section */}
                     <div className="space-y-4">
@@ -604,50 +604,50 @@ function DashboardPageContent() {
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div className="space-y-2">
-                          <Label className="text-gray-300">Primario (Oscuro)</Label>
+                          <Label className="text-muted-foreground">Primario (Oscuro)</Label>
                           <div className="flex gap-2">
                             <Input 
                               type="color" 
                               value={fullConfig.themes.standard.primary} 
                               onChange={(e) => updateThemeColor('standard', 'primary', e.target.value)}
-                              className="w-12 h-10 p-1 bg-gray-900 border-gray-700" 
+                              className="w-12 h-10 p-1 bg-muted border-border" 
                             />
                             <Input 
                               value={fullConfig.themes.standard.primary} 
                               onChange={(e) => updateThemeColor('standard', 'primary', e.target.value)}
-                              className="flex-1 bg-gray-900 border-gray-700 text-xs font-mono" 
+                              className="flex-1 bg-muted border-border text-xs font-mono" 
                             />
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-gray-300">Secundario (Gris Claro)</Label>
+                          <Label className="text-muted-foreground">Secundario (Gris Claro)</Label>
                           <div className="flex gap-2">
                             <Input 
                               type="color" 
                               value={fullConfig.themes.standard.secondary} 
                               onChange={(e) => updateThemeColor('standard', 'secondary', e.target.value)}
-                              className="w-12 h-10 p-1 bg-gray-900 border-gray-700" 
+                              className="w-12 h-10 p-1 bg-muted border-border" 
                             />
                             <Input 
                               value={fullConfig.themes.standard.secondary} 
                               onChange={(e) => updateThemeColor('standard', 'secondary', e.target.value)}
-                              className="flex-1 bg-gray-900 border-gray-700 text-xs font-mono" 
+                              className="flex-1 bg-muted border-border text-xs font-mono" 
                             />
                           </div>
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-gray-300">Fondo (Blanco)</Label>
+                          <Label className="text-muted-foreground">Fondo (Blanco)</Label>
                           <div className="flex gap-2">
                             <Input 
                               type="color" 
                               value={fullConfig.themes.standard.background} 
                               onChange={(e) => updateThemeColor('standard', 'background', e.target.value)}
-                              className="w-12 h-10 p-1 bg-gray-900 border-gray-700" 
+                              className="w-12 h-10 p-1 bg-muted border-border" 
                             />
                             <Input 
                               value={fullConfig.themes.standard.background} 
                               onChange={(e) => updateThemeColor('standard', 'background', e.target.value)}
-                              className="flex-1 bg-gray-900 border-gray-700 text-xs font-mono" 
+                              className="flex-1 bg-muted border-border text-xs font-mono" 
                             />
                           </div>
                         </div>

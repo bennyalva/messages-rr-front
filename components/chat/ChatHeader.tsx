@@ -7,11 +7,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import { logout } from '@/lib/store/features/authSlice';
 import { useRouter, usePathname } from 'next/navigation';
-import { Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft, ClipboardPenLine } from 'lucide-react';
+import { Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft, ClipboardPenLine, Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { storageService } from '@/lib/utils/storage';
 import { STORAGE_KEYS, ROUTES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
+import { setTheme } from '@/lib/store/features/themeSlice';
 
 interface ChatHeaderProps {
   variant?: 'user' | 'admin';
@@ -275,7 +276,25 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
         {/* Left: Back button OR Users counter — flex-1 pushes logo to center */}
         <div className="flex-1 flex items-center pl-3 z-10">
             {isAdminVariant ? (
-                <span className="text-foreground/80 text-[11px]">Bienvenido, <span className="text-primary font-bold">{user?.alias}</span></span>
+                <div className="flex flex-col gap-1">
+                  <span className="text-foreground/80 text-sm">Bienvenido, <span className="text-primary font-bold">{user?.alias}</span></span>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => { dispatch(setTheme('dark')); localStorage.setItem(STORAGE_KEYS.THEME, 'dark'); }}
+                      className={`p-1 rounded-full transition-all ${activeTheme === 'dark' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                      title="Tema Dark"
+                    >
+                      <Moon className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => { dispatch(setTheme('standard')); localStorage.setItem(STORAGE_KEYS.THEME, 'standard'); }}
+                      className={`p-1 rounded-full transition-all ${activeTheme === 'standard' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                      title="Tema Estándar"
+                    >
+                      <Sun className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
             ) : showBackButton ? (
                 <Button 
                     variant="ghost" 

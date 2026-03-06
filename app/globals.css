@@ -212,3 +212,28 @@
   align-items: center;
   animation: marquee 15s linear infinite;
 }
+
+/* Theme-aware scrollbar for admin panel and scrollable areas */
+.themed-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.themed-scrollbar::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+  border-radius: 3px;
+}
+.themed-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+.themed-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+.themed-scrollbar::-webkit-scrollbar-thumb:active {
+  background: hsl(var(--primary) / 0.5);
+}
+/* Firefox */
+.themed-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.3) hsl(var(--muted));
+}
