@@ -72,6 +72,6 @@ export const STORAGE_KEYS = {
   TOKEN: 'cabinaDigitalRR_token',
   REFRESH_TOKEN: 'cabinaDigitalRR_refresh_token',
   AUTH_COOKIE: 'cabinaDigitalRR_auth',
-  SESSION_ID: 'cabinaDigitalRR_session_id',
   CONFIG: 'cabinaDigitalRR_config',
+  ADMIN_HEADER_VISIBLE: 'cabinaDigitalRR_admin_header_visible',
 } as const;

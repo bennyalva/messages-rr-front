@@ -8,13 +8,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Users, Music, Palette, Trash2, Edit, X, Disc, MessageSquare, Settings, Mail, Sun, Moon } from 'lucide-react';
+import { Users, Music, Palette, Trash2, Edit, X, Disc, MessageSquare, Settings, Mail, Sun, Moon, Info } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import httpClient from '@/lib/services/httpClient';
 import { generateUUID } from '@/lib/utils/uuid';
 import ChatHeader from '@/components/chat/ChatHeader';
 import ConfirmModal from '@/components/ui/ConfirmModal';
-import { setThemeConfig, ThemeConfig } from '@/lib/store/features/themeSlice';
-import { ENDPOINTS } from '@/lib/constants';
+import { setThemeConfig, ThemeConfig, setTheme } from '@/lib/store/features/themeSlice';
+import { ENDPOINTS, STORAGE_KEYS } from '@/lib/constants';
+import { ADMIN_TABS_CONTENT } from './constants';
 
 interface DirectMessage {
   id: string;
@@ -38,9 +40,96 @@ interface Message {
 
 const MAX_SONGS_ALLOWED = 5;
 
+const NotificationBadge = ({ 
+  count, 
+  variant = 'primary',
+  className = ''
+}: { 
+  count: number, 
+  variant?: 'primary' | 'secondary',
+  className?: string 
+}) => {
+  if (count <= 0) return null;
+  
+  const variants = {
+    primary: "bg-primary/20 text-primary",
+    secondary: "bg-secondary/20 text-secondary"
+  };
+
+  return (
+    <span className={`inline-flex items-center justify-center px-2 py-0.5 rounded-full font-bold text-sm leading-none min-w-[1.25rem] ${variants[variant]} ${className}`}>
+      {count}
+    </span>
+  );
+};
+
+const TabHeaderWithInfo = ({ 
+  icon: Icon, 
+  title, 
+  description, 
+  actionSlot, 
+  titleBadge 
+}: { 
+  icon: any, 
+  title: string, 
+  description?: string, 
+  actionSlot?: React.ReactNode, 
+  titleBadge?: React.ReactNode 
+}) => {
+  const [showInfo, setShowInfo] = useState(false);
+  return (
+    <CardHeader className="flex-shrink-0 border-b border-border/50 bg-card/10 py-3 px-6">
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 flex-wrap">
+            <Icon className="text-foreground w-5 h-5 flex-shrink-0 mr-1" />
+            <div className="flex items-start">
+              <CardTitle className="text-xl m-0">{title}</CardTitle>
+              {description && (
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={() => setShowInfo(!showInfo)}
+                  className={`h-5 w-5 rounded-full transition-colors cursor-pointer ml-0.5 -mt-1 hover:bg-transparent ${showInfo ? 'text-primary' : 'text-muted-foreground/70 hover:text-foreground'}`}
+                  title={showInfo ? "Ocultar información" : "Mostrar información"}
+                >
+                  <Info className="w-3.5 h-3.5" />
+                </Button>
+              )}
+            </div>
+            {titleBadge}
+          </div>
+          <div className="flex items-center gap-2">
+            {actionSlot}
+          </div>
+        </div>
+        
+        {description && (
+          <AnimatePresence>
+            {showInfo && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="px-4 py-3 bg-card/60 shadow-[inset_0_2px_10px_rgba(0,0,0,0.1)] border border-border/40 text-sm text-muted-foreground rounded-lg flex items-start gap-3">
+                   <Info className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                   <p className="leading-relaxed">{description}</p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
+      </div>
+    </CardHeader>
+  );
+};
+
 function DashboardPageContent() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.auth);
+  const { activeTheme } = useAppSelector(state => state.theme);
   const [users, setUsers] = useState<any[]>([]);
   const [songs, setSongs] = useState<any[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -186,24 +275,24 @@ function DashboardPageContent() {
     <div className="h-screen flex flex-col overflow-hidden bg-background">
       <ChatHeader variant="admin" />
       
-      {/* Content area - takes remaining height */}
-      <div className="flex-1 flex flex-col overflow-hidden p-4 lg:px-10 lg:py-6">
+      {/* Content area - takes remaining height - aligned exactly with header (m-4) */}
+      <div className="flex-1 flex flex-col overflow-hidden p-4">
         <Tabs defaultValue="dm" className="flex-1 flex flex-col overflow-hidden">
           {/* Tab List */}
-          <TabsList className="grid w-full grid-cols-5 lg:w-[800px] mb-4 bg-muted/50 border border-border flex-shrink-0">
-            <TabsTrigger value="dm" className="flex items-center justify-center gap-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary">
+          <TabsList className="grid w-full grid-cols-5 mb-4 bg-muted/50 border border-border flex-shrink-0">
+            <TabsTrigger value="dm" className="flex items-center justify-center gap-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary cursor-pointer">
               DM <Mail className="w-4 h-4" />
             </TabsTrigger>
-            <TabsTrigger value="rolas" className="flex items-center justify-center gap-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary">
+            <TabsTrigger value="rolas" className="flex items-center justify-center gap-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary cursor-pointer">
               Rolas <Disc className="w-4 h-4" />
             </TabsTrigger>
-            <TabsTrigger value="chat" className="flex items-center justify-center gap-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary">
+            <TabsTrigger value="chat" className="flex items-center justify-center gap-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary cursor-pointer">
               Chat <MessageSquare className="w-4 h-4" />
             </TabsTrigger>
-            <TabsTrigger value="users" className="flex items-center justify-center gap-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary">
+            <TabsTrigger value="users" className="flex items-center justify-center gap-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary cursor-pointer">
               Usuarios <Users className="w-4 h-4" />
             </TabsTrigger>
-            <TabsTrigger value="config" className="flex items-center justify-center gap-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary">
+            <TabsTrigger value="config" className="flex items-center justify-center gap-2 data-[state=active]:bg-primary/20 data-[state=active]:text-primary cursor-pointer">
               Config <Settings className="w-4 h-4" />
             </TabsTrigger>
           </TabsList>
@@ -211,22 +300,14 @@ function DashboardPageContent() {
           {/* Tab Content - DM (new) */}
           <TabsContent value="dm" className="flex-1 overflow-hidden mt-0">
             <Card className="h-full flex flex-col bg-card/50 border-border">
-              <CardHeader className="flex-shrink-0 border-b border-border">
-                <CardTitle className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-primary/30 to-primary/10">
-                    <Mail className="text-primary w-5 h-5"/>
-                  </div>
-                  <span>Mensajes Directos al DJ</span>
-                  {directMessages.length > 0 && (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary">
-                      {directMessages.length} {directMessages.length === 1 ? 'mensaje' : 'mensajes'}
-                    </span>
-                  )}
-                </CardTitle>
-                <CardDescription className="text-muted-foreground">
-                  Peticiones y saludos de los bailadores.
-                </CardDescription>
-              </CardHeader>
+              <TabHeaderWithInfo 
+                icon={Mail}
+                title={ADMIN_TABS_CONTENT.DM.title}
+                description={ADMIN_TABS_CONTENT.DM.description}
+                titleBadge={
+                  <NotificationBadge count={directMessages.length} />
+                }
+              />
               <CardContent className="flex-1 overflow-auto pt-4 themed-scrollbar">
                 {directMessages.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-center py-12">
@@ -270,7 +351,7 @@ function DashboardPageContent() {
                         <Button 
                           size="icon" 
                           variant="ghost" 
-                          className="h-8 w-8 text-muted-foreground/50 hover:text-red-500 hover:bg-red-500/10 transition-all flex-shrink-0" 
+                          className="h-8 w-8 text-muted-foreground/50 hover:text-red-500 hover:bg-red-500/10 transition-all flex-shrink-0 cursor-pointer" 
                           onClick={() => handleDeleteDirectMessage(dm.id)}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -286,17 +367,11 @@ function DashboardPageContent() {
           {/* Tab Content - Rolas */}
           <TabsContent value="rolas" className="flex-1 overflow-hidden mt-0">
             <Card className="h-full flex flex-col bg-card/50 border-border">
-              <CardHeader className="flex-shrink-0 border-b border-border">
-                <CardTitle className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-secondary/30 to-secondary/10">
-                    <Music className="text-secondary w-5 h-5"/>
-                  </div>
-                  <span>Votaciones de Rolas</span>
-                </CardTitle>
-                <CardDescription className="text-muted-foreground">
-                  Crea la lista de éxitos para que voten los bailadores.
-                </CardDescription>
-              </CardHeader>
+              <TabHeaderWithInfo 
+                icon={Music}
+                title={ADMIN_TABS_CONTENT.ROLAS.title}
+                description={ADMIN_TABS_CONTENT.ROLAS.description}
+              />
               <CardContent className="flex-1 overflow-auto space-y-6 pt-6 themed-scrollbar">
                  {/* Add Song Form */}
                  <div className={`p-4 rounded-xl border transition-all ${
@@ -342,7 +417,7 @@ function DashboardPageContent() {
                           onClick={handleAddSong}
                           className={`transition-all font-semibold ${
                             newSongTitle.trim() && newSongArtist.trim() && songs.length < MAX_SONGS_ALLOWED
-                              ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white shadow-lg shadow-green-500/25 border-0'
+                              ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white shadow-lg shadow-green-500/25 border-0 cursor-pointer'
                               : 'bg-muted text-muted-foreground border border-border cursor-not-allowed'
                           }`}
                           disabled={!newSongTitle.trim() || !newSongArtist.trim() || songs.length >= MAX_SONGS_ALLOWED}
@@ -360,14 +435,15 @@ function DashboardPageContent() {
                       </h3>
                       {songs.length > 0 && (
                         <div className="flex items-center gap-3">
-                          <span className="text-sm px-3 py-1 rounded-full bg-primary/20 text-primary font-semibold">
-                            {songs.reduce((acc, song) => acc + (song.votes || 0), 0)} votos
-                          </span>
+                          <NotificationBadge 
+                            count={songs.reduce((acc, song) => acc + (song.votes || 0), 0)} 
+                            className="px-3 py-1"
+                          />
                           <Button 
                             size="sm" 
                             variant="destructive" 
                             onClick={() => setShowResetModal(true)}
-                            className="text-xs"
+                            className="text-xs cursor-pointer"
                           >
                             <Trash2 className="w-3 h-3 mr-1" /> Reiniciar
                         </Button>
@@ -434,7 +510,7 @@ function DashboardPageContent() {
                                 <Button 
                                   size="sm" 
                                   variant="ghost" 
-                                  className="h-8 w-8 p-0 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" 
+                                  className="h-8 w-8 p-0 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 cursor-pointer" 
                                   onClick={() => handleDeleteSong(song.id)}
                                 >
                                   <X className="w-4 h-4" />
@@ -451,10 +527,11 @@ function DashboardPageContent() {
           {/* Tab Content - Chat */}
           <TabsContent value="chat" className="flex-1 overflow-hidden mt-0">
             <Card className="h-full flex flex-col bg-card/50 border-border">
-              <CardHeader className="flex-shrink-0">
-                <CardTitle className="flex items-center gap-2"><MessageSquare className="text-primary"/> Gestión del Chat</CardTitle>
-                <CardDescription>Administra y modera los mensajes del chat público.</CardDescription>
-              </CardHeader>
+              <TabHeaderWithInfo 
+                icon={MessageSquare}
+                title={ADMIN_TABS_CONTENT.CHAT.title}
+                description={ADMIN_TABS_CONTENT.CHAT.description}
+              />
               <CardContent className="flex-1 overflow-auto themed-scrollbar">
                 {messages.length === 0 ? (
                   <div className="flex items-center justify-center h-full text-muted-foreground">
@@ -480,7 +557,7 @@ function DashboardPageContent() {
                         <Button 
                           size="icon" 
                           variant="ghost" 
-                          className="h-8 w-8 text-destructive flex-shrink-0" 
+                          className="h-8 w-8 text-destructive flex-shrink-0 cursor-pointer" 
                           onClick={() => handleDeleteMessage(msg.id)}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -497,9 +574,11 @@ function DashboardPageContent() {
           {/* Tab Content - Users */}
           <TabsContent value="users" className="flex-1 overflow-hidden mt-0">
             <Card className="h-full flex flex-col bg-card/50 border-border">
-              <CardHeader className="flex-shrink-0">
-                <CardTitle className="flex items-center gap-2"><Users className="text-primary"/> Gestión de Usuarios</CardTitle>
-              </CardHeader>
+              <TabHeaderWithInfo 
+                icon={Users}
+                title={ADMIN_TABS_CONTENT.USERS.title}
+                description={ADMIN_TABS_CONTENT.USERS.description}
+              />
               <CardContent className="flex-1 overflow-auto themed-scrollbar">
                 <div className="space-y-2">
                     {users.map(u => (
@@ -514,8 +593,8 @@ function DashboardPageContent() {
                                  </div>
                             </div>
                             <div className="flex gap-2">
-                                <Button size="icon" variant="ghost" className="h-8 w-8 text-blue-400"><Edit className="w-4 h-4" /></Button>
-                                <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive" onClick={() => handleDeleteUser(u.id)}>
+                                <Button size="icon" variant="ghost" className="h-8 w-8 text-blue-400 cursor-pointer"><Edit className="w-4 h-4" /></Button>
+                                <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive cursor-pointer" onClick={() => handleDeleteUser(u.id)}>
                                     <Trash2 className="w-4 h-4" />
                                 </Button>
                             </div>
@@ -529,10 +608,29 @@ function DashboardPageContent() {
           {/* Tab Content - Config */}
           <TabsContent value="config" className="flex-1 overflow-hidden mt-0">
             <Card className="h-full flex flex-col bg-card/50 border-border">
-              <CardHeader className="flex-shrink-0">
-                <CardTitle className="flex items-center gap-2"><Palette className="text-primary"/> Configuración de Temas</CardTitle>
-                <CardDescription>Personaliza los colores de los temas Dark y Estándar.</CardDescription>
-              </CardHeader>
+              <TabHeaderWithInfo 
+                icon={Palette}
+                title={ADMIN_TABS_CONTENT.CONFIG.title}
+                description={ADMIN_TABS_CONTENT.CONFIG.description}
+                actionSlot={
+                  <div className="flex items-center gap-1 bg-muted/50 p-1 rounded-full border border-border">
+                    <button
+                      onClick={() => { dispatch(setThemeConfig(fullConfig?.themes)); dispatch(setTheme('dark')); localStorage.setItem(STORAGE_KEYS.THEME, 'dark'); }}
+                      className={`p-2 rounded-full transition-all flex items-center gap-2 cursor-pointer ${activeTheme === 'dark' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                      title="Aplicar Tema Dark"
+                    >
+                      <Moon className="w-4 h-4" /> <span className="text-xs font-medium hidden sm:inline-block pr-1">Oscuro</span>
+                    </button>
+                    <button
+                      onClick={() => { dispatch(setThemeConfig(fullConfig?.themes)); dispatch(setTheme('standard')); localStorage.setItem(STORAGE_KEYS.THEME, 'standard'); }}
+                      className={`p-2 rounded-full transition-all flex items-center gap-2 cursor-pointer ${activeTheme === 'standard' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                      title="Aplicar Tema Estándar"
+                    >
+                      <Sun className="w-4 h-4" /> <span className="text-xs font-medium hidden sm:inline-block pr-1">Claro</span>
+                    </button>
+                  </div>
+                }
+              />
               <CardContent className="flex-1 overflow-auto space-y-8 pt-4 pb-10 themed-scrollbar">
                 {!fullConfig ? (
                   <p className="text-muted-foreground italic">Cargando configuración...</p>
@@ -551,7 +649,7 @@ function DashboardPageContent() {
                               type="color" 
                               value={fullConfig.themes.dark.primary} 
                               onChange={(e) => updateThemeColor('dark', 'primary', e.target.value)}
-                              className="w-12 h-10 p-1 bg-muted border-border" 
+                              className="w-12 h-10 p-1 bg-muted border-border cursor-pointer" 
                             />
                             <Input 
                               value={fullConfig.themes.dark.primary} 
@@ -567,7 +665,7 @@ function DashboardPageContent() {
                               type="color" 
                               value={fullConfig.themes.dark.secondary} 
                               onChange={(e) => updateThemeColor('dark', 'secondary', e.target.value)}
-                              className="w-12 h-10 p-1 bg-muted border-border" 
+                              className="w-12 h-10 p-1 bg-muted border-border cursor-pointer" 
                             />
                             <Input 
                               value={fullConfig.themes.dark.secondary} 
@@ -583,7 +681,7 @@ function DashboardPageContent() {
                               type="color" 
                               value={fullConfig.themes.dark.background} 
                               onChange={(e) => updateThemeColor('dark', 'background', e.target.value)}
-                              className="w-12 h-10 p-1 bg-muted border-border" 
+                              className="w-12 h-10 p-1 bg-muted border-border cursor-pointer" 
                             />
                             <Input 
                               value={fullConfig.themes.dark.background} 
@@ -610,7 +708,7 @@ function DashboardPageContent() {
                               type="color" 
                               value={fullConfig.themes.standard.primary} 
                               onChange={(e) => updateThemeColor('standard', 'primary', e.target.value)}
-                              className="w-12 h-10 p-1 bg-muted border-border" 
+                              className="w-12 h-10 p-1 bg-muted border-border cursor-pointer" 
                             />
                             <Input 
                               value={fullConfig.themes.standard.primary} 
@@ -626,7 +724,7 @@ function DashboardPageContent() {
                               type="color" 
                               value={fullConfig.themes.standard.secondary} 
                               onChange={(e) => updateThemeColor('standard', 'secondary', e.target.value)}
-                              className="w-12 h-10 p-1 bg-muted border-border" 
+                              className="w-12 h-10 p-1 bg-muted border-border cursor-pointer" 
                             />
                             <Input 
                               value={fullConfig.themes.standard.secondary} 
@@ -642,7 +740,7 @@ function DashboardPageContent() {
                               type="color" 
                               value={fullConfig.themes.standard.background} 
                               onChange={(e) => updateThemeColor('standard', 'background', e.target.value)}
-                              className="w-12 h-10 p-1 bg-muted border-border" 
+                              className="w-12 h-10 p-1 bg-muted border-border cursor-pointer" 
                             />
                             <Input 
                               value={fullConfig.themes.standard.background} 
@@ -655,7 +753,7 @@ function DashboardPageContent() {
                     </div>
 
                     <Button 
-                      className="w-full bg-gradient-to-r from-primary to-secondary text-black font-bold h-12"
+                      className="w-full bg-gradient-to-r from-primary to-secondary text-black font-bold h-12 cursor-pointer"
                       onClick={handleSaveConfig}
                       disabled={isSavingConfig}
                     >

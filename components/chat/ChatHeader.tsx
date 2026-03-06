@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import { logout } from '@/lib/store/features/authSlice';
 import { useRouter, usePathname } from 'next/navigation';
-import { Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft, ClipboardPenLine, Moon, Sun } from 'lucide-react';
+import { Disc, LogOut, User, Mail, Info, MessageSquare, Users as UsersIcon, MoreVertical, ArrowLeft, ClipboardPenLine, Moon, Sun, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { storageService } from '@/lib/utils/storage';
 import { STORAGE_KEYS, ROUTES } from '@/lib/constants';
@@ -45,6 +45,16 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
       setConfig(stored);
     }
   }, []);
+
+  // Initialize admin header visibility from localStorage
+  useEffect(() => {
+    if (isAdminVariant) {
+      const storedVisibility = storageService.getItem(STORAGE_KEYS.ADMIN_HEADER_VISIBLE);
+      if (storedVisibility !== null) {
+        setIsVisible(storedVisibility === 'true');
+      }
+    }
+  }, [isAdminVariant]);
 
   // Auto-dismiss hero animation after 5 seconds
   useEffect(() => {
@@ -157,6 +167,14 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
     window.location.href = ROUTES.LOGIN;
   };
 
+  const toggleAdminHeaderVisibility = () => {
+    const newVisibility = !isVisible;
+    setIsVisible(newVisibility);
+    if (isAdminVariant) {
+      storageService.setItem(STORAGE_KEYS.ADMIN_HEADER_VISIBLE, String(newVisibility));
+    }
+  };
+
   return (
     <>
       {/* Global Overlay for Phase 2 Animation - Hero Mode - OUTSIDE header to avoid clipping */}
@@ -267,33 +285,17 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
            )}
       </AnimatePresence>
 
-      <header className={`sticky top-0 z-[100] bg-background/80 backdrop-blur-md py-1 flex items-center transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${!isVisible && !isAdminVariant ? '-translate-y-[58px] shadow-none opacity-90 border-b border-primary/30' : 'translate-y-0 opacity-100 border-b-0'} ${
+      <header className={`sticky top-0 z-[100] bg-background/80 backdrop-blur-md py-1 flex items-center transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] ${
           isAdminVariant 
-            ? 'mx-4 lg:mx-10 mt-4 rounded-xl border border-border p-2 max-h-20 relative' 
-            : 'w-full h-16 shadow-[0_4px_20px_rgba(0,0,0,0.2)] border-0'
+            ? `mx-4 mt-4 rounded-xl border border-border p-2 max-h-20 relative ${!isVisible ? '-translate-y-[calc(100%+8px)] opacity-90 shadow-none -mb-[90px]' : 'translate-y-0 opacity-100 shadow-sm mb-0'}` 
+            : `w-full h-16 shadow-[0_4px_20px_rgba(0,0,0,0.2)] border-0 ${!isVisible ? '-translate-y-[58px] shadow-none opacity-90 border-b border-primary/30' : 'translate-y-0 opacity-100 border-b-0'}`
         }`}>
 
-        {/* Left: Back button OR Users counter — flex-1 pushes logo to center */}
+        {/* Left: Back button OR Users counter */}
         <div className="flex-1 flex items-center pl-3 z-10">
             {isAdminVariant ? (
                 <div className="flex flex-col gap-1">
                   <span className="text-foreground/80 text-sm">Bienvenido, <span className="text-primary font-bold">{user?.alias}</span></span>
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => { dispatch(setTheme('dark')); localStorage.setItem(STORAGE_KEYS.THEME, 'dark'); }}
-                      className={`p-1 rounded-full transition-all ${activeTheme === 'dark' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground'}`}
-                      title="Tema Dark"
-                    >
-                      <Moon className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => { dispatch(setTheme('standard')); localStorage.setItem(STORAGE_KEYS.THEME, 'standard'); }}
-                      className={`p-1 rounded-full transition-all ${activeTheme === 'standard' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground'}`}
-                      title="Tema Estándar"
-                    >
-                      <Sun className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
                 </div>
             ) : showBackButton ? (
                 <Button 
@@ -410,9 +412,28 @@ export default function ChatHeader({ variant = 'user', showBackButton = false }:
         )}
         </div>
 
-        {/* Gradient accent line — user variant only */}
-        {!isAdminVariant && (
-            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-secondary to-primary" />
+        {/* Gradient accent line */}
+        {isAdminVariant ? (
+            <div className="absolute inset-0 rounded-xl overflow-hidden pointer-events-none z-20">
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-secondary to-primary opacity-80" />
+            </div>
+        ) : (
+            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary via-secondary to-primary z-20" />
+        )}
+
+        {/* Admin Toggle Tab */}
+        {isAdminVariant && (
+            <button
+                onClick={toggleAdminHeaderVisibility}
+                className="absolute -bottom-4 right-16 w-12 h-4 bg-background/20 backdrop-blur-sm border border-t-0 border-border/20 rounded-b opacity-40 hover:opacity-100 hover:bg-background/95 hover:border-border hover:shadow-[0_2px_4px_rgba(0,0,0,0.1)] flex items-center justify-center cursor-pointer text-muted-foreground transition-all duration-300 focus:outline-none z-10 group"
+                title={isVisible ? "Ocultar encabezado" : "Mostrar encabezado"}
+            >
+                {isVisible ? (
+                    <ChevronUp className="w-3 h-3 opacity-70 group-hover:opacity-100 transition-opacity" />
+                ) : (
+                    <ChevronDown className="w-3 h-3 text-primary group-hover:scale-110 transition-transform" />
+                )}
+            </button>
         )}
 
     </header>
