@@ -69,7 +69,7 @@ function AboutPageContent() {
                        {/* Main Title Overlay at the START of the image, clearing the 2rem (-mt-8) overlap */}
                        <div className="text-center mt-12 md:mt-16 relative z-20 px-6">
                            <h1 className="text-primary font-black tracking-widest uppercase text-3xl md:text-5xl flex items-center justify-center gap-3 drop-shadow-2xl shadow-black/80">
-                               <Headphones className="w-8 h-8 md:w-12 md:h-12" /> Bochis Mix
+                               <Headphones className="w-8 h-8 md:w-12 md:h-12" /> Sonidero Dj
                            </h1>
                        </div>
                    </div>

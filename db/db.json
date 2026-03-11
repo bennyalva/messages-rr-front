@@ -850,21 +850,30 @@
   ],
   "directMessages": [
     {
-      "id": "4435558e-89e2-424e-a1b8-0d342f0e425b",
-      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
-      "userAlias": "lbenny",
-      "userGang": "arcolocos",
-      "content": "jlka fj alksjdf lakjsdf lkajsd fklsajd flkajds flkjads flasldkjf lkasdjf lsdkajf lkas dflkdsaj flkajds flkjads flkjadsl",
-      "timestamp": "2026-03-06T21:22:07.841Z",
-      "isRead": false
-    },
-    {
-      "id": "01ab18fa-a213-4b52-b4ec-565415d48118",
+      "id": "a19b4005-588f-4e91-94a4-d99f25c63a01",
       "userId": "adba0f6f-4770-4f52-9613-4d51915daf1b",
       "userAlias": "tester123",
       "userGang": "",
-      "content": "👋 mi buen que paso no nos vemos desde hace tiempo pero después de todo te sigo amando!❤️",
-      "timestamp": "2026-03-06T21:31:02.651Z",
+      "content": "Hola ya llegue",
+      "timestamp": "2026-03-11T19:35:35.804Z",
+      "isRead": false
+    },
+    {
+      "id": "b6be17d2-0b54-459c-9789-8a5d1718f300",
+      "userId": "adba0f6f-4770-4f52-9613-4d51915daf1b",
+      "userAlias": "tester123",
+      "userGang": "",
+      "content": "Que paso ya llego la banda buena de los sonidos",
+      "timestamp": "2026-03-11T19:36:02.480Z",
+      "isRead": false
+    },
+    {
+      "id": "92bd311a-9880-44b9-84e4-d3c0e4c281a0",
+      "userId": "358478fc-bcfd-47a6-96c4-fcbe49dacd1f",
+      "userAlias": "lbenny",
+      "userGang": "arcolocos",
+      "content": "Un saludo para mi compa que hoy si llego porque lo dejo su mujer y nos vamos a poner al 100%",
+      "timestamp": "2026-03-11T19:40:14.370Z",
       "isRead": false
     }
   ],
@@ -917,33 +926,10 @@
     }
   ],
   "config": {
-    "item": {
-      "appName": "Super Loco",
-      "logoUrl": "/superloco.png",
-      "logoUrlDark": "/superloco-dark.png",
-      "logoUrlStandard": "/superloco-standard.png",
-      "defaultTheme": "dark",
-      "themes": {
-        "dark": {
-          "primary": "oklch(0.922 0 0)",
-          "secondary": "oklch(0.269 0 0)",
-          "accent": "oklch(0.269 0 0)",
-          "background": "oklch(0.145 0 0)",
-          "foreground": "oklch(0.985 0 0)"
-        },
-        "standard": {
-          "primary": "oklch(0.205 0 0)",
-          "secondary": "oklch(0.97 0 0)",
-          "accent": "oklch(0.97 0 0)",
-          "background": "oklch(1 0 0)",
-          "foreground": "oklch(0.145 0 0)"
-        }
-      }
-    },
-    "appName": "Super Loco",
-    "logoUrl": "/superloco.png",
-    "logoUrlDark": "/superloco-dark.png",
-    "logoUrlStandard": "/superloco-standard.png",
+    "appName": "Siboney",
+    "logoUrl": "/siboney.png",
+    "logoUrlDark": "/siboney-dark.png",
+    "logoUrlStandard": "/siboney-standard.png",
     "defaultTheme": "dark",
     "themes": {
       "dark": {

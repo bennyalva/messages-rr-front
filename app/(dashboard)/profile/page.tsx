@@ -66,7 +66,7 @@ function ProfilePageContent() {
                   </div>
                   
                    <div className="space-y-3">
-                      <Label className="text-muted-foreground font-semibold text-xs uppercase tracking-wider">Tema de la App</Label>
+                      <Label>Tema de la App</Label>
                       <div className="flex gap-3">
                           <button 
                               onClick={() => handleThemeChange('standard')}
@@ -83,7 +83,7 @@ function ProfilePageContent() {
                               )}>
                                   ☀️
                               </div>
-                              <span className="text-[10px] font-bold uppercase tracking-tight">Estándar</span>
+                              <span className="text-[10px] font-bold uppercase tracking-tight">Claro</span>
                               {activeTheme === 'standard' && <Check className="w-3 h-3 absolute top-1.5 right-1.5 animate-in zoom-in-50" />}
                           </button>
 
@@ -102,7 +102,7 @@ function ProfilePageContent() {
                               )}>
                                   🌙
                               </div>
-                              <span className="text-[10px] font-bold uppercase tracking-tight">Dark Mode</span>
+                              <span className="text-[10px] font-bold uppercase tracking-tight">Oscuro</span>
                               {activeTheme === 'dark' && <Check className="w-3 h-3 absolute top-1.5 right-1.5 animate-in zoom-in-50" />}
                           </button>
                       </div>
