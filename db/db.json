@@ -901,6 +901,12 @@
       "title": "otra cara",
       "artist": "arroladora",
       "votes": 2
+    },
+    {
+      "id": "e10f1741-dd18-4b5c-bf8d-e135747ff209",
+      "title": "el paso del gigante",
+      "artist": "soñador",
+      "votes": 0
     }
   ],
   "userVotes": [

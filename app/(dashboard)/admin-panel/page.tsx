@@ -431,16 +431,16 @@ function DashboardPageContent() {
                    "lg:col-span-1 flex flex-col gap-4 p-5 rounded-2xl border transition-all h-fit",
                    songs.length >= MAX_SONGS_ALLOWED 
                      ? 'bg-muted/30 border-border/30 opacity-60' 
-                     : 'bg-gradient-to-br from-secondary/10 via-background to-background border-secondary/30 shadow-[0_4px_20px_-4px_rgba(var(--secondary),0.15)] ring-1 ring-secondary/20'
+                     : 'bg-gradient-to-br from-primary/10 via-background to-background border-primary/30 shadow-[0_4px_20px_-4px_rgba(var(--primary),0.15)] ring-1 ring-primary/20'
                  )}>
-                    <h4 className="text-sm font-semibold text-secondary flex items-center justify-between">
+                    <h4 className="text-sm font-semibold text-primary flex items-center justify-between">
                       <span className="flex items-center gap-2">
                         <Disc className="w-5 h-5" /> Agregar Nueva Rola
                       </span>
                       <span className={`text-xs px-2.5 py-0.5 rounded-full font-bold ${
                         songs.length >= MAX_SONGS_ALLOWED 
-                          ? 'bg-red-500/20 text-red-500' 
-                          : 'bg-secondary/20 text-secondary'
+                          ? 'bg-destructive/20 text-destructive' 
+                          : 'bg-primary/20 text-primary'
                       }`}>
                         {songs.length}/{MAX_SONGS_ALLOWED}
                       </span>
@@ -452,24 +452,24 @@ function DashboardPageContent() {
                     
                     <div className="flex flex-col gap-4 mt-2">
                         <div className="space-y-1.5">
-                          <Label htmlFor="songTitle" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Nombre de la canción</Label>
+                          <Label htmlFor="songTitle" className="text-xs font-semibold text-foreground uppercase tracking-wider">Nombre de la canción</Label>
                           <Input 
                                id="songTitle"
                                placeholder="Ej. El Paso del Gigante" 
                                value={newSongTitle}
                                onChange={(e) => setNewSongTitle(e.target.value)}
-                               className="bg-card border-border/60 focus:border-secondary text-foreground pl-3 h-11"
+                               className="bg-background border-border focus:border-primary text-foreground pl-3 h-11"
                                disabled={songs.length >= MAX_SONGS_ALLOWED}
                           />
                         </div>
                         <div className="space-y-1.5">
-                          <Label htmlFor="songArtist" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Artista / Grupo</Label>
+                          <Label htmlFor="songArtist" className="text-xs font-semibold text-foreground uppercase tracking-wider">Artista / Grupo</Label>
                           <Input 
                                id="songArtist"
                                placeholder="Ej. Grupo Soñador" 
                                value={newSongArtist}
                                onChange={(e) => setNewSongArtist(e.target.value)}
-                               className="bg-card border-border/60 focus:border-secondary text-foreground pl-3 h-11"
+                               className="bg-background border-border focus:border-primary text-foreground pl-3 h-11"
                                disabled={songs.length >= MAX_SONGS_ALLOWED}
                           />
                         </div>
@@ -480,8 +480,7 @@ function DashboardPageContent() {
                             isSubmitting={false}
                             label="Agregar Rola"
                             icon={<Music className="w-4 h-4 mr-2" />}
-                            className="w-full h-11 text-base shadow-[0_4px_14px_0_rgba(var(--secondary),0.39)] hover:shadow-[0_6px_20px_rgba(var(--secondary),0.23)] hover:-translate-y-0.5"
-                            style={{ backgroundColor: 'hsl(var(--secondary))', color: 'hsl(var(--secondary-foreground))' }}
+                            className="w-full h-11 text-base hover:-translate-y-0.5"
                           />
                         </div>
                     </div>
@@ -494,18 +493,23 @@ function DashboardPageContent() {
                         <span className="text-foreground">🎵 Votaciones Activas</span>
                       </h3>
                       {songs.length > 0 && (
-                        <div className="flex items-center gap-3">
-                          <NotificationBadge 
-                            count={songs.reduce((acc, song) => acc + (song.votes || 0), 0)} 
-                            className="px-3 py-1"
-                          />
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-2.5 bg-muted/40 px-3.5 py-1.5 rounded-full border border-border/60 shadow-sm transition-all hover:bg-muted/60">
+                            <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                              Total de votos
+                            </span>
+                            <NotificationBadge 
+                              count={songs.reduce((acc, song) => acc + (song.votes || 0), 0)} 
+                              className="px-2.5 py-0.5 text-sm shadow-[0_0_10px_rgba(var(--primary),0.2)]"
+                            />
+                          </div>
                           <Button 
                             size="sm" 
                             variant="destructive" 
                             onClick={() => setShowResetModal(true)}
-                            className="text-xs cursor-pointer"
+                            className="text-xs cursor-pointer h-8 shadow-sm hover:shadow-md transition-all"
                           >
-                            <Trash2 className="w-3 h-3 mr-1" /> Reiniciar
+                            <Trash2 className="w-3.5 h-3.5 mr-1.5" /> Reiniciar
                         </Button>
                         </div>
                       )}
@@ -557,7 +561,7 @@ function DashboardPageContent() {
                                   <div className={cn(
                                     "px-3 py-1 rounded-full text-sm font-bold flex-shrink-0",
                                     song.votes > 0 
-                                      ? "bg-secondary/10 text-secondary ring-1 ring-secondary/30" 
+                                      ? "bg-primary/10 text-primary ring-1 ring-primary/30" 
                                       : "bg-muted/50 text-muted-foreground ring-1 ring-border/50"
                                   )}>
                                     {song.votes} {song.votes === 1 ? 'voto' : 'votos'}
